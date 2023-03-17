@@ -1,32 +1,47 @@
 <template>
   <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
-    <router-view/>
+    <PollyHeader v-if="pathName != LOGIN"></PollyHeader>
+    <RouterView></RouterView>
+    <PollyFooter v-if="pathName != LOGIN"></PollyFooter>
   </div>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 
-nav {
-  padding: 30px;
-}
+<script>
+import PollyHeader from "./components/header/Header.vue";
+import PollyFooter from "./components/footer/Footer.vue";
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+export default {
+  // component-name小写命名
+  name: "",
+  // 组件
+  components: {
+    PollyHeader,
+    PollyFooter,
+  },
+  // 变量
+  data() {
+    return {
+      // 解耦常量
+      LOGIN: "login",
+    };
+  },
+  // 方法
+  methods: {},
+  // 计算属性
+  computed: {
+    pathName() {
+      return this.$route.name;
+    },
+  },
+  // 监控data中的数据变化
+  watch: {},
+  // 生命周期 - 创建完成(可以访问当前this实例)
+  created() {},
+  // 生命周期 - 挂载完成(可以访问dom元素)
+  mounted() {},
+};
+</script>
 
-nav a.router-link-exact-active {
-  color: #42b983;
-}
+<style lang="less">
 </style>
