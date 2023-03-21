@@ -71,10 +71,12 @@ export default {
 
 <style lang="less" scoped>
 .polly-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: #fff;
   font-size: 14px;
   text-align: center;
-  line-height: 40px;
   border-radius: 5px;
   background: linear-gradient(to right, #ff4b2b, #ff416c);
   cursor: pointer;

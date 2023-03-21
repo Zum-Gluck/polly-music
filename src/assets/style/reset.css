@@ -194,9 +194,8 @@ hr {
 }
 
 /*—滚动条默认显示样式–*/
-
+/* 
 ::-webkit-scrollbar {
-  width: 0px;
   height: 8px;
 }
 
@@ -207,8 +206,8 @@ hr {
 
 ::-webkit-scrollbar-track {
   border-radius: 10px;
-  background-color: #fff;
-}
+  background-color: #000;
+} */
 
 body {
   min-width: 1200px;

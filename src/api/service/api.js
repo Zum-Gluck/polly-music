@@ -1,16 +1,29 @@
 import { instance } from "./instance";
 
 /**
+ * @param {optional} type:资源类型,对应以下类型,默认为 0 即 PC 
  * @method 获取推荐推荐歌单（轮播图）
- * @param {*} type:资源类型,对应以下类型,默认为 0 即 PC 
- * 
  */
-export const getBanner = type => instance.get(`/banner`);
+export const getBanner = type => instance.get(`/banner?type=${type ? type : 0}`);
 
 /**
+ * @param {require} limit 取出数量 , 默认为 30 (不支持 offset)
  * @method 获取推荐新音乐
- * @param {*} limit 
  */
-export const getNewSong = limit => instance.get(`/personalized/newsong?limit=${limit}`);
+export const getNewSong = limit => instance.get(`/personalized/newsong?limit=${limit ? limit : 30}`);
 
+
+/**
+ * @param {require} uid 
+ * @method 获取用户喜欢的音乐
+ */
+export const getUserLikeList = uid => instance.get(`/likelist?uid=${uid}`)
+
+
+/**
+ * 
+ * @param {require} ids 音乐 id, 如 ids=347230
+ * @method 获取音乐详情
+ */
+export const getSongDetail = ids => instance.get(`/song/detail?ids=${ids}`)
 

@@ -7,18 +7,27 @@
           <h1>
             <RouterLink to="/home">
               <a href="javascript:;">
-                <img src="@/assets/images/logo.jpg" width="215px" />
+                <img
+                  src="@/assets/images/logo.jpg"
+                  width="215px"
+                />
               </a>
             </RouterLink>
           </h1>
           <!-- logo end -->
 
-          <div class="box" :class="{
+          <div
+            class="box"
+            :class="{
               isReverseFront: isReverseFront,
               isReverseBack: isReverseBack,
-            }">
+            }"
+          >
             <!-- 正面开始 -->
-            <div class="login_form front" ref="front">
+            <div
+              class="login_form front"
+              ref="front"
+            >
               <!-- 正面start -->
               <h1>
                 <a href="javascript:;">Login via password</a>
@@ -30,29 +39,47 @@
               </p>
 
               <!-- 表单开始 -->
-              <PollyInput conponentsType="account" v-model="userInfo.account" ref="account">
+              <PollyInput
+                conponentsType="account"
+                v-model="userInfo.account"
+                ref="account"
+              >
               </PollyInput>
 
-              <PollyInput conponentsType="password" v-model="userInfo.password" ref="password">
+              <PollyInput
+                conponentsType="password"
+                v-model="userInfo.password"
+                ref="password"
+              >
               </PollyInput>
               <!-- 表单结束 -->
 
               <div class="forget">
                 <a href="javascript:;"> <span>forget your password?</span></a>
                 <div class="br"></div>
-                <a href="javascript:;" @click="triggerLoginMethod">
+                <a
+                  href="javascript:;"
+                  @click="triggerLoginMethod"
+                >
                   <span>login via QR code</span>
                 </a>
               </div>
               <button @click="loginByPassword">sign in</button>
-              <a href="javascript:;" class="switch">
+              <a
+                href="javascript:;"
+                class="switch"
+              >
                 <span>switch into Chinese</span>
               </a>
             </div>
             <!-- 正面结束 -->
 
             <!-- 反面开始 -->
-            <div class="login_form back" ref="back" v-if="isShowBack">
+            <div
+              class="login_form back"
+              ref="back"
+              v-if="isShowBack"
+            >
               <h1>
                 <a href="javascript:;">login via QR code</a>
               </h1>
@@ -64,16 +91,26 @@
 
               <!-- 二维码start -->
               <div class="qrCode ">
-                <div class="qrText" @click="reGetQrCode" v-if="isShowQrText">
+                <div
+                  class="qrText"
+                  @click="reGetQrCode"
+                  v-if="isShowQrText"
+                >
                   <a href="javascript:;">
                     <div>二维码已过期</div>
                     <div>点击重新获取</div>
                   </a>
                 </div>
-                <div class="qrTextScan" v-show="isScanSuccess">
+                <div
+                  class="qrTextScan"
+                  v-show="isScanSuccess"
+                >
                   扫码成功请授权
                 </div>
-                <img :class="{'qrFliter':isShowQrText || isScanSuccess}" :src="qrCodeUrl">
+                <img
+                  :class="{'qrFliter':isShowQrText || isScanSuccess}"
+                  :src="qrCodeUrl"
+                >
               </div>
               <!-- 二维码end -->
 
@@ -81,7 +118,10 @@
                 <a href="javascript:;">
                   <span>The telephone number is no longer use? </span></a>
                 <div class="br"></div>
-                <a href="javascript:;" @click="triggerLoginMethod">
+                <a
+                  href="javascript:;"
+                  @click="triggerLoginMethod"
+                >
                   <span>login via password</span>
                 </a>
               </div>
@@ -89,7 +129,10 @@
                 Regenerating QR code
               </button>
 
-              <a href="javascript:;" class="switch">
+              <a
+                href="javascript:;"
+                class="switch"
+              >
                 <span>switch to Chinese</span>
               </a>
             </div>
@@ -104,7 +147,7 @@
             "Welcome to PollyMusic,We are committed to a better life for you"
           </h1>
           <div class="copy flex-center">
-            © Copyright PollyMusic. Designed by Amu in 2023-3.
+            © Copyright PollyMusic. Designed by fj in 2023-3.
           </div>
         </div>
       </el-col>
@@ -319,8 +362,8 @@ export default {
     isFromNotLogin() {
       if (this.$route.query.code == 301) {
         this.$message({
-          type:'info',
-          message:"访问个人主页需要先登陆"
+          type: 'info',
+          message: "访问个人主页需要先登陆"
         })
       }
     }

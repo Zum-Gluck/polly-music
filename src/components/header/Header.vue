@@ -93,13 +93,13 @@ export default {
   },
   // 方法
   methods: {
-    /**
-     * @bug 退出时修改登陆状态 退出按钮点击之后 头像不消失，补全mapMutations函数
-     */
     ...mapMutations(['SET_LOGIN_STATUS', 'SET_PROFILE']),
     async loginOut() {
       try {
         await this.$api.loginOut()
+        if (this.$route.name === 'profile') {
+          this.$router.push("/login");
+        }
         this.SET_LOGIN_STATUS(false)
         this.SET_PROFILE(null)
         window.localStorage.clear()

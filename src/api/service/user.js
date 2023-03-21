@@ -2,7 +2,6 @@ import { instance } from "./instance";
 
 
 /**
- * 
  * @param {reqire} phone 手机号
  * @param {optional} ctcode 国家码 China is default : +86
  * @method 发送验证码
@@ -10,7 +9,6 @@ import { instance } from "./instance";
 export const sendCaptcha = phone => instance.get(`/captcha/sent?phone=${phone}`);
 
 /**
- * 
  * @param {require} phone 
  * @param {require} captcha 
  * @method 验证验证码
@@ -51,7 +49,6 @@ export const getKey = () => instance.get(`/login/qr/key?timestamp=${Number(new D
 export const getQrCode = key => instance.get(`/login/qr/create?key=${key}&qrimg=1&timestamp=${Number(new Date())}`);
 
 /**
- * 
  * @param {require} key 由上第一个接口生成
  * @method 传入第一个接口生成的key检查二维码的状态
  */
@@ -59,7 +56,10 @@ export const checkQrStatus = key => instance.get(`/login/qr/check?key=${key}&tim
 
 
 /**
- * @param {require} uid 
- * @method 获取用户喜欢音乐
+ * @method 登录后调用此接口,可以获取用户等级信息,包含当前登录天数,听歌次数,下一等级需要的登录天数和听歌次数,当前等级进度息
  */
-export const getUserLikeList = uid => instance.get(`/likelist?uid=${uid}`)
+export const getUserLevel = () => instance.get(`/user/level`);
+
+
+export const getUserLikedSongList = uid => instance.get(`/user/playlist?uid=${uid}`);
+

@@ -1,8 +1,10 @@
 <template>
   <div class="song-list clearfix">
     <PollyButton class="fr btn"></PollyButton>
+
+    <!--表格开始 -->
     <ElTable
-      :data="tableData"
+      :data="songList"
       style="width: 100%"
       :row-class-name="tableRowClassName"
       :header-cell-style="{
@@ -12,21 +14,70 @@
       }"
       :cell-style="{ border: 0 }"
       class="customer-table shadow"
+      tooltip-effect="light"
+      v-loading="loading"
+      @cell-mouse-enter="rowEnter"
+      @cell-mouse-leave="rowLeave"
     >
-      <ElTableColumn prop="num" label="序号" width="80">
+
+      <!-- 列配置 -->
+      <ElTableColumn
+        prop="num"
+        label="序号"
+        width="80"
+      >
         <template slot-scope="scope">
-          <div style="text-align: center">{{ +scope.row.num }}</div>
+
+          <!-- 数字 -->
+          <div style="text-align: center; cursor:pointer">{{scope.row.index}}</div>
+
         </template>
       </ElTableColumn>
-      <ElTableColumn prop="name" label="歌曲">
+      <ElTableColumn
+        prop="name"
+        label="歌曲"
+      >
         <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+          <span style="cursor:pointer">{{ scope.row.name }}</span>
         </template>
       </ElTableColumn>
-      <ElTableColumn prop="address" label="歌手" width="180"> </ElTableColumn>
-      <ElTableColumn prop="name" label="专辑" width="150"> </ElTableColumn>
-      <ElTableColumn prop="name" label="时长" width="70"> </ElTableColumn>
+      <ElTableColumn
+        show-overflow-tooltip
+        prop="name"
+        label="歌手"
+        width="180"
+      >
+        <template slot-scope="scope">
+          <span
+            style="cursor:pointer"
+            v-for="(item,index) in scope.row.singerList"
+            :key='index'
+          >{{ item.name }}<span v-if="index != scope.row.singerList.length - 1">&nbsp;/&nbsp;</span>
+          </span>
+        </template>
+      </ElTableColumn>
+      <ElTableColumn
+        show-overflow-tooltip
+        prop="name"
+        label="专辑"
+        width="150"
+      >
+        <template slot-scope="scope">
+          <span style="cursor:pointer">{{ scope.row.name }}</span>
+        </template>
+      </ElTableColumn>
+      <ElTableColumn
+        prop="duration"
+        label="时长"
+        width="70"
+      >
+        <template slot-scope="scope">
+          <span style="cursor:pointer">{{ scope.row.duration }}</span>
+        </template>
+      </ElTableColumn>
     </ElTable>
+    <!--表格结束 -->
+
   </div>
 </template>
 
@@ -39,35 +90,18 @@ export default {
   components: {
     PollyButton,
   },
+  props: {
+    // 歌曲详情数组
+    songList: {
+      type: Array,
+      default: []
+    }
+  },
   // 变量
   data() {
     return {
-      tableData: [
-        {
-          num: "01",
-          name: "Opps",
-          province: "上海",
-          city: "普陀区",
-          address: "上海市普",
-          zip: 200333,
-        },
-          {
-          num: "01",
-          name: "Opps",
-          province: "上海",
-          city: "普陀区",
-          address: "上海市普",
-          zip: 200333,
-        },
-          {
-          num: "01",
-          name: "Opps",
-          province: "上海",
-          city: "普陀区",
-          address: "上海市普",
-          zip: 200333,
-        },
-      ],
+      loading: true,
+      isCellMouseEnter: false
     };
   },
   // 方法
@@ -85,15 +119,37 @@ export default {
       }
       return "warning-row";
     },
+    rowEnter(row, column, cell, event) {
+      const cellEle = event.target.parentNode.firstChild.getElementsByClassName("cell")[0].firstChild
+      cellEle.innerHTML = ''
+      cellEle.classList.add('icon-play')
+      cellEle.classList.add('iconfont')
+    },
+    rowLeave(row, column, cell, event) {
+      const cellEle = event.target.parentNode.firstChild.getElementsByClassName("cell")[0].firstChild
+      cellEle.innerHTML = row.index
+      cellEle.classList.remove('icon-play')
+      cellEle.classList.remove('iconfont')
+    }
   },
   // 计算属性
   computed: {},
   // 监控data中的数据变化
-  watch: {},
+  watch: {
+    songList: function (newVal, oldVal) {
+      this.loading = false
+    }
+  },
   // 生命周期 - 创建完成(可以访问当前this实例)
-  created() {},
+  created() { },
   // 生命周期 - 挂载完成(可以访问dom元素)
-  mounted() {},
+  mounted() {
+
+    //用户无喜欢的歌曲，页面不会一直loading加载
+    this.$on('noneLikedSong', function () {
+      this.loading = false;
+    })
+  },
 };
 </script>
 
@@ -101,6 +157,12 @@ export default {
 .el-table .bgc {
   background: #fafafa;
 }
+
+.el-table--enable-row-hover .el-table__body tr:hover > td {
+  background-color: #e8e9ed !important;
+  color: @color;
+}
+
 .el-table::before {
   left: 0;
   bottom: 0;
@@ -110,10 +172,8 @@ export default {
 .el-table_1_column_1 {
   text-align: center !important;
 }
-
 .btn {
   margin-bottom: 20px;
   border-radius: 20px;
-
 }
 </style>

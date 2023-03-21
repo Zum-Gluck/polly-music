@@ -60,7 +60,7 @@ export default {
     // 获取轮播图数据
     async requestImg() {
       try {
-        let res = await this.$api.getBanner(0);
+        let res = await this.$api.getBanner();
         this.imgData = res.banners;
         let len = this.imgData.length;
 
