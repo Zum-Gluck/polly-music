@@ -5,6 +5,8 @@
     <PollyFooter v-if="pathName != LOGIN"></PollyFooter>
   </div>
 </template>
+1123
+133
 
 <script>
 import PollyHeader from "./components/header/Header.vue";
