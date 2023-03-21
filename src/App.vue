@@ -6,7 +6,6 @@
   </div>
 </template>
 
-
 <script>
 import PollyHeader from "./components/header/Header.vue";
 import PollyFooter from "./components/footer/Footer.vue";
