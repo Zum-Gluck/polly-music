@@ -27,3 +27,9 @@ export const getUserLikeList = uid => instance.get(`/likelist?uid=${uid}`)
  */
 export const getSongDetail = ids => instance.get(`/song/detail?ids=${ids}`)
 
+
+/**
+ * @param {require} id 音乐id
+ * @method 获取VIP音乐的URL 
+ */
+export const getSongUrl = id => instance.get(`/song/url?id=${id}`)

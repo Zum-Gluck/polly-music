@@ -1,6 +1,9 @@
 <template>
-  <div class="song-list clearfix">
-    <PollyButton class="fr btn"></PollyButton>
+  <div class="song_list clearfix">
+    <PollyButton
+      class="fr btn"
+      @click.native="playAllClick"
+    ></PollyButton>
 
     <!--表格开始 -->
     <ElTable
@@ -27,9 +30,54 @@
         width="80"
       >
         <template slot-scope="scope">
+          <!-- 数字&播放按钮 start-->
+          <div
+            @click="songPlayClick(scope.row)"
+            style="text-align: center; cursor:pointer"
+          >
+            <span>{{scope.row.index}}</span>
+          </div>
+          <!-- 数字&播放按钮 end-->
 
-          <!-- 数字 -->
-          <div style="text-align: center; cursor:pointer">{{scope.row.index}}</div>
+          <!-- Playing start -->
+          <div
+            class="playing"
+            :class="{'index_active':(currentSong ? currentSong.index : -1) == scope.row.index }"
+            v-show="isShowPlaying && !isPause"
+          >
+            <div class="box">
+              <div style="animation-delay: -1.2s;"></div>
+              <div></div>
+              <div style="animation-delay: -1.5s;"></div>
+              <div style="animation-delay: -1.2s;"></div>
+              <div style="animation-delay: -0.9s;"></div>
+              <div style="animation-delay: -0.6s;"></div>
+            </div>
+          </div>
+          <!-- Playing end -->
+
+          <!-- Pause start -->
+          <div
+            v-if="!isPause"
+            @click="SET_IS_PAUSE(true)"
+            class="pause"
+            :class="{'index_active':(currentSong ? currentSong.index : -1) == scope.row.index}"
+          >
+            <span class="iconfont icon-24gf-pause2"></span>
+          </div>
+          <!-- Pause end -->
+
+          <!-- 播放 start -->
+          <div
+            v-else
+            @click="SET_IS_PAUSE(false)"
+            class="pause"
+            :class="{'index_active':(currentSong ? currentSong.index : -1) == scope.row.index}"
+          >
+            <span class="iconfont icon-play">
+            </span>
+          </div>
+          <!-- 播放 end -->
 
         </template>
       </ElTableColumn>
@@ -82,6 +130,7 @@
 </template>
 
 <script>
+import { mapMutations, mapGetters, mapActions } from 'vuex';
 import PollyButton from "../pollybutton/PollyButton.vue";
 export default {
   // component-name小写命名
@@ -101,16 +150,18 @@ export default {
   data() {
     return {
       loading: true,
-      isCellMouseEnter: false
+      isShowPlaying: false
     };
   },
   // 方法
   methods: {
     tableRowClassName({ row, rowIndex }) {
+      if (this.currentSong && this.currentSong.index == rowIndex + 1) {
+        return 'active'
+      }
+
       if (rowIndex % 2 != 0) {
         return "bgc";
-      } else {
-        return "";
       }
     },
     tableHeaderClassName({ row, column, rowIndex, columnIndex }) {
@@ -120,31 +171,49 @@ export default {
       return "warning-row";
     },
     rowEnter(row, column, cell, event) {
+      if (this.currentSong && this.currentSong.index === row.index) {
+        this.isShowPlaying = false;
+      }
       const cellEle = event.target.parentNode.firstChild.getElementsByClassName("cell")[0].firstChild
       cellEle.innerHTML = ''
       cellEle.classList.add('icon-play')
       cellEle.classList.add('iconfont')
     },
     rowLeave(row, column, cell, event) {
+      if (this.currentSong && this.currentSong.index === row.index) {
+        this.isShowPlaying = true;
+      }
       const cellEle = event.target.parentNode.firstChild.getElementsByClassName("cell")[0].firstChild
       cellEle.innerHTML = row.index
       cellEle.classList.remove('icon-play')
       cellEle.classList.remove('iconfont')
+    },
+    ...mapMutations(['SET_IS_PAUSE']),
+    ...mapActions(['selectPlay','allPlay']),
+    // 播放按钮的点击
+    songPlayClick(row) {
+      this.isShowPlaying = false
+      this.selectPlay({ song: row, songList: this.songList })
+    },
+    // 播放全部按钮的点击
+    playAllClick() {
+      this.allPlay(this.songList);
     }
   },
   // 计算属性
-  computed: {},
+  computed: {
+    ...mapGetters(['currentSong', 'isPause'])
+  },
   // 监控data中的数据变化
   watch: {
     songList: function (newVal, oldVal) {
       this.loading = false
-    }
+    },
   },
   // 生命周期 - 创建完成(可以访问当前this实例)
   created() { },
   // 生命周期 - 挂载完成(可以访问dom元素)
   mounted() {
-
     //用户无喜欢的歌曲，页面不会一直loading加载
     this.$on('noneLikedSong', function () {
       this.loading = false;
@@ -161,6 +230,44 @@ export default {
 .el-table--enable-row-hover .el-table__body tr:hover > td {
   background-color: #e8e9ed !important;
   color: @color;
+}
+
+.song_list {
+  .active {
+    color: @color;
+    background-color: #e8e9ec;
+  }
+  .playing {
+    display: none;
+    z-index: 998;
+    background-color: #e8e9ec;
+    .box {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: space-around;
+      div {
+        width: 2px;
+        height: 100%;
+        background-color: red;
+        animation: play 0.9s linear infinite alternate;
+      }
+    }
+  }
+  .pause {
+    display: none;
+    color: @color;
+    background-color: #e8e9ec;
+  }
+  .index_active {
+    display: inline;
+    position: absolute;
+    top: 11px;
+    left: 25px;
+    width: 25px;
+    height: 25px;
+    overflow: hidden;
+  }
 }
 
 .el-table::before {

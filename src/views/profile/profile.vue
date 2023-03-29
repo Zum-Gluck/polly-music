@@ -75,6 +75,14 @@
           <div class="title">
             <a href="javascript:;"><span>我创建的歌单</span></a>
           </div>
+
+          <div class="cover_layout">
+            <ListCover
+              v-for="item in userCreatedSongList"
+              :key="item.id"
+              :songListItem="item"
+            ></ListCover>
+          </div>
         </div>
       </el-card>
       <!-- 收藏歌单结束 -->
@@ -85,6 +93,7 @@
 <script>
 import SongList from "@/components/songlist/SongList"
 import PollyButton from '@/components/pollybutton/PollyButton.vue';
+import ListCover from '@/components/listcover/ListCover.vue';
 import { mapMutations } from 'vuex';
 import { createSong } from "@/model/song"
 
@@ -94,7 +103,8 @@ export default {
   // 组件
   components: {
     SongList,
-    PollyButton
+    PollyButton,
+    ListCover
   },
   // 变量
   data() {
@@ -103,9 +113,12 @@ export default {
         nickname: "",
         pictureUrl: ""
       },
+      // 用户喜欢的音乐
       userLikedSongList: [],
       profile: {},
       userfLeveInfo: {},
+      // 用户收藏（创建）的歌单
+      userCreatedSongList: []
     };
   },
   // 方法
@@ -173,7 +186,8 @@ export default {
 
     //获取用户收藏的歌单
     let res = await this.$api.getUserLikedSongList(this.profile.userId)
-    console.log(res);
+    this.userCreatedSongList = res.playlist
+    // console.log(this.userCreatedSongList);
 
   },
   beforeRouteEnter(to, from, next) {
@@ -252,7 +266,7 @@ export default {
         padding: 60px 20px 15px;
         background-color: #fff;
         .signature {
-          font-size: 8px;
+          font-size: 12px;
           cursor: pointer;
 
           a {
@@ -307,8 +321,6 @@ export default {
   }
 
   .liked_song_list {
-    height: 300px;
-
     .title {
       display: flex;
       font-size: 13px;
@@ -327,5 +339,18 @@ export default {
 
 .el-card {
   background: no-repeat;
+}
+
+.cover_layout {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 20px;
+
+  .song_list_cover:nth-child(3),
+  .song_list_cover:nth-child(4) {
+    margin-bottom: 0;
+  }
 }
 </style>

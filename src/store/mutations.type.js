@@ -1,3 +1,11 @@
 export const SET_LOGIN_STATUS = 'SET_LOGIN_STATUS'
 
 export const SET_PROFILE = 'SET_PROFILE'
+
+export const SET_CURRENT_SONG = 'SET_CURRENT_SONG'
+
+export const SET_SONG_PLAY_LIST = 'SET_SONG_PLAY_LIST'
+
+export const SET_IS_PLAYING = 'SET_IS_PLAYING'
+
+export const SET_IS_PAUSE = 'SET_IS_PAUSE'

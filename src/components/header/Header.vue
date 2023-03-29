@@ -53,7 +53,7 @@
               </div>
             </el-dropdown-item>
             <el-dropdown-item>
-              <div class="textBox">
+              <div class="textBox" @click="$router.push('/profile')">
                 <span class="iconfont icon-Profile"></span>
                 <span>个人主页</span>
               </div>

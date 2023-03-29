@@ -232,3 +232,7 @@
   75%{-webkit-transform:rotate(270deg);}
   100%{-webkit-transform:rotate(360deg);}
 }
+
+.el-progress-bar__outer {
+  height: 3px !important;
+}

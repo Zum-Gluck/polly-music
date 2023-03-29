@@ -3,20 +3,23 @@
     <PollyHeader v-if="pathName != LOGIN"></PollyHeader>
     <RouterView></RouterView>
     <PollyFooter v-if="pathName != LOGIN"></PollyFooter>
+    <PlayBar v-if="pathName != LOGIN"></PlayBar>
   </div>
 </template>
 
 <script>
 import PollyHeader from "./components/header/Header.vue";
 import PollyFooter from "./components/footer/Footer.vue";
+import PlayBar from './components/playbar/PlayBar.vue';
 
 export default {
   // component-name小写命名
-  name: "",
+  name: "app",
   // 组件
   components: {
     PollyHeader,
     PollyFooter,
+    PlayBar
   },
   // 变量
   data() {
@@ -36,9 +39,9 @@ export default {
   // 监控data中的数据变化
   watch: {},
   // 生命周期 - 创建完成(可以访问当前this实例)
-  created() {},
+  created() { },
   // 生命周期 - 挂载完成(可以访问dom元素)
-  mounted() {},
+  mounted() { },
 };
 </script>
 
