@@ -6,13 +6,13 @@
     <PlayBar v-show="pathName != LOGIN"></PlayBar>
   </div>
 </template>
-
 <script>
 import PollyHeader from "./components/header/Header.vue";
 import PollyFooter from "./components/footer/Footer.vue";
 import PlayBar from './components/playbar/PlayBar.vue';
 
 export default {
+  // dev dev
   // component-name小写命名
   name: "app",
   // 组件
