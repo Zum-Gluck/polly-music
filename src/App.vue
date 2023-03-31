@@ -3,7 +3,7 @@
     <PollyHeader v-if="pathName != LOGIN"></PollyHeader>
     <RouterView></RouterView>
     <PollyFooter v-if="pathName != LOGIN"></PollyFooter>
-    <PlayBar v-if="pathName != LOGIN"></PlayBar>
+    <PlayBar v-show="pathName != LOGIN"></PlayBar>
   </div>
 </template>
 

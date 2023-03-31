@@ -73,16 +73,44 @@
                 </a>
               </div>
               <div class="minute">
-                00/00
+                {{currentDuration}} / {{fullDuration}}
               </div>
             </div>
-            <div class="bottom">
-              <el-progress
-                :percentage="currentProcess"
-                color="#e64124"
-                :format="format"
-                :show-text="false"
-              ></el-progress>
+            <div class="bottom_layout">
+              <div
+                class="mask"
+                @click="maskClick"
+                ref="mask"
+              >
+                <el-progress
+                  :percentage="currentProcess"
+                  color="#e64124"
+                  :format="format"
+                  :show-text="false"
+                ></el-progress>
+              </div>
+              <!-- 拖拽条开始 -->
+              <div
+                class="move"
+                ref="progress_button"
+              >
+
+                <div
+                  class="progress_button"
+                  @mouseenter="isToastShow = true"
+                  @mouseleave="isToastShow = false"
+                  @mousedown="progressBtnDown"
+                >
+                  <transition name="fade">
+                    <div
+                      class="toast"
+                      v-show="isToastShow"
+                    >{{ currentDuration}}</div>
+                  </transition>
+                </div>
+              </div>
+              <!-- 拖拽条结束 -->
+
             </div>
           </div>
         </div>
@@ -93,6 +121,7 @@
         autoplay
         :src="songUrl"
         ref="audioEle"
+        @timeupdate="timeupdate"
       ></audio>
     </div>
   </transition>
@@ -109,7 +138,12 @@ export default {
   data() {
     return {
       songUrl: '',
-      currentProcess: 0
+      currentProcess: 0,
+      currentDuration: "00:00",
+      fullDuration: "00:00",
+      fullSeconds: 0,
+      isToastShow: false,
+      isChangeBtnPos: true
     };
   },
   // 方法
@@ -130,8 +164,55 @@ export default {
       const prevSong = this.songPlayList[this.currentSong.index - 2]
       this.SET_CURRENT_SONG(prevSong);
     },
-    controlProcess() {
+    timeupdate(e) {
+      let currentTime = Math.floor(e.target.currentTime)
+      this.currentDuration = this.$utils.formatSecondTime(currentTime);
+      if (this.isChangeBtnPos) {
+        this.$refs.progress_button.style.left = `${this.currentProcess}%`;
+        this.currentProcess = currentTime / this.fullSeconds * 100
+      }
+    },
+
+    // 进度条拖动
+    progressBtnDown() {
+      this.isChangeBtnPos = false
+      const leftDistance = this.$refs.mask.getBoundingClientRect().left
+
+      document.onmousemove = (e) => {
+        const maxPos = 620;
+        let currentPos = e.pageX - leftDistance;
+
+        currentPos = currentPos < 0 ? 0 : currentPos
+        currentPos = currentPos > maxPos ? maxPos : currentPos
+
+
+        this.currentProcess = currentPos / maxPos * 100
+        this.$refs.progress_button.style.left = `${this.currentProcess}%`;
+
+
+        this.cancelMouseMove(maxPos, currentPos)
+      }
+    },
+    cancelMouseMove(maxPos, currentPos) {
+
+      document.onmouseup = () => {
+        const fullSeconds = this.$utils.strConvertSecond(this.fullDuration)
+        this.$refs.audioEle.currentTime = currentPos / maxPos * fullSeconds
+        this.$refs.mask.onmousemove = null
+        this.isChangeBtnPos = true
+        document.onmouseup = null;
+        document.onmousemove = null;
+      }
+    },
+
+    // 点击进度条
+    maskClick(e) {
+      const maxPos = 620
+      const clickPos = e.offsetX
+      const fullSeconds = this.$utils.strConvertSecond(this.fullDuration)
+      this.$refs.audioEle.currentTime = clickPos / maxPos * fullSeconds
     }
+
   },
   // 计算属性
   computed: {
@@ -146,6 +227,11 @@ export default {
       // VIP 歌曲单独发送请求
       let res = await this.$api.getSongUrl(id)
       this.songUrl = res.data[0].url
+
+      this.fullSeconds = this.$utils.strConvertSecond(newVal.duration);
+      this.fullDuration = newVal.duration
+
+      // 控制进度条前进
     },
     isPause: function (newVal) {
       if (newVal === true) {
@@ -153,13 +239,13 @@ export default {
       } else {
         this.$refs.audioEle.play()
       }
-    }
+    },
   },
   // 生命周期 - 创建完成(可以访问当前this实例)
   created() { },
   // 生命周期 - 挂载完成(可以访问dom元素)
   mounted() {
-    this.controlProcess();
+
   },
 };
 </script>
@@ -167,7 +253,7 @@ export default {
 <style lang="less" scoped>
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.5s;
+  transition: opacity 0.3s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
@@ -240,6 +326,8 @@ export default {
       float: left;
       width: 50px;
       height: 50px;
+      user-select: none;
+
       img {
         width: 100%;
         border-radius: 4px;
@@ -253,7 +341,7 @@ export default {
         height: 30px;
         .title {
           float: left;
-
+          user-select: none;
           .song_title {
             margin-right: 10px;
             font-weight: 500;
@@ -261,6 +349,61 @@ export default {
         }
         .minute {
           float: right;
+          user-select: none;
+        }
+      }
+
+      .bottom_layout {
+        position: relative;
+
+        .mask {
+          height: 10px;
+          line-height: 10px;
+          padding-top: 3px;
+          width: 100%;
+          cursor: pointer;
+        }
+        .move {
+          position: absolute;
+          top: -6px;
+          left: 0%;
+        }
+        .progress_button {
+          margin-top: 3px;
+          width: 13px;
+          height: 13px;
+          border: 2px solid @color;
+          border-radius: 50%;
+          background-color: #fff;
+          transition: all 0.3s;
+          &:hover {
+            box-shadow: 0 0 0 5px rgba(250, 40, 0, 0.2);
+          }
+        }
+
+        .toast {
+          position: absolute;
+          top: -36px;
+          left: -18px;
+          height: 30px;
+          min-width: 50px;
+          text-align: center;
+          line-height: 30px;
+          background-color: #303133;
+          border-radius: 3px;
+          color: #fff;
+
+          &::after {
+            content: "";
+            display: block;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border: 3px solid transparent;
+            border-top-color: #303133;
+          }
         }
       }
     }

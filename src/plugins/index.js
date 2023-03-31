@@ -31,7 +31,8 @@ import {
     DropdownMenu,
     DropdownItem,
     Loading,
-    Progress
+    Progress,
+    Tooltip
 } from 'element-ui';
 
 Vue.prototype.$message = message
@@ -47,3 +48,4 @@ Vue.use(DropdownMenu)
 Vue.use(DropdownItem)
 Vue.use(Loading)
 Vue.use(Progress)
+Vue.use(Tooltip)

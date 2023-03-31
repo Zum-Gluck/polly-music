@@ -189,7 +189,7 @@ export default {
       cellEle.classList.remove('iconfont')
     },
     ...mapMutations(['SET_IS_PAUSE']),
-    ...mapActions(['selectPlay','allPlay']),
+    ...mapActions(['selectPlay', 'allPlay']),
     // 播放按钮的点击
     songPlayClick(row) {
       this.isShowPlaying = false
@@ -230,6 +230,10 @@ export default {
 .el-table--enable-row-hover .el-table__body tr:hover > td {
   background-color: #e8e9ed !important;
   color: @color;
+}
+
+.icon-play {
+  font-size: 20px !important;
 }
 
 .song_list {

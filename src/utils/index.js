@@ -154,6 +154,14 @@ export default {
     }
     return result
   },
+  // 字符串 00:00 转秒
+  strConvertSecond(str) {
+    const items = str.split(":")
+    const mimuteOfSecond = Number(items[0]) * 60;
+    const seconds = Number(items[1]);
+    return mimuteOfSecond + seconds;
+
+  },
   // 获取是几几后
   getAstro(timestamp) {
     let newDate = new Date()
