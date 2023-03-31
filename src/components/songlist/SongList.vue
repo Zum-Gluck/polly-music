@@ -222,25 +222,13 @@ export default {
 };
 </script>
 
-<style lang="less">
-.el-table .bgc {
-  background: #fafafa;
-}
-
-.el-table--enable-row-hover .el-table__body tr:hover > td {
-  background-color: #e8e9ed !important;
-  color: @color;
-}
+<style lang="less" scoped>
 
 .icon-play {
   font-size: 20px !important;
 }
 
 .song_list {
-  .active {
-    color: @color;
-    background-color: #e8e9ec;
-  }
   .playing {
     display: none;
     z-index: 998;
@@ -274,15 +262,7 @@ export default {
   }
 }
 
-.el-table::before {
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 0px;
-}
-.el-table_1_column_1 {
-  text-align: center !important;
-}
+
 .btn {
   margin-bottom: 20px;
   border-radius: 20px;
