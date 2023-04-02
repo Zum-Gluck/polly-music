@@ -5,6 +5,7 @@ import utils from '@/utils';
 // 全局样式文件
 import '@/assets/style/reset.css'
 import '@/assets/style/common.css'
+import '@/assets/style/custom.css'
 
 
 // 字体图标
