@@ -164,23 +164,49 @@ export default {
   },
   // 获取是几几后
   getAstro(timestamp) {
-    let newDate = new Date()
-    newDate.setTime(timestamp)
-    let birthday = newDate.toLocaleDateString(timestamp)
-    console.log(birthday);
-    let birthdayArr = birthday.split('/')
-    let year = birthdayArr[0].substring(birthdayArr[0].length - 2) + '后'
-    let month = birthdayArr[1]
-    let day = birthdayArr[2]
-    return (
-      year +
-      ' - ' +
-      '魔羯水瓶双鱼白羊金牛双子巨蟹狮子处女天秤天蝎射手魔羯'.substr(
-        month * 2 - (day < '102223444433'.charAt(month - 1) - -19) * 2,
-        2
-      ) +
-      '座'
-    )
+    function getGeneration(year) {
+      let generation;
+      if (year >= 2000) {
+        generation = "00 后";
+      } else if (year >= 1990) {
+        generation = "90 后";
+      } else if (year >= 1980) {
+        generation = "80 后";
+      } else if (year >= 1970) {
+        generation = "70 后";
+      } else if (year >= 1960) {
+        generation = "60 后";
+      } else if (year >= 1950) {
+        generation = "50 后";
+      } else {
+        generation = "更早之前";
+      }
+      return generation;
+    }
+
+    function getZodiac(month, day) {
+      const zodiacs = [
+        "摩羯", "水瓶", "双鱼", "白羊", "金牛", "双子",
+        "巨蟹", "狮子", "处女", "天秤", "天蝎", "射手"
+      ];
+      const offsets = [
+        19, 18, 20, 19, 20, 21,
+        22, 23, 22, 23, 22, 21
+      ];
+      const index = month - 1;
+      const offset = offsets[index];
+      const zodiacIndex = day < offset ? index : (index + 1) % 12;
+      return zodiacs[zodiacIndex];
+    }
+
+
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const generation = getGeneration(year);
+    const zodiac = getZodiac(month, day);
+    return `${generation}，${zodiac}座`;
   },
   // 数组随机
   shuffle(arr) {
