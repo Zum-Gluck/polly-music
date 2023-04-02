@@ -98,26 +98,5 @@ export default {
 };
 </script>
 
-<style lang="less">
-.focus {
-  position: relative;
-  .swiper-slide {
-    cursor: pointer;
-  }
-}
-.swiper-slide-invisible-blank {
-  display: none;
-}
-.swiper-pagination {
-  width: 1200px;
-  margin: 0 auto;
-  .swiper-pagination-bullet {
-    margin: 0 3px;
-  }
-}
-.swiper-pagination-bullet-active {
-  width: 15px;
-  border-radius: 15px;
-  background-color: #fa2800 !important;
-}
+<style lang="less" scoped>
 </style>

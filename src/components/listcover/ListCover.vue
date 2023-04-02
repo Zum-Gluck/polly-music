@@ -102,8 +102,5 @@ export default {
 .song_list_name {
   width: 140px;
   margin-top: 10px;
-
-  a {
-  }
 }
 </style>
