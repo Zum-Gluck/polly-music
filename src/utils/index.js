@@ -167,6 +167,7 @@ export default {
     let newDate = new Date()
     newDate.setTime(timestamp)
     let birthday = newDate.toLocaleDateString(timestamp)
+    console.log(birthday);
     let birthdayArr = birthday.split('/')
     let year = birthdayArr[0].substring(birthdayArr[0].length - 2) + '后'
     let month = birthdayArr[1]

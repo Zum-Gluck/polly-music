@@ -231,7 +231,6 @@ export default {
       this.fullSeconds = this.$utils.strConvertSecond(newVal.duration);
       this.fullDuration = newVal.duration
 
-      // 控制进度条前进
     },
     isPause: function (newVal) {
       if (newVal === true) {
