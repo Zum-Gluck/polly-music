@@ -3,6 +3,9 @@ const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
   configureWebpack: {
+    devServer: {
+      hot: true
+    },
     resolve: {
       alias: {
         //该别名默认存在（vue内部已经配置过）
@@ -21,7 +24,7 @@ module.exports = defineConfig({
 })
 
 
-function addStyleResource (rule) {
+function addStyleResource(rule) {
   rule.use('style-resource')
     .loader('style-resources-loader')
     .options({

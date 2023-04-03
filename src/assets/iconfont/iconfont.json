@@ -6,18 +6,18 @@
   "description": "",
   "glyphs": [
     {
-      "icon_id": "688097",
-      "name": "上一首 上一个",
-      "font_class": "shangyishoushangyige",
-      "unicode": "e78a",
-      "unicode_decimal": 59274
+      "icon_id": "2076215",
+      "name": "音量",
+      "font_class": "yinliang",
+      "unicode": "e87a",
+      "unicode_decimal": 59514
     },
     {
-      "icon_id": "688128",
-      "name": "下一个 下一首",
-      "font_class": "xiayigexiayishou",
-      "unicode": "e7a5",
-      "unicode_decimal": 59301
+      "icon_id": "4354255",
+      "name": "形状-椭圆形",
+      "font_class": "xingzhuang-tuoyuanxing",
+      "unicode": "eb99",
+      "unicode_decimal": 60313
     },
     {
       "icon_id": "7594152",

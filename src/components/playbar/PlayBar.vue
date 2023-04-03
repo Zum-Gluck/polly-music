@@ -42,11 +42,15 @@
 
         <!-- 右边开始 -->
         <div class="right">
-          <div class="volume">
-            volume
-          </div>
-          <div class="other_control_btn">
-            other_control_btn
+          <div class="flex">
+            <div class="volume">
+              <!-- 音量按钮 -->
+              <a href="javascirpt:;"> <span class="iconfont icon-yinliang"></span></a>
+              <div class="my_process"></div>
+            </div>
+            <div class="other_control_btn">
+              other_control_btn
+            </div>
           </div>
         </div>
         <!-- 右边结束 -->
@@ -325,14 +329,41 @@ export default {
 
   .right {
     float: right;
-    width: 200px;
+    width: 310px;
     height: 70px;
+
+    .flex {
+      display: flex;
+      align-items: center;
+      height: 70px;
+      .volume {
+        display: flex;  
+        align-items: center;
+
+        .my_process {
+          width: 100px;
+          height: 3px;
+          background-color: @color;
+          margin: 0 15px;
+        }
+        
+        a {
+          color: @color;
+          .iconfont {
+            font-size: 19px;
+          }
+        }
+
+      }
+
+    
+    }
   }
 
   .process_bar {
     height: 70px;
     margin-left: 135px;
-    margin-right: 200px;
+    margin-right: 310px;
     padding: 10px 22px;
     .cover {
       float: left;
