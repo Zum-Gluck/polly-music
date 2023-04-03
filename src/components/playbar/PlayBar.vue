@@ -128,6 +128,7 @@
 </template>
 
 <script>
+import { loginOut } from '@/api/service/user';
 import { mapGetters, mapMutations } from 'vuex';
 export default {
   // component-name小写命名
@@ -216,7 +217,7 @@ export default {
   },
   // 计算属性
   computed: {
-    ...mapGetters(['isPlaying', 'currentSong', 'songPlayList', 'isPause']),
+    ...mapGetters(['isPlaying', 'currentSong', 'songPlayList', 'isPause', 'profile']),
   },
   // 监控data中的数据变化
   watch: {
@@ -224,12 +225,24 @@ export default {
       let { copyright, id } = newVal
       if (copyright == 8) this.songUrl = newVal.url;
 
-      // VIP 歌曲单独发送请求
-      let res = await this.$api.getSongUrl(id)
-      this.songUrl = res.data[0].url
+      console.log(copyright);
+      // console.log(this.profile.vipType);
+      let { vipType } = this.profile;
+      try {
+        let res = await this.$api.getSongUrl(id)
+        this.songUrl = res.data[0].url
+        if (copyright == 1 && vipType === 0) {
+          this.$message({ message: '正在试听vip歌曲(30s)', type: 'success' })
+        }
+        this.fullSeconds = this.$utils.strConvertSecond(newVal.duration);
+        this.fullDuration = newVal.duration
 
-      this.fullSeconds = this.$utils.strConvertSecond(newVal.duration);
-      this.fullDuration = newVal.duration
+        console.log('no error');
+      } catch (err) {
+        console.log('请求vip 音乐时候出现error');
+        console.log(err);
+      }
+
 
     },
     isPause: function (newVal) {
