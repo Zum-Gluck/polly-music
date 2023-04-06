@@ -132,7 +132,6 @@
 </template>
 
 <script>
-import { loginOut } from '@/api/service/user';
 import { mapGetters, mapMutations } from 'vuex';
 export default {
   // component-name小写命名
@@ -229,19 +228,28 @@ export default {
       let { copyright, id } = newVal
       if (copyright == 8) this.songUrl = newVal.url;
 
-      console.log(copyright);
+      // console.log(copyright);
       // console.log(this.profile.vipType);
       let { vipType } = this.profile;
       try {
         let res = await this.$api.getSongUrl(id)
         this.songUrl = res.data[0].url
+        // console.log(res);
+
+
+        // 无法播放的VIP歌曲
+        if (this.songUrl === null) {
+          this.$refs.audioEle.currentTime = 0;
+          this.SET_IS_PAUSE(true);
+          return this.$message({ message: '该歌曲需要购买', type: 'info' })
+        }
+
         if (copyright == 1 && vipType === 0) {
           this.$message({ message: '正在试听vip歌曲(30s)', type: 'success' })
         }
         this.fullSeconds = this.$utils.strConvertSecond(newVal.duration);
         this.fullDuration = newVal.duration
 
-        console.log('no error');
       } catch (err) {
         console.log('请求vip 音乐时候出现error');
         console.log(err);
@@ -337,7 +345,7 @@ export default {
       align-items: center;
       height: 70px;
       .volume {
-        display: flex;  
+        display: flex;
         align-items: center;
 
         .my_process {
@@ -346,17 +354,14 @@ export default {
           background-color: @color;
           margin: 0 15px;
         }
-        
+
         a {
           color: @color;
           .iconfont {
             font-size: 19px;
           }
         }
-
       }
-
-    
     }
   }
 
