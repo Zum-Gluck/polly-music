@@ -212,6 +212,19 @@ export default {
     },
     // 账号密码登陆按钮点击
     loginByPassword() {
+
+      return this.$message({
+        message: "网易限制,请使用二维码登陆",
+        type: 'error',
+        duration: 1000 * 6
+      })
+
+
+      /**
+       * @bug 网易限制账号密码登陆，暂时绕不过，等更新吧
+       */
+
+
       let isPassReg = !(
         this.$refs.account.$data.isShowError ||
         this.$refs.password.$data.isShowError
@@ -225,10 +238,6 @@ export default {
       if (userFlag) return this.$message({ message: "account or password can not be empty", type: "error", });
 
       // 提交表单
-
-      /**
-       * @bug 网易限制账号密码登陆，暂时绕不过，等更新吧
-       */
 
     },
     // 发送验证码按钮
@@ -318,7 +327,7 @@ export default {
             break;
 
           case 802: //扫码成功
-            console.log(statusInfo);
+            // console.log(statusInfo);
             this.isScanSuccess = true
             break;
 
@@ -357,6 +366,7 @@ export default {
     },
     regeneratingBtn() {
       if (!this.isShowQrText) return this.$message({ type: 'warnning', message: 'this QR code still valid' })
+      this.isShowQrText = false;
       this.QrCodeInit();
     },
     isFromNotLogin() {
@@ -372,11 +382,6 @@ export default {
   },
   mounted() {
     this.isFromNotLogin();
-    this.$notify({
-      title: '温馨提示',
-      message: '由于网易的限制账号密码登陆暂不可用,请使用二维码登陆',
-      duration: 1000 * 9
-    });
   },
 };
 </script>
@@ -464,6 +469,7 @@ export default {
     height: 100vh;
     padding: 13px 30px 0;
     transform-style: preserve-3d;
+    overflow: hidden;
 
     .box {
       position: relative;

@@ -36,12 +36,18 @@
       </div>
       <!-- 搜索icon end -->
 
-      <div class="login userbox" v-if="isLogin">
+      <div
+        class="login userbox"
+        v-if="isLogin"
+      >
         <el-dropdown>
           <span class="el-dropdown-link">
             <a href="javascript:;">
-              <img :src="profile.avatarUrl" alt="">
-              <span>{{profile.nickname}}</span>
+              <img
+                :src="profile ? profile.avatarUrl : ''"
+                alt=""
+              >
+              <span>{{profile ? profile.nickname :''}}</span>
               <i class="el-icon-arrow-down el-icon--right"></i>
             </a>
           </span>
@@ -53,13 +59,19 @@
               </div>
             </el-dropdown-item>
             <el-dropdown-item>
-              <div class="textBox" @click="$router.push('/profile')">
+              <div
+                class="textBox"
+                @click="$router.push('/profile')"
+              >
                 <span class="iconfont icon-Profile"></span>
                 <span>个人主页</span>
               </div>
             </el-dropdown-item>
             <el-dropdown-item>
-              <div class="textBox" @click="loginOut">
+              <div
+                class="textBox"
+                @click="loginOut"
+              >
                 <span class="iconfont icon-tuichu"></span>
                 <span>退出登陆</span>
               </div>
@@ -69,7 +81,10 @@
 
       </div>
 
-      <div class="login" v-else>
+      <div
+        class="login"
+        v-else
+      >
         <router-link to="/login">登录</router-link>
       </div>
 

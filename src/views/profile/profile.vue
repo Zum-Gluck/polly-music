@@ -17,7 +17,7 @@
           <div class="portrait">
             <img
               width="70px"
-              :src="profile.avatarUrl"
+              :src="profile ? profile.avatarUrl :''"
             />
             <a href="javascript:;"> {{profile.nickname}}</a>
 
