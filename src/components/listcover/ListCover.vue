@@ -9,7 +9,7 @@
       }"
     >
       <div class="amount_play">
-        <span> {{$utils.tranNumber(songListItem.playCount)}}</span>
+        <span> {{$utils.tranNumber(songListItem.playCount,0)}}</span>
       </div>
       <img
         :src="songListItem.coverImgUrl || songListItem.picUrl "
@@ -74,7 +74,6 @@ export default {
 <style lang="less" scoped>
 .song_list_cover {
   margin-bottom: 20px;
-  width: 140px;
 }
 
 .images {

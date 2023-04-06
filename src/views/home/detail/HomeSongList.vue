@@ -8,7 +8,7 @@
       "
       >
         <ListCover
-          size="120px"
+          size="125px"
           :songListItem="item"
         ></ListCover>
       </li>
@@ -61,6 +61,14 @@ export default {
     flex-wrap: wrap;
     justify-content: space-between;
     margin-top: 20px;
+
+    li {
+      margin-right: 17px;
+    }
+
+    & li:nth-child(8n) {
+      margin-right: 0;
+    }
   }
 }
 </style>
