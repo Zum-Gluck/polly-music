@@ -33,3 +33,9 @@ export const getSongDetail = ids => instance.get(`/song/detail?ids=${ids}`)
  * @method 获取VIP音乐的URL 
  */
 export const getSongUrl = id => instance.get(`/song/url?id=${id}`)
+
+
+/**
+ * @method 获取推荐歌单
+ */
+export const getRecommendSongList = limit => instance.get(`/personalized?limit=${limit}`)

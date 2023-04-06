@@ -1,15 +1,19 @@
 <template>
   <div class="home">
-    <Focus></Focus>
+    <HomeFocus></HomeFocus>
+    <HomeSongList></HomeSongList>
   </div>
 </template>
 
 <script>
-import Focus from "./detail/focus.vue";
+import HomeFocus from './detail/HomeFocus.vue';
+import HomeSongList from './detail/HomeSongList.vue'
+
 export default {
   name: "home",
   components: {
-    Focus,
+    HomeFocus,
+    HomeSongList
   },
   methods: {},
 };

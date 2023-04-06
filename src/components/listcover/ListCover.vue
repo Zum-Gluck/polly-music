@@ -3,16 +3,25 @@
     <div
       class="images shadow"
       @click="coverClick"
+      :style="{
+        width:size,
+        height:size
+      }"
     >
       <div class="amount_play">
         <span> {{$utils.tranNumber(songListItem.playCount)}}</span>
       </div>
       <img
-        :src="songListItem.coverImgUrl"
+        :src="songListItem.coverImgUrl || songListItem.picUrl "
         width="105px"
       >
     </div>
-    <div class="song_list_name">
+    <div
+      class="song_list_name"
+      :style="{
+        width:size
+      }"
+    >
       <a
         href="javascript:;"
         class="ellipsis-two"
@@ -30,13 +39,20 @@ export default {
     songListItem: {
       type: Object,
       default: {}
+    },
+
+    // 设置宽高
+    size: {
+      type: String,
+      default: '140px'
     }
   },
   // 组件
   components: {},
   // 变量
   data() {
-    return {};
+    return {
+    };
   },
   // 方法
   methods: {
@@ -58,6 +74,7 @@ export default {
 <style lang="less" scoped>
 .song_list_cover {
   margin-bottom: 20px;
+  width: 140px;
 }
 
 .images {
