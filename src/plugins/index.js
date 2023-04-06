@@ -33,10 +33,12 @@ import {
     DropdownItem,
     Loading,
     Progress,
-    Tooltip
+    Tooltip,
+    Notification
 } from 'element-ui';
 
 Vue.prototype.$message = message
+Vue.prototype.$notify = Notification 
 Vue.use(Button)
 Vue.use(Select)
 Vue.use(Row)

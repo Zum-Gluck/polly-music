@@ -372,6 +372,11 @@ export default {
   },
   mounted() {
     this.isFromNotLogin();
+    this.$notify({
+      title: '温馨提示',
+      message: '由于网易的限制账号密码登陆暂不可用,请使用二维码登陆',
+      duration: 1000 * 9
+    });
   },
 };
 </script>

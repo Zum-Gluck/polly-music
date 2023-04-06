@@ -16,5 +16,8 @@ export default {
     HomeSongList
   },
   methods: {},
+  activated(){
+     this.$notify.closeAll();
+  }
 };
 </script>
