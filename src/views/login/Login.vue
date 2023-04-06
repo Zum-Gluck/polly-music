@@ -318,7 +318,7 @@ export default {
             break;
 
           case 802: //扫码成功
-            console.log(statusInfo);
+            // console.log(statusInfo);
             this.isScanSuccess = true
             break;
 

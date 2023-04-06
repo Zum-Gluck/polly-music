@@ -87,7 +87,7 @@
                 ref="mask"
               >
                 <el-progress
-                  :percentage="currentProcess"
+                  :percentage="currentProcess ? currentProcess : 0"
                   color="#e64124"
                   :format="format"
                   :show-text="false"
@@ -230,7 +230,10 @@ export default {
 
       // console.log(copyright);
       // console.log(this.profile.vipType);
-      let { vipType } = this.profile;
+      let vipType = 0
+      if (this.profile) {
+        vipType = this.profile.vipType;
+      }
       try {
         let res = await this.$api.getSongUrl(id)
         this.songUrl = res.data[0].url
