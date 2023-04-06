@@ -6,13 +6,13 @@ https://www.bilibili.com/video/BV14M4y1U75h/?spm_id_from=333.880.my_history.page
 
 # 技术栈
 
-1. 开发工具： Visual Studio Code
+1. 开发工具：Visual Studio Code
 2. 编程语言：JavaScript
-3. 构建工具：Vite2.x / webpack5.x
+3. 构建工具：webpack5.x
 4. 前端框架：Vue2.x 
-5. 路由工具： Vuerouter
-6. 状态管理： Vuex / Pinia
-7. Ul 框架： Element 
+5. 路由工具：Vuerouter
+6. 状态管理：Vuex / Pinia
+7. Ul 框架：Element 
 
 ## Project setup
 
