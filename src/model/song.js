@@ -13,14 +13,15 @@ class Song {
 
 
 export function createSong(songDetail) {
+    console.log(songDetail);
     return new Song({
         id: songDetail.id,
         name: songDetail.name,
-        singerList: songDetail.ar,
-        album: songDetail.al,
-        duration: formatTime(songDetail.dt),
+        singerList: songDetail.ar || songDetail.song.artists,
+        album: (songDetail.al ? songDetail.al.picUrl : false) || songDetail.song.album.blurPicUrl,
+        duration: songDetail.dt ? formatTime(songDetail.dt) : formatTime(songDetail.song.duration),
         url: `https://music.163.com/song/media/outer/url?id=${songDetail.id}.mp3`,
-        copyright: songDetail.fee,
+        copyright: songDetail.song ? songDetail.song.fee : songDetail.fee,
         index: songDetail.index
     })
 }

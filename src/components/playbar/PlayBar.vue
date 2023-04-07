@@ -58,7 +58,7 @@
         <!-- 中间开始 -->
         <div class="process_bar">
           <div class="cover">
-            <img :src="currentSong ? currentSong.album.picUrl :'' ">
+            <img :src="currentSong ? currentSong.album :'' ">
           </div>
           <div class="mid">
             <div class="top">
@@ -250,6 +250,7 @@ export default {
         if (copyright == 1 && vipType === 0) {
           this.$message({ message: '正在试听vip歌曲(30s)', type: 'success' })
         }
+
         this.fullSeconds = this.$utils.strConvertSecond(newVal.duration);
         this.fullDuration = newVal.duration
 
