@@ -36,6 +36,16 @@ export const getSongUrl = id => instance.get(`/song/url?id=${id}`)
 
 
 /**
+ * @param {optional} limit 获取数量
  * @method 获取推荐歌单
  */
 export const getRecommendSongList = limit => instance.get(`/personalized?limit=${limit}`)
+
+
+
+/**
+ * @param {optional} limit 获取数量
+ * @method 获取推荐歌单
+ */
+export const getRecommendNewSong = limit => instance.get(`/personalized/newsong?limit=${limit}`)
+

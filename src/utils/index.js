@@ -226,5 +226,16 @@ export default {
   // 行政代码转地区
   getCityText(code) {
     return placesmap[code]
+  },
+
+  //歌手数组专字符串
+  tranNameListToString(list) {
+    let str = "";
+
+    for (let i = 0; i < list.length; i++) {
+      str += `${list[i].name} / `
+    }
+
+    return str.slice(0, str.length - 3);
   }
 }
