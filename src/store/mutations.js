@@ -30,5 +30,10 @@ export const mutations = {
     // 设置音乐是否暂停
     [types.SET_IS_PAUSE](state, flag) {
         state.isPause = flag
+    },
+
+    //设置播放音乐的页面
+    [types.SET_ORIGIN_PAGE](state, page) {
+        state.originPage = page;
     }
 }

@@ -11,4 +11,6 @@ export const getters = {
     isPlaying: state => state.isPlaying,
     // 是否暂停
     isPause: state => state.isPause,
+    // 播放音乐的页面
+    originPage: state => state.originPage
 }

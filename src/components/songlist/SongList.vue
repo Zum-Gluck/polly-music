@@ -21,6 +21,7 @@
       v-loading="loading"
       @cell-mouse-enter="rowEnter"
       @cell-mouse-leave="rowLeave"
+      @cell-dblclick="rowDbclick"
     >
 
       <!-- 列配置 -->
@@ -43,7 +44,7 @@
           <div
             class="playing"
             :class="{'index_active':(currentSong ? currentSong.index : -1) == scope.row.index }"
-            v-show="isShowPlaying && !isPause"
+            v-show="isShowPlaying && !isPause && isOriginPageRight"
           >
             <div class="box">
               <div style="animation-delay: -1.2s;"></div>
@@ -61,7 +62,7 @@
             v-if="!isPause"
             @click="SET_IS_PAUSE(true)"
             class="pause"
-            :class="{'index_active':(currentSong ? currentSong.index : -1) == scope.row.index}"
+            :class="{'index_active':(currentSong ? currentSong.index : -1) == scope.row.index && isOriginPageRight}"
           >
             <span class="iconfont icon-24gf-pause2"></span>
           </div>
@@ -156,7 +157,7 @@ export default {
   // 方法
   methods: {
     tableRowClassName({ row, rowIndex }) {
-      if (this.currentSong && this.currentSong.index == rowIndex + 1) {
+      if (this.currentSong && this.currentSong.index == rowIndex + 1 && this.isOriginPageRight) {
         return 'active'
       }
 
@@ -188,12 +189,19 @@ export default {
       cellEle.classList.remove('icon-play')
       cellEle.classList.remove('iconfont')
     },
+    rowDbclick(row) {
+      this.songPlayClick(row);
+    },
     ...mapMutations(['SET_IS_PAUSE']),
     ...mapActions(['selectPlay', 'allPlay']),
     // 播放按钮的点击
     songPlayClick(row) {
       this.isShowPlaying = false
-      this.selectPlay({ song: row, songList: this.songList })
+      this.selectPlay({
+        song: row,
+        songList: this.songList,
+        page: this.$route.name
+      })
     },
     // 播放全部按钮的点击
     playAllClick() {
@@ -202,7 +210,10 @@ export default {
   },
   // 计算属性
   computed: {
-    ...mapGetters(['currentSong', 'isPause'])
+    ...mapGetters(['currentSong', 'isPause', 'originPage']),
+    isOriginPageRight() {
+      return this.originPage === this.$route.name
+    }
   },
   // 监控data中的数据变化
   watch: {
@@ -223,7 +234,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
 .icon-play {
   font-size: 20px !important;
 }
@@ -261,7 +271,6 @@ export default {
     overflow: hidden;
   }
 }
-
 
 .btn {
   margin-bottom: 20px;

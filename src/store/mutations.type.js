@@ -9,3 +9,5 @@ export const SET_SONG_PLAY_LIST = 'SET_SONG_PLAY_LIST'
 export const SET_IS_PLAYING = 'SET_IS_PLAYING'
 
 export const SET_IS_PAUSE = 'SET_IS_PAUSE'
+
+export const SET_ORIGIN_PAGE = 'SET_ORIGIN_PAGE'

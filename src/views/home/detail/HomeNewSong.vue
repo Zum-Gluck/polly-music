@@ -79,9 +79,11 @@ export default {
     },
     // 播放按钮的点击
     playClick(song) {
+      console.log( this.$route.name);
       this.selectPlay({
         song,
-        songList: this.recommendNewSongList
+        songList: this.recommendNewSongList,
+        page: this.$route.name
       });
     },
     normalize(lists) {

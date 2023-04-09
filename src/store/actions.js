@@ -2,11 +2,12 @@ import * as types from './mutations.type'
 
 export const actions = {
     // 选择播放
-    selectPlay({ commit }, { song, songList }) {
+    selectPlay({ commit }, { song, songList, page }) {
         commit(types.SET_CURRENT_SONG, song)
         commit(types.SET_IS_PLAYING, true)
         commit(types.SET_SONG_PLAY_LIST, songList)
         commit(types.SET_IS_PAUSE, false)
+        commit(types.SET_ORIGIN_PAGE, page)
     },
 
     // 播放全部

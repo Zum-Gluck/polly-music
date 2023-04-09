@@ -11,4 +11,6 @@ export const state = {
     isPlaying: false,
     // 音乐是否暂停
     isPause: false,
+    // 播放音乐的页面
+    originPage: "home",
 }
