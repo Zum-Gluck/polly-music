@@ -1,6 +1,5 @@
 <template>
   <transition name="fade">
-
     <div
       class="play_bar shadow"
       v-show="isPlaying"
@@ -89,7 +88,6 @@
                 <el-progress
                   :percentage="currentProcess ? currentProcess : 0"
                   color="#e64124"
-                  :format="format"
                   :show-text="false"
                 ></el-progress>
               </div>
@@ -126,6 +124,7 @@
         :src="songUrl"
         ref="audioEle"
         @timeupdate="timeupdate"
+        @ended="musicOver"
       ></audio>
     </div>
   </transition>
@@ -153,8 +152,12 @@ export default {
   // 方法
   methods: {
     ...mapMutations(['SET_CURRENT_SONG', 'SET_IS_PAUSE']),
-    format(percentage) {
-      return percentage === 100 ? '满' : `${percentage}%`;
+    musicOver() {
+      if (this.currentDuration === '00:30') {
+        this.$message({ type: 'info', message: '试听结束，剩余需要开通网易黑胶会员' })
+      } else {
+        this.nextClick();
+      }
     },
     nextClick() {
       if (this.currentSong.index === this.songPlayList.length) return this.$message({ type: 'info', message: "已经是最后一首了～" });

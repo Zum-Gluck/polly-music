@@ -123,6 +123,7 @@ export default {
   },
   // 方法
   methods: {
+    ...mapMutations(['SET_PROFILE']),
     // 检查登陆状态并返回用户喜欢的音乐ID
     async getUserInfoAndRetrunIds() {
       const status = await this.$api.getLoginStatus()
@@ -167,7 +168,6 @@ export default {
       return res
 
     },
-    ...mapMutations(['SET_PROFILE']),
   },
   // 计算属性
   computed: {},

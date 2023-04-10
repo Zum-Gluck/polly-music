@@ -156,6 +156,9 @@ export default {
   },
   // 方法
   methods: {
+    ...mapMutations(['SET_IS_PAUSE']),
+    ...mapActions(['selectPlay', 'allPlay']),
+    // 配置行类名
     tableRowClassName({ row, rowIndex }) {
       if (this.currentSong && this.currentSong.index == rowIndex + 1 && this.isOriginPageRight) {
         return 'active'
@@ -192,8 +195,6 @@ export default {
     rowDbclick(row) {
       this.songPlayClick(row);
     },
-    ...mapMutations(['SET_IS_PAUSE']),
-    ...mapActions(['selectPlay', 'allPlay']),
     // 播放按钮的点击
     songPlayClick(row) {
       this.isShowPlaying = false
