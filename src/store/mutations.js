@@ -24,7 +24,7 @@ export const mutations = {
 
     // 设置是否开始播放音乐
     [types.SET_IS_PLAYING](state, flag) {
-        state.isPlaying = flag
+        state.isBegin = flag
     },
 
     // 设置音乐是否暂停

@@ -26,7 +26,7 @@
           <!-- 播放 -->
           <a
             href="javascript:;"
-            v-if="((!isPlaying || isPause) || originPage !== $route.name) || 
+            v-if="((!isBegin || isPause) || originPage !== $route.name) || 
             !(index+1 === (currentSong ? currentSong.index : -1))"
             @click="playClick(item)"
           >
@@ -99,7 +99,7 @@ export default {
   },
   // 计算属性
   computed: {
-    ...mapGetters(['isPlaying', 'isPause', 'originPage', 'currentSong'])
+    ...mapGetters(['isBegin', 'isPause', 'originPage', 'currentSong'])
   },
   // 监控data中的数据变化
   watch: {

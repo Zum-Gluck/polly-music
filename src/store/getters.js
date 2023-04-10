@@ -8,7 +8,7 @@ export const getters = {
     // 当前播放列表
     songPlayList: state => state.songPlayList,
     // 是否播放音乐
-    isPlaying: state => state.isPlaying,
+    isBegin: state => state.isBegin,
     // 是否暂停
     isPause: state => state.isPause,
     // 播放音乐的页面

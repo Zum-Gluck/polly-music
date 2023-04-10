@@ -2,7 +2,7 @@
   <transition name="fade">
     <div
       class="play_bar shadow"
-      v-show="isPlaying"
+      v-show="isBegin"
     >
       <div class="w">
         <!-- 左边 -->
@@ -223,7 +223,7 @@ export default {
   },
   // 计算属性
   computed: {
-    ...mapGetters(['isPlaying', 'currentSong', 'songPlayList', 'isPause', 'profile']),
+    ...mapGetters(['isBegin', 'currentSong', 'songPlayList', 'isPause', 'profile']),
   },
   // 监控data中的数据变化
   watch: {
