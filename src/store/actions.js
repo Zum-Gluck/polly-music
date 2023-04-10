@@ -10,6 +10,11 @@ export const actions = {
         commit(types.SET_ORIGIN_PAGE, page)
     },
 
+    // 音乐暂停
+    songPause({commit}){
+        commit(types.SET_IS_PAUSE,true)
+    },
+
     // 播放全部
     allPlay({ commit }, songList) {
         commit(types.SET_CURRENT_SONG, songList[0])

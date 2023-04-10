@@ -3,7 +3,7 @@
     <h2>推荐新歌曲</h2>
     <ul>
       <li
-        v-for="item of recommendNewSongList"
+        v-for="(item,index) of recommendNewSongList"
         :key="item.id"
         @mouseenter="songMouseEnter"
         @mouseleave="songMouseLeave"
@@ -21,15 +21,16 @@
             }}</div>
         </div>
         <div class="duration">{{item.duration}}</div>
-
         <!-- 遮罩层 -->
         <div class="mask_play">
           <!-- 播放 -->
           <a
             href="javascript:;"
-            v-if="true"
+            v-if="((!isPlaying || isPause) || originPage !== $route.name) || 
+            !(index+1 === (currentSong ? currentSong.index : -1))"
             @click="playClick(item)"
           >
+
             <span class="iconfont icon-24gf-play ">
             </span>
           </a>
@@ -38,12 +39,13 @@
           <!-- 暂停 -->
           <a
             href="javascript:;"
+            @click="songPause"
             v-else
           > <span class="iconfont icon-24gf-pause2"></span>
           </a>
           <!-- end -->
 
-          <div class="mask_bgc"></div>
+          <div class="mask_bgc"> </div>
         </div>
         <!-- end -->
 
@@ -54,7 +56,7 @@
 
 <script>
 import { createSong } from '@/model/song';
-import { mapActions, mapMutations } from 'vuex';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 export default {
   // component-name小写命名
@@ -70,7 +72,7 @@ export default {
   // 方法
   methods: {
     ...mapMutations(['SET_SONG_PLAY_LIST', 'SET_CURRENT_SONG']),
-    ...mapActions(['selectPlay']),
+    ...mapActions(['selectPlay', 'songPause']),
     songMouseEnter(e) {
       e.target.lastChild.style = 'display:block;';
     },
@@ -79,7 +81,6 @@ export default {
     },
     // 播放按钮的点击
     playClick(song) {
-      console.log( this.$route.name);
       this.selectPlay({
         song,
         songList: this.recommendNewSongList,
@@ -98,9 +99,11 @@ export default {
   },
   // 计算属性
   computed: {
+    ...mapGetters(['isPlaying', 'isPause', 'originPage', 'currentSong'])
   },
   // 监控data中的数据变化
-  watch: {},
+  watch: {
+  },
   // 生命周期 - 创建完成(可以访问当前this实例)
   created() { },
   // 生命周期 - 挂载完成(可以访问dom元素)
@@ -108,8 +111,6 @@ export default {
     try {
       let res = await this.$api.getRecommendNewSong(10);
       this.recommendNewSongList = this.normalize(res.result);
-      console.log(this.recommendNewSongList);
-      console.log(this.recommendNewSongList);
     } catch (err) {
       console.log("获取推荐新歌曲时发生了错误");
       console.log(err);

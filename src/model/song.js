@@ -13,7 +13,6 @@ class Song {
 
 
 export function createSong(songDetail) {
-    console.log(songDetail);
     return new Song({
         id: songDetail.id,
         name: songDetail.name,

@@ -7,7 +7,7 @@ export const state = {
     currentSong: null,
     // 音乐播放列表
     songPlayList: [],
-    // 是否在播放音乐
+    // 是否开始播放
     isPlaying: false,
     // 音乐是否暂停
     isPause: false,
