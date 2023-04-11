@@ -70,21 +70,17 @@
       <!-- 用户信息结束 -->
 
       <!-- 收藏歌单开始 -->
-      <el-card class="mt">
-        <div class="liked_song_list">
-          <div class="title">
-            <a href="javascript:;"><span>我创建的歌单</span></a>
-          </div>
-
-          <div class="cover_layout">
-            <ListCover
-              v-for="item in userCreatedSongList"
-              :key="item.id"
-              :songListItem="item"
-            ></ListCover>
-          </div>
+      <div class="mt">
+       <PollyCard title="收藏的歌单"> 
+         <div class="cover_layout">
+          <ListCover
+            v-for="item in userCreatedSongList"
+            :key="item.id"
+            :songListItem="item"
+          ></ListCover>
         </div>
-      </el-card>
+       </PollyCard>
+      </div>
       <!-- 收藏歌单结束 -->
     </div>
   </div>
@@ -94,6 +90,8 @@
 import SongList from "@/components/songlist/SongList"
 import PollyButton from '@/components/pollybutton/PollyButton.vue';
 import ListCover from '@/components/listcover/ListCover.vue';
+import PollyCard from '@/components/pollycard/PollyCard.vue';
+
 import { mapMutations } from 'vuex';
 import { createSong } from "@/model/song"
 
@@ -104,7 +102,8 @@ export default {
   components: {
     SongList,
     PollyButton,
-    ListCover
+    ListCover,
+    PollyCard
   },
   // 变量
   data() {
@@ -316,22 +315,6 @@ export default {
             }
           }
         }
-      }
-    }
-  }
-
-  .liked_song_list {
-    .title {
-      display: flex;
-      font-size: 13px;
-
-      &::before {
-        display: block;
-        content: "";
-        width: 3px;
-        height: 20px;
-        background-color: @color;
-        margin-right: 10px;
       }
     }
   }

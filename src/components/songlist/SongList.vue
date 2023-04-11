@@ -1,9 +1,6 @@
 <template>
   <div class="song_list clearfix">
-    <PollyButton
-      class="fr btn"
-      @click.native="playAllClick"
-    ></PollyButton>
+    <PollyButton class="fr btn" @click.native="playAllClick"></PollyButton>
 
     <!--表格开始 -->
     <ElTable
@@ -23,36 +20,34 @@
       @cell-mouse-leave="rowLeave"
       @cell-dblclick="rowDbclick"
     >
-
       <!-- 列配置 -->
-      <ElTableColumn
-        prop="num"
-        label="序号"
-        width="80"
-      >
+      <ElTableColumn prop="num" label="序号" width="80">
         <template slot-scope="scope">
           <!-- 数字&播放按钮 start-->
           <div
             @click="songPlayClick(scope.row)"
-            style="text-align: center; cursor:pointer"
+            style="text-align: center; cursor: pointer"
           >
-            <span>{{scope.row.index}}</span>
+            <span>{{ scope.row.index }}</span>
           </div>
           <!-- 数字&播放按钮 end-->
 
           <!-- Playing start -->
           <div
             class="playing"
-            :class="{'index_active':(currentSong ? currentSong.index : -1) == scope.row.index }"
+            :class="{
+              index_active:
+                (currentSong ? currentSong.index : -1) == scope.row.index,
+            }"
             v-show="isShowPlaying && !isPause && isOriginPageRight"
           >
             <div class="box">
-              <div style="animation-delay: -1.2s;"></div>
+              <div style="animation-delay: -1.2s"></div>
               <div></div>
-              <div style="animation-delay: -1.5s;"></div>
-              <div style="animation-delay: -1.2s;"></div>
-              <div style="animation-delay: -0.9s;"></div>
-              <div style="animation-delay: -0.6s;"></div>
+              <div style="animation-delay: -1.5s"></div>
+              <div style="animation-delay: -1.2s"></div>
+              <div style="animation-delay: -0.9s"></div>
+              <div style="animation-delay: -0.6s"></div>
             </div>
           </div>
           <!-- Playing end -->
@@ -62,7 +57,11 @@
             v-if="!isPause"
             @click="SET_IS_PAUSE(true)"
             class="pause"
-            :class="{'index_active':(currentSong ? currentSong.index : -1) == scope.row.index && isOriginPageRight}"
+            :class="{
+              index_active:
+                (currentSong ? currentSong.index : -1) == scope.row.index &&
+                isOriginPageRight,
+            }"
           >
             <span class="iconfont icon-24gf-pause2"></span>
           </div>
@@ -73,65 +72,54 @@
             v-else
             @click="SET_IS_PAUSE(false)"
             class="pause"
-            :class="{'index_active':(currentSong ? currentSong.index : -1) == scope.row.index}"
+            :class="{
+              index_active:
+                (currentSong ? currentSong.index : -1) == scope.row.index,
+            }"
           >
-            <span class="iconfont icon-play">
-            </span>
+            <span class="iconfont icon-play"> </span>
           </div>
           <!-- 播放 end -->
-
         </template>
       </ElTableColumn>
-      <ElTableColumn
-        prop="name"
-        label="歌曲"
-      >
+      <ElTableColumn prop="name" label="歌曲">
         <template slot-scope="scope">
-          <span style="cursor:pointer">{{ scope.row.name }}</span>
+          <span style="cursor: pointer">{{ scope.row.name }}</span>
         </template>
       </ElTableColumn>
-      <ElTableColumn
-        show-overflow-tooltip
-        prop="name"
-        label="歌手"
-        width="180"
-      >
+      <ElTableColumn show-overflow-tooltip prop="name" label="歌手" width="180">
         <template slot-scope="scope">
+          <!-- {{ scope.row.ar[0] }} -->
           <span
-            style="cursor:pointer"
-            v-for="(item,index) in scope.row.singerList"
-            :key='index'
-          >{{ item.name }}<span v-if="index != scope.row.singerList.length - 1">&nbsp;/&nbsp;</span>
+            style="cursor: pointer"
+            v-for="(item, index) in scope.row.singerList"
+            :key="index"
+            >{{ item.name
+            }}<span v-if="index != scope.row.singerList.length - 1"
+              >&nbsp;/&nbsp;</span
+            >
           </span>
         </template>
       </ElTableColumn>
-      <ElTableColumn
-        show-overflow-tooltip
-        prop="name"
-        label="专辑"
-        width="150"
-      >
+      <ElTableColumn show-overflow-tooltip prop="name" label="专辑" width="150">
         <template slot-scope="scope">
-          <span style="cursor:pointer">{{ scope.row.name }}</span>
+          <span style="cursor: pointer">{{ scope.row.name }}</span>
         </template>
       </ElTableColumn>
-      <ElTableColumn
-        prop="duration"
-        label="时长"
-        width="70"
-      >
+      <ElTableColumn prop="duration" label="时长" width="70">
         <template slot-scope="scope">
-          <span style="cursor:pointer">{{$utils.formatTime( scope.row.duration) }}</span>
+          <span style="cursor: pointer">{{
+            $utils.formatTime(scope.row.duration)
+          }}</span>
         </template>
       </ElTableColumn>
     </ElTable>
     <!--表格结束 -->
-
   </div>
 </template>
 
 <script>
-import { mapMutations, mapGetters, mapActions } from 'vuex';
+import { mapMutations, mapGetters, mapActions } from "vuex";
 import PollyButton from "../pollybutton/PollyButton.vue";
 export default {
   // component-name小写命名
@@ -144,24 +132,28 @@ export default {
     // 歌曲详情数组
     songList: {
       type: Array,
-      default: []
-    }
+      default: () => [],
+    },
   },
   // 变量
   data() {
     return {
       loading: true,
-      isShowPlaying: false
+      isShowPlaying: false,
     };
   },
   // 方法
   methods: {
-    ...mapMutations(['SET_IS_PAUSE']),
-    ...mapActions(['selectPlay', 'allPlay']),
+    ...mapMutations(["SET_IS_PAUSE"]),
+    ...mapActions(["selectPlay", "allPlay"]),
     // 配置行类名
     tableRowClassName({ row, rowIndex }) {
-      if (this.currentSong && this.currentSong.index == rowIndex + 1 && this.isOriginPageRight) {
-        return 'active'
+      if (
+        this.currentSong &&
+        this.currentSong.index == rowIndex + 1 &&
+        this.isOriginPageRight
+      ) {
+        return "active";
       }
 
       if (rowIndex % 2 != 0) {
@@ -178,58 +170,62 @@ export default {
       if (this.currentSong && this.currentSong.index === row.index) {
         this.isShowPlaying = false;
       }
-      const cellEle = event.target.parentNode.firstChild.getElementsByClassName("cell")[0].firstChild
-      cellEle.innerHTML = ''
-      cellEle.classList.add('icon-play')
-      cellEle.classList.add('iconfont')
+      const cellEle =
+        event.target.parentNode.firstChild.getElementsByClassName("cell")[0]
+          .firstChild;
+      cellEle.innerHTML = "";
+      cellEle.classList.add("icon-play");
+      cellEle.classList.add("iconfont");
     },
     rowLeave(row, column, cell, event) {
       if (this.currentSong && this.currentSong.index === row.index) {
         this.isShowPlaying = true;
       }
-      const cellEle = event.target.parentNode.firstChild.getElementsByClassName("cell")[0].firstChild
-      cellEle.innerHTML = row.index
-      cellEle.classList.remove('icon-play')
-      cellEle.classList.remove('iconfont')
+      const cellEle =
+        event.target.parentNode.firstChild.getElementsByClassName("cell")[0]
+          .firstChild;
+      cellEle.innerHTML = row.index;
+      cellEle.classList.remove("icon-play");
+      cellEle.classList.remove("iconfont");
     },
     rowDbclick(row) {
       this.songPlayClick(row);
     },
     // 播放按钮的点击
     songPlayClick(row) {
-      this.isShowPlaying = false
+      this.isShowPlaying = false;
       this.selectPlay({
         song: row,
         songList: this.songList,
-        page: this.$route.name
-      })
+        page: this.$route.name,
+      });
     },
     // 播放全部按钮的点击
     playAllClick() {
       this.allPlay(this.songList);
-    }
+    },
   },
   // 计算属性
   computed: {
-    ...mapGetters(['currentSong', 'isPause', 'originPage']),
+    ...mapGetters(["currentSong", "isPause", "originPage"]),
     isOriginPageRight() {
-      return this.originPage === this.$route.name
-    }
+      return this.originPage === this.$route.name;
+    },
   },
   // 监控data中的数据变化
   watch: {
     songList: function (newVal, oldVal) {
-      this.loading = false
+      this.loading = false;
     },
   },
   // 生命周期 - 创建完成(可以访问当前this实例)
-  created() { },
+  created() {},
   // 生命周期 - 挂载完成(可以访问dom元素)
   mounted() {
     //用户无喜欢的歌曲，页面不会一直loading加载
-    this.$on('noneLikedSong', function () {
+    this.$on("noneLikedSong", function () {
       this.loading = false;
-    })
+    });
   },
 };
 </script>
