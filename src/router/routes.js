@@ -1,5 +1,5 @@
 import HomeView from '@/views/home/Home.vue'
-import ErrorPage from '@/components/error/ErrorPage.vue'
+import ErrorPage from '@/views/error/ErrorPage.vue'
 import Layout from '@/views/layout/Layout.vue'
 
 // 登陆路由
