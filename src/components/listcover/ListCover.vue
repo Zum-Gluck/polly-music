@@ -4,29 +4,31 @@
       class="images shadow"
       @click="coverClick"
       :style="{
-        width:size,
-        height:size
+        width: size,
+        height: size,
       }"
     >
-      <div class="amount_play">
-        <span> {{$utils.tranNumber(songListItem.playCount,0)}}</span>
+      <div class="amount_play" v-if="songListItem.playCount">
+        <span> {{ $utils.tranNumber(songListItem.playCount, 0) }}</span>
       </div>
       <img
-        :src="songListItem.coverImgUrl || songListItem.picUrl "
+        :src="songListItem.coverImgUrl || songListItem.picUrl"
         width="105px"
-      >
+      />
     </div>
     <div
       class="song_list_name"
       :style="{
-        width:size
+        width: size,
       }"
     >
       <a
         href="javascript:;"
         class="ellipsis-two"
         :title="songListItem.name"
-      >{{songListItem.name}}</a>
+        v-if="songListItem.name"
+        >{{ songListItem.name }}</a
+      >
     </div>
   </div>
 </template>
@@ -38,36 +40,36 @@ export default {
   props: {
     songListItem: {
       type: Object,
-      default: {}
+      default: () => {},
     },
 
     // 设置宽高
     size: {
       type: String,
-      default: '140px'
-    }
+      default: "140px",
+    },
   },
   // 组件
   components: {},
   // 变量
   data() {
-    return {
-    };
+    return {};
   },
   // 方法
   methods: {
     coverClick() {
-      this.$router.push(`/songmenu/${this.songListItem.id}`)
-    }
+      if (!this.$route.fullPath.includes("/songmenu"))
+        this.$router.push(`/songmenu/${this.songListItem.id}`);
+    },
   },
   // 计算属性
   computed: {},
   // 监控data中的数据变化
   watch: {},
   // 生命周期 - 创建完成(可以访问当前this实例)
-  created() { },
+  created() {},
   // 生命周期 - 挂载完成(可以访问dom元素)
-  mounted() { },
+  mounted() {},
 };
 </script>
 
