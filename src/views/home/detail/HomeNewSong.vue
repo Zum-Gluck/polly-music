@@ -20,7 +20,7 @@
             $utils.tranNameListToString(item.singerList)
             }}</div>
         </div>
-        <div class="duration">{{item.duration}}</div>
+        <div class="duration">{{$utils.formatTime(item.duration)}}</div>
         <!-- 遮罩层 -->
         <div class="mask_play">
           <!-- 播放 -->

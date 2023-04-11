@@ -76,7 +76,7 @@
                 </a>
               </div>
               <div class="minute">
-                {{currentDuration}} / {{fullDuration}}
+                {{currentDuration}} / {{$utils.formatSecondTime(fullDuration)}}
               </div>
             </div>
             <div class="bottom_layout">
@@ -143,7 +143,7 @@ export default {
       songUrl: '',
       currentProcess: 0,
       currentDuration: "00:00",
-      fullDuration: "00:00",
+      fullDuration: 0,
       fullSeconds: 0,
       isToastShow: false,
       isChangeBtnPos: true
@@ -203,7 +203,8 @@ export default {
     cancelMouseMove(maxPos, currentPos) {
 
       document.onmouseup = () => {
-        const fullSeconds = this.$utils.strConvertSecond(this.fullDuration)
+        const fullSeconds = this.$utils.formatSecond(this.currentSong.duration)
+
         this.$refs.audioEle.currentTime = currentPos / maxPos * fullSeconds
         this.$refs.mask.onmousemove = null
         this.isChangeBtnPos = true
@@ -216,7 +217,7 @@ export default {
     maskClick(e) {
       const maxPos = 620
       const clickPos = e.offsetX
-      const fullSeconds = this.$utils.strConvertSecond(this.fullDuration)
+      const fullSeconds = this.$utils.formatSecond(this.currentSong.duration)
       this.$refs.audioEle.currentTime = clickPos / maxPos * fullSeconds
     }
 
@@ -254,8 +255,8 @@ export default {
           this.$message({ message: '正在试听vip歌曲(30s)', type: 'success' })
         }
 
-        this.fullSeconds = this.$utils.strConvertSecond(newVal.duration);
-        this.fullDuration = newVal.duration
+        this.fullSeconds = this.$utils.formatSecond(newVal.duration);
+        this.fullDuration = this.$utils.formatSecond(newVal.duration)
 
       } catch (err) {
         console.log('请求vip 音乐时候出现error');

@@ -121,7 +121,7 @@
         width="70"
       >
         <template slot-scope="scope">
-          <span style="cursor:pointer">{{ scope.row.duration }}</span>
+          <span style="cursor:pointer">{{$utils.formatTime( scope.row.duration) }}</span>
         </template>
       </ElTableColumn>
     </ElTable>
