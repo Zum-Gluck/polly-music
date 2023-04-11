@@ -57,7 +57,7 @@ export default {
   // 方法
   methods: {
     coverClick() {
-      console.log(this.songListItem.name);
+      this.$router.push(`/songmenu/${this.songListItem.id}`)
     }
   },
   // 计算属性

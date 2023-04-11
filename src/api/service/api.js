@@ -49,3 +49,9 @@ export const getRecommendSongList = limit => instance.get(`/personalized?limit=$
  */
 export const getRecommendNewSong = limit => instance.get(`/personalized/newsong?limit=${limit}`)
 
+
+/**
+ * @param {require} id 歌单id
+ * @method 获取歌单详情
+ */
+ export const getSongMenu = id=> instance.get(`/playlist/detail?id=${id}`)
