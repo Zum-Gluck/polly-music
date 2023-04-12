@@ -46,17 +46,17 @@
           </div></el-col
         >
       </el-row>
-      <SongList :songList="this.songlist.songs" />
+      <SongList :songList="this.songlist" />
     </el-card>
   </div>
 </template>
 
 <script>
-import SongList from "../songlist/SongList.vue";
-import PollyButton from "../pollybutton/PollyButton.vue";
-import PollyCard from "../pollycard/PollyCard.vue";
-import ListCover from "../listcover/ListCover.vue";
-import utils from "../../utils/index.js";
+import SongList from "@/components/songlist/SongList.vue";
+import PollyButton from "@/components/pollybutton/PollyButton.vue";
+import PollyCard from "@/components/pollycard/PollyCard.vue";
+import ListCover from "@/components/listcover/ListCover.vue";
+import { createSong } from "@/model/song";
 export default {
   components: { PollyCard, ListCover, PollyButton, SongList },
   data() {
@@ -64,7 +64,7 @@ export default {
       playlist: {
         creator: {},
       },
-      songlist: {},
+      songlist: [],
     };
   },
   async activated() {
@@ -73,16 +73,20 @@ export default {
     let res2 = await this.$api.getSongMenuList(this.$route.params.id);
 
     this.playlist = res1.playlist;
-    this.songlist = res2;
-    this.playlist.createTime = utils.dateFormat(
+    this.songlist = this.normalize(res2.songs);
+    this.playlist.createTime = this.$utils.dateFormat(
       this.playlist.createTime,
       "YYYY-MM-DD"
     );
-    // console.log(res2)
-    console.log(this.playlist);
-    console.log(this.songlist.songs);
   },
-  methods: {},
+  methods: {
+    normalize(list) {
+      let index = 1;
+      return list.map((element) =>
+        Object.assign(createSong(element), { index: index++ })
+      );
+    },
+  },
 
   computed: {},
 };
