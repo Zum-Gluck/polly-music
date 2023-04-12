@@ -1,88 +1,148 @@
 <template>
   <div>
-    <el-row>
-      <el-col :span="20">
-        <el-card>
+    <el-row :gutter="30">
+      <el-col :span="17" :offset="0">
+        <el-card style="position: relative">
           <el-row :gutter="20">
-            <el-col :span="6"
-              ><div class="grid-left">
+            <el-col :span="9"
+              ><div class="grid_left">
                 <ListCover
-                  size="250px"
+                  size="280px"
                   :songListItem="{ coverImgUrl: this.playlist.coverImgUrl }"
                 /></div
             ></el-col>
-            <el-col :span="18">
-              <div class="grid-right">
+            <el-col :span="15">
+              <div class="grid_right">
                 <h1 style="font-size: 25px">
                   {{ this.playlist.name }}
                 </h1>
-                <div>
+                <div class="avatar_name_creatime">
                   <img
                     :src="this.playlist.creator.avatarUrl"
                     style="width: 40px; height: 40px; border-radius: 50%"
-                  /><span style="color: black">{{
-                    this.playlist.creator.nickname
-                  }}</span>
+                  /><span
+                    style="color: black; margin-left: 20px; margin-right: 40px"
+                    >{{ this.playlist.creator.nickname }}</span
+                  >
                   <span style="color: rgba(0, 0, 0, 0.5)"
                     >{{ this.playlist.createTime }}创建</span
                   >
                 </div>
-                <div>
+                <div class="right_pollybutton">
                   <span>标签:</span>
                   <PollyButton
                     v-for="(item, index) in this.playlist.tags"
                     :key="index"
                     :content="item"
                     height="30px"
-                    width="60px"
+                    width="55px"
                     style="border-radius: 30px; display: inline-block"
                   />
                 </div>
-                <div>
+                <div
+                  :class="
+                    this.extend
+                      ? 'right_description_extend'
+                      : 'right_description_shorten'
+                  "
+                >
                   <span>
                     {{ this.playlist.description }}
                   </span>
                 </div>
-
-                <el-button round
-                  ><i class="el-icon-star-off"></i>收藏</el-button
+                <span
+                  style="color: #f60; cursor: pointer"
+                  @click="toggleExtend()"
+                  v-if="!extend"
                 >
+                  全部 >
+                </span>
+                <span
+                  style="color: #f60; cursor: pointer"
+                  @click="toggleShorten()"
+                  v-else
+                >
+                  收起
+                </span>
+                <div class="right_subscribe">
+                  <el-button round style="width: 120px"
+                    ><i class="el-icon-star-off"></i>收藏</el-button
+                  >
+                </div>
               </div>
             </el-col>
           </el-row>
-          <SongList :songList="this.songlist" />
+
+          <SongList :songList="this.songlist" style="margin-top: 20px" />
         </el-card>
       </el-col>
-      <el-col :span="4">
-        <PollyCard title="喜欢这个歌单的人">
-          <ListCover
-            v-for="(item, value) in this.subscribe"
-            :key="value"
-            size="35px"
-            :songListItem="{ coverImgUrl: item.avatarUrl }"
-            style="display: inline-block; margin: 2px"
-          />
+      <el-col :span="7" :offset="0">
+        <PollyCard title="喜欢这个歌单的人" style="margin-bottom: 30px">
+          <div
+            style="
+              display: flex;
+              flex-wrap: wrap;
+              justify-content: space-between;
+              padding: 10px;
+            "
+          >
+            <ListCover
+              v-for="(item, value) in this.subscribe"
+              :key="value"
+              size="35px"
+              :songListItem="{ coverImgUrl: item.avatarUrl }"
+              style="flex: 14.28%; margin: 0"
+            />
+          </div>
         </PollyCard>
-        <PollyCard title="相关推荐">
-          <div v-for="(item, value) in this.relatedplaylist" :key="value">
+        <PollyCard title="相关推荐" style="margin-bottom: 30px">
+          <div
+            v-for="(item, value) in this.relatedplaylist"
+            :key="value"
+            style="position: relative; margin-top: 10px"
+          >
             <ListCover
               size="55px"
               :songListItem="{ coverImgUrl: item.coverImgUrl }"
               style="display: inline-block; margin: 2px"
-            />{{ item.name }} By.{{ item.creator.nickname }}
+            />
+            <div
+              style="position: absolute; top: 0; left: 65px"
+              class="related_name"
+            >
+              {{ item.name }}
+            </div>
+            <div
+              style="
+                position: absolute;
+                bottom: 10px;
+                left: 65px;
+                color: rgba(0, 0, 0, 0.5);
+              "
+            >
+              By.{{ item.creator.nickname }}
+            </div>
           </div>
         </PollyCard>
         <PollyCard title="精彩评论">
           <div v-for="(item, value) in this.comment" :key="value">
-            <img
-              :src="item.user.avatarUrl"
-              style="width: 40px; height: 40px; border-radius: 50%"
-            />
-            <span>
-              {{ item.user.nickname }}
-            </span>
-            <div>
-              {{ item.content }}
+            <div class="comment">
+              <img
+                :src="item.user.avatarUrl"
+                style="width: 40px; height: 40px; border-radius: 50%"
+              />
+              <div class="comment_name">
+                <div>
+                  <strong> {{ item.user.nickname }}</strong>
+                  <span style="color: rgba(0, 0, 0, 0.3)">
+                    ·{{ item.timeStr }}
+                  </span>
+                </div>
+
+                <div id="content">
+                  {{ item.content }}
+                </div>
+              </div>
             </div>
           </div>
         </PollyCard>
@@ -102,31 +162,15 @@ export default {
   data() {
     return {
       playlist: {
-        creator: {},
+        //歌单相关信息
+        creator: {}, //歌单创建者
       },
-      songlist: [],
-      subscribe: [],
-      relatedplaylist: [],
-      comment: [],
+      songlist: [], //歌单歌曲
+      subscribe: [], //收藏者
+      relatedplaylist: [], //相关推荐
+      comment: [], //歌单评论
+      extend: false, //控制歌单简介展开
     };
-  },
-  async activated() {
-    // console.log(this.$route.params.id);
-    let res1 = await this.$api.getSongMenu(this.$route.params.id);
-    let res2 = await this.$api.getSongMenuList(this.$route.params.id);
-    let res3 = await this.$api.getSongMenuSubscribe(this.$route.params.id);
-    let res4 = await this.$api.getSongMenuRelated(this.$route.params.id);
-    let res5 = await this.$api.getSongMenuComment(this.$route.params.id);
-    console.log("file: SongMenu.vue:114 @ res5:", res5.comments);
-    this.playlist = res1.playlist;
-    this.playlist.createTime = this.$utils.dateFormat(
-      this.playlist.createTime,
-      "YYYY-MM-DD"
-    );
-    this.songlist = this.normalize(res2.songs);
-    this.subscribe = res3.subscribers;
-    this.relatedplaylist = res4.playlists;
-    this.comment = res5.comments;
   },
   methods: {
     normalize(list) {
@@ -135,6 +179,32 @@ export default {
         Object.assign(createSong(element), { index: index++ })
       );
     },
+    toggleShorten() {
+      this.extend = !this.extend;
+    },
+    toggleExtend() {
+      this.extend = !this.extend;
+    },
+  },
+  async activated() {
+    // console.log(this.$route.params.id);
+    let res1 = await this.$api.getSongMenu(this.$route.params.id);
+    let res2 = await this.$api.getSongMenuList(this.$route.params.id);
+    let res6 = await this.$api.getSongMenuList(this.$route.params.id, 10, 10);
+    let res3 = await this.$api.getSongMenuSubscribe(this.$route.params.id);
+    let res4 = await this.$api.getSongMenuRelated(this.$route.params.id);
+    let res5 = await this.$api.getSongMenuComment(this.$route.params.id, 5);
+    console.log("file: SongMenu.vue:114 @ res5:", res5.comments);
+    this.playlist = res1.playlist;
+    this.playlist.createTime = this.$utils.dateFormat(
+      this.playlist.createTime,
+      "YYYY-MM-DD"
+    );
+    this.songlist = this.normalize(res2.songs.concat(res6.songs));
+    this.subscribe = res3.subscribers;
+    this.relatedplaylist = res4.playlists;
+    this.comment = res5.comments;
+    console.log("file: SongMenu.vue:198 @ comment:", this.comment);
   },
 
   computed: {},
@@ -143,16 +213,70 @@ export default {
 
 
 <style lang="less" scoped>
-// .el-card{
-//   display: flex;
-//   flex-direction: row;
-//   justify-content: space-between;
-//   .detail_left{
-//     flex: 1;
-//     display: inline-block;
-//   }
-//   .detail_right{
-//     flex: 1;
-//   }
-// }
+.grid_right {
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  // height: 275px;
+  .right_pollybutton {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    width: 250px;
+    justify-content: space-between;
+    line-height: 30px;
+  }
+  .right_subscribe {
+    display: flex;
+    flex-direction: row-reverse;
+  }
+  .right_description_shorten {
+    span {
+      text-overflow: -o-ellipsis-lastline;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+  }
+  .right_description_extend {
+    span {
+      margin-bottom: 10px;
+    }
+  }
+}
+.avatar_name_creatime {
+  margin-top: 10px;
+  display: flex;
+  line-height: 40px;
+}
+.related_name {
+  text-overflow: -o-ellipsis-lastline;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  font-weight: 700;
+}
+
+.comment {
+  margin: 15px;
+  display: flex;
+  .comment_name {
+    margin-left: 15px;
+    #content {
+      margin: 10px 0 0 0;
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 5px;
+      padding: 10px;
+      color: gray;
+    }
+  }
+}
 </style>

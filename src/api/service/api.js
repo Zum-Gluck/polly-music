@@ -55,10 +55,12 @@ export const getSongMenu = (id) => instance.get(`/playlist/detail?id=${id}`);
 
 /**
  * @param {require} id 歌单id
+ * @param {optional} limit 数量
+ * @param {optional} offset 偏移量
  * @method 获取歌单歌曲
  */
-export const getSongMenuList = (id) =>
-  instance.get(`/playlist/track/all?id=${id}&limit=10&offset=0`);
+export const getSongMenuList = (id,limit=10,offset=0) =>
+  instance.get(`/playlist/track/all?id=${id}&limit=${limit}&offset=${offset}`);
 
 /**
  * @param {require} id 歌单id

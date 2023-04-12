@@ -1,7 +1,7 @@
 import HomeView from "@/views/home/Home.vue";
 import ErrorPage from "@/views/error/ErrorPage.vue";
 import Layout from "@/views/layout/Layout.vue";
-import SongMenu from "@/views/songmenu/SongMenu.vue";
+
 // 登陆路由
 const __login__ = {
   path: "/login",
@@ -74,7 +74,7 @@ const appRoutes = [
       {
         path: "/songmenu/:id",
         name: "song-menu",
-        component: SongMenu,
+        component: () => import("@/views/songmenu/SongMenu.vue"),
       },
     ],
   },
