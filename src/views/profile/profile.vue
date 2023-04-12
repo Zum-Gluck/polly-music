@@ -8,78 +8,20 @@
     <div class="right">
 
       <!-- 用户信息开始 -->
-      <div class=" my-card">
-        <div
-          class="background "
-          v-if="profile.backgroundUrl"
-          :style="'background:url( '+ profile.backgroundUrl +')'"
-        >
-          <div class="portrait">
-            <img
-              width="70px"
-              :src="profile ? profile.avatarUrl :''"
-            />
-            <a href="javascript:;"> {{profile.nickname}}</a>
-
-            <PollyButton
-              class="fr"
-              content="签到"
-              width="60"
-              height="30"
-            ></PollyButton>
-          </div>
-        </div>
-        <div class="user_info">
-          <div
-            class="signature"
-            v-if="profile.signature"
-          ><a href="javascript:;">
-              {{profile.signature}}</a></div>
-
-          <ul>
-            <li>
-              <a href="javascript:;">
-                <span class="level">等级:</span>
-                <span> <i class="iconfont icon-level"></i>{{userfLeveInfo.level}}</span>
-              </a>
-            </li>
-            <li>
-              <a href="javascript:;">
-                <span class="level">年龄:</span>
-                <span>{{$utils.getAstro(profile.birthday)}}</span>
-                <span
-                  v-if="profile.gender == 1"
-                  class="iconfont icon-nanxing"
-                ></span>
-
-                <span
-                  v-else
-                  class="iconfont icon-nv1"
-                ></span>
-              </a>
-            </li>
-            <li>
-              <a href="javascript:;">
-                <span class="level">地区:</span>
-                <span>{{$utils.getCityText(profile.city)}}</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
+      <UserInfo :profile="userinfo"></UserInfo>
       <!-- 用户信息结束 -->
 
       <!-- 收藏歌单开始 -->
       <div class="mt">
-       <PollyCard title="收藏的歌单"> 
-         <div class="cover_layout">
-          <ListCover
-            v-for="item in userCreatedSongList"
-            :key="item.id"
-            :songListItem="item"
-          ></ListCover>
-        </div>
-       </PollyCard>
+        <PollyCard title="收藏的歌单">
+          <div class="cover_layout">
+            <ListCover
+              v-for="item in userCreatedSongList"
+              :key="item.id"
+              :songListItem="item"
+            ></ListCover>
+          </div>
+        </PollyCard>
       </div>
       <!-- 收藏歌单结束 -->
     </div>
@@ -88,12 +30,14 @@
 
 <script>
 import SongList from "@/components/songlist/SongList"
-import PollyButton from '@/components/pollybutton/PollyButton.vue';
 import ListCover from '@/components/listcover/ListCover.vue';
 import PollyCard from '@/components/pollycard/PollyCard.vue';
+import UserInfo from '@/components/userinfo/UserInfo.vue';
 
 import { mapMutations } from 'vuex';
 import { createSong } from "@/model/song"
+import { createProfile } from "@/model/profile"
+
 
 export default {
   // component-name小写命名
@@ -101,9 +45,9 @@ export default {
   // 组件
   components: {
     SongList,
-    PollyButton,
     ListCover,
-    PollyCard
+    PollyCard,
+    UserInfo
   },
   // 变量
   data() {
@@ -117,7 +61,9 @@ export default {
       profile: {},
       userfLeveInfo: {},
       // 用户收藏（创建）的歌单
-      userCreatedSongList: []
+      userCreatedSongList: [],
+      // userInfo组件需要的数据
+      userinfo:{}
     };
   },
   // 方法
@@ -129,6 +75,8 @@ export default {
       const { profile } = status.data
       // console.log(profile);
       this.profile = profile
+
+      this.userinfo = await this.normalizeUserInfo(this.profile)
 
       let { userId } = profile
       // 用户信息加入缓存
@@ -167,6 +115,14 @@ export default {
       return res
 
     },
+
+    async normalizeUserInfo(profile) {
+      //获取用户等级信息
+      let { data } = await this.$api.getUserLevel()
+      this.userfLeveInfo = data
+      profile.level = this.userfLeveInfo.level
+      return createProfile(profile);
+    }
   },
   // 计算属性
   computed: {},
@@ -178,10 +134,6 @@ export default {
   async mounted() {
     // 获取用户喜欢的音乐
     this.userLikedSongList = await this.normalizeSongList()
-
-    //获取用户等级信息
-    let { data } = await this.$api.getUserLevel()
-    this.userfLeveInfo = data
 
     //获取用户收藏的歌单
     let res = await this.$api.getUserLikedSongList(this.profile.userId)
@@ -229,94 +181,6 @@ export default {
   .right {
     width: 350px;
     flex-shrink: 0;
-
-    .my-card {
-      border-radius: 4px;
-      border: 1px solid #ebeef5;
-      overflow: hidden;
-      box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
-
-      .background {
-        position: relative;
-        height: 130px;
-        background-size: 100% !important;
-
-        .portrait {
-          position: absolute;
-          top: 110px;
-          left: 20px;
-          width: 89%;
-          img {
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            vertical-align: middle;
-            margin-right: 6px;
-          }
-          a:hover {
-            color: @color;
-          }
-          .polly-button {
-            margin-top: 22px;
-          }
-        }
-      }
-
-      .user_info {
-        padding: 60px 20px 15px;
-        background-color: #fff;
-        .signature {
-          font-size: 12px;
-          cursor: pointer;
-
-          a {
-            color: #999;
-          }
-
-          &:hover a {
-            color: @color;
-          }
-        }
-
-        ul {
-          margin-top: 10px;
-          li {
-            display: flex;
-            align-items: center;
-            margin-bottom: 4px;
-            &::before {
-              content: "";
-              display: block;
-              width: 7px;
-              height: 7px;
-              background-color: @color;
-              border-radius: 50%;
-            }
-
-            span {
-              margin-left: 9px;
-              font-size: 13px;
-            }
-
-            a:hover {
-              color: @color;
-            }
-
-            .icon-nanxing {
-              color: #4d95cb;
-              font-size: 14px;
-            }
-            .icon-nv1 {
-              color: #eb50c4;
-              font-size: 14px;
-            }
-            .icon-level {
-              margin-right: -1px;
-              font-size: 13px;
-            }
-          }
-        }
-      }
-    }
   }
 }
 
