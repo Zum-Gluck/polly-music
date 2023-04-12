@@ -92,13 +92,11 @@
           <!-- {{ scope.row.ar[0] }} -->
           <span
             style="cursor: pointer"
-            v-for="(item, index) in scope.row.singerList
-              ? scope.row.singerList
-              : scope.row.ar"
+            v-for="(item, index) in scope.row.singerList"
             :key="index"
             >{{ item.name
-            }}<span v-if="index != scope.row.singerList?.length - 1"
-              ><span v-if="scope.row.singerList">&nbsp;/&nbsp;</span></span
+            }}<span v-if="index != scope.row.singerList.length - 1"
+              >&nbsp;/&nbsp;</span
             >
           </span>
         </template>
