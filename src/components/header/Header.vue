@@ -129,9 +129,13 @@ export default {
       }
     },
     profileClick() {
-      let { userId } = JSON.parse(localStorage.getItem('profile'))
-      console.log(userId);
-      this.$router.push(`/profile/${userId}`)
+      let res = JSON.parse(localStorage.getItem('profile'))
+      if (!res) {
+        return this.$router.push("/login?code=301");
+      } else {
+        let { userId } = res
+        this.$router.push(`/profile/${userId}`)
+      }
     }
   },
   // 计算属性

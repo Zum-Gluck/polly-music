@@ -157,6 +157,8 @@
 
 <script>
 import PollyInput from "./detail/PollyInput.vue";
+import { createProfile } from '@/model/profile';
+
 import { mapMutations } from 'vuex'
 
 export default {
@@ -189,7 +191,7 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(['SET_LOGIN_STATUS']),
+    ...mapMutations(['SET_LOGIN_STATUS', 'SET_PROFILE']),
     //切换登录方式
     triggerLoginMethod() {
       if (this.isReverseFront) {
@@ -335,7 +337,10 @@ export default {
             window.localStorage.setItem('cookie', statusInfo.cookie);
             window.localStorage.setItem('isLogin', true);
             this.SET_LOGIN_STATUS(true);
-            this.$router.push('/profile');
+
+            const userId = await this.getUserInfo()
+
+            this.$router.push(`/profile/${userId}`);
             this.$message({
               type: 'success',
               message: "login success"
@@ -351,6 +356,28 @@ export default {
 
 
       }, 1000);
+    },
+    async getUserInfo() {
+      const status = await this.$api.getLoginStatus()
+      const { profile } = status.data
+      // console.log(profile);
+      this.profile = profile
+
+      this.userinfo = await this.normalizeUserInfo(this.profile)
+
+      let { userId } = profile
+      // 用户信息加入缓存
+      window.localStorage.setItem("profile", JSON.stringify(profile))
+      this.SET_PROFILE(profile);
+
+      return userId
+    },
+    async normalizeUserInfo(profile) {
+      //获取用户等级信息
+      let { data } = await this.$api.getUserLevel()
+      this.userfLeveInfo = data
+      profile.level = this.userfLeveInfo.level
+      return createProfile(profile);
     },
     // 调用以上QRcode有关的方法
     async QrCodeInit() {

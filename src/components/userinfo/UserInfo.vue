@@ -119,9 +119,10 @@ export default {
   // 计算属性
   computed: {},
   // 监控data中的数据变化
-  watch: {},
-  updated() {
-    this.getUserCreatedSongList()
+  watch: {
+    profile: function (newVal, oldVal) {
+      this.getUserCreatedSongList()
+    }
   },
 };
 </script>

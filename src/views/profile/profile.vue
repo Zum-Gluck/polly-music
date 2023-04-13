@@ -75,24 +75,11 @@ export default {
      * @method 1.处理歌曲
      */
     async getUserLikedList() {
+      let profile = JSON.parse(localStorage.getItem('profile'));
       const id = this.$route.params.id
       // 如果uid存在，则是其他用户的主页
       if (id) return this.getOtherPersonInfo(id);
-
-
-      let songsDetai = await this.getUserDetail();
-
-
-      //没有喜欢的音乐
-      if (!songsDetai) {
-        this.$bus.$emit('noneLikedSong')
-        return []
-      }
-
-
-      return this.normalizeSongList(songsDetai)
     },
-
     // 格式化歌曲
     normalizeSongList(lists) {
       let res = []
@@ -104,38 +91,6 @@ export default {
 
       return res
     },
-    /**
-     * @method 2.获取音乐详情信息
-     */
-    async getUserDetail() {
-      let { ids } = await this.getUserInfoAndRetrunIds()
-
-      let idsStr = ids.join(',')
-      let { songs } = await this.$api.getSongDetail(idsStr)
-      return songs;
-    },
-    /**
-     * @method 3.检查登陆状态并返回用户喜欢的音乐ID
-     */
-    async getUserInfoAndRetrunIds() {
-      const status = await this.$api.getLoginStatus()
-      const { profile } = status.data
-      // console.log(profile);
-      this.profile = profile
-
-      this.userinfo = await this.normalizeUserInfo(this.profile)
-
-      let { userId } = profile
-      // 用户信息加入缓存
-      window.localStorage.setItem("profile", JSON.stringify(profile))
-      this.SET_PROFILE(profile);
-
-      const ids = await this.$api.getUserLikeList(userId);
-      return ids
-    },
-    /**
-     * @method 4.获取用户等级信息并处理props
-     */
     async normalizeUserInfo(profile) {
       //获取用户等级信息
       let { data } = await this.$api.getUserLevel()
@@ -149,13 +104,17 @@ export default {
      * @param {number} id 
      */
     async getOtherPersonInfo(id, offset = 50) {
-
       let info = await this.$api.getUserLikedSongList(id)
       let playlist = info.playlist
       this.userinfo = await this.normalizeUserInfo(playlist[0].creator)
       let userLikedList = await this.$api.getSongMenuList(playlist[0].id, offset)
       let list = this.normalizeSongList(userLikedList.songs)
 
+      //没有喜欢的音乐
+      if (!list) {
+        this.$bus.$emit('noneLikedSong')
+        return []
+      }
       return list
     },
 
@@ -213,7 +172,6 @@ export default {
   // 监控data中的数据变化
   watch: {
     $route: async function (newVal) {
-      console.log(newVal);
       if (newVal.name !== 'profile') return
       let profile = JSON.parse(localStorage.getItem('profile'));
       const currentId = this.$route.params.id
@@ -229,14 +187,6 @@ export default {
   async mounted() {
     // 默认获取用户喜欢的音乐
     this.songListDate = await this.getUserLikedList()
-  },
-  async activated() {
-    // let profile = JSON.parse(localStorage.getItem('profile'));
-    // const currentId = this.$route.params.id
-    // if (currentId !== profile.id) {
-    //   this.songListDate = await this.getUserLikedList()
-    //   this.getOtherPersonInfo(currentId);
-    // }
   },
   beforeRouteEnter(to, from, next) {
     // 访问的不是Profile页面放行
