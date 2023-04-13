@@ -194,10 +194,11 @@ export default {
     // 播放按钮的点击
     songPlayClick(row) {
       this.isShowPlaying = false;
+
       this.selectPlay({
         song: row,
         songList: this.songList,
-        page: this.$route.name,
+        page: this.$route.path,
       });
     },
     // 播放全部按钮的点击
@@ -209,7 +210,7 @@ export default {
   computed: {
     ...mapGetters(["currentSong", "isPause", "originPage"]),
     isOriginPageRight() {
-      return this.originPage === this.$route.name;
+      return this.originPage === this.$route.path;
     },
   },
   // 监控data中的数据变化

@@ -26,7 +26,7 @@
           <!-- 播放 -->
           <a
             href="javascript:;"
-            v-if="((!isBegin || isPause) || originPage !== $route.name) || 
+            v-if="((!isBegin || isPause) || originPage !== $route.path) || 
             !(index+1 === (currentSong ? currentSong.index : -1))"
             @click="playClick(item)"
           >
@@ -84,7 +84,7 @@ export default {
       this.selectPlay({
         song,
         songList: this.recommendNewSongList,
-        page: this.$route.name
+        page: this.$route.path
       });
     },
     normalize(lists) {
