@@ -7,23 +7,7 @@
     </div>
     <div class="right">
 
-      <!-- 用户信息开始 -->
       <UserInfo :profile="userinfo"></UserInfo>
-      <!-- 用户信息结束 -->
-
-      <!-- 收藏歌单开始 -->
-      <div class="mt">
-        <PollyCard title="收藏的歌单">
-          <div class="cover_layout">
-            <ListCover
-              v-for="item in userCreatedSongList"
-              :key="item.id"
-              :songListItem="item"
-            ></ListCover>
-          </div>
-        </PollyCard>
-      </div>
-      <!-- 收藏歌单结束 -->
     </div>
   </div>
 </template>
@@ -63,37 +47,15 @@ export default {
       // 用户收藏（创建）的歌单
       userCreatedSongList: [],
       // userInfo组件需要的数据
-      userinfo:{}
+      userinfo: {}
     };
   },
   // 方法
   methods: {
     ...mapMutations(['SET_PROFILE']),
-    // 检查登陆状态并返回用户喜欢的音乐ID
-    async getUserInfoAndRetrunIds() {
-      const status = await this.$api.getLoginStatus()
-      const { profile } = status.data
-      // console.log(profile);
-      this.profile = profile
-
-      this.userinfo = await this.normalizeUserInfo(this.profile)
-
-      let { userId } = profile
-      // 用户信息加入缓存
-      window.localStorage.setItem("profile", JSON.stringify(profile))
-      this.SET_PROFILE(profile);
-
-      const ids = await this.$api.getUserLikeList(userId);
-      return ids
-    },
-    // 获取音乐详情信息
-    async getUserDetail() {
-      let { ids } = await this.getUserInfoAndRetrunIds()
-
-      let idsStr = ids.join(',')
-      let { songs } = await this.$api.getSongDetail(idsStr)
-      return songs;
-    },
+    /**
+     * @method 1.处理歌曲
+     */
     async normalizeSongList() {
       let res = []
       let songsDetai = await this.getUserDetail();
@@ -115,7 +77,38 @@ export default {
       return res
 
     },
+    /**
+     * @method 2.获取音乐详情信息
+     */
+    async getUserDetail() {
+      let { ids } = await this.getUserInfoAndRetrunIds()
 
+      let idsStr = ids.join(',')
+      let { songs } = await this.$api.getSongDetail(idsStr)
+      return songs;
+    },
+    /**
+     * @method 3.检查登陆状态并返回用户喜欢的音乐ID
+     */
+    async getUserInfoAndRetrunIds() {
+      const status = await this.$api.getLoginStatus()
+      const { profile } = status.data
+      // console.log(profile);
+      this.profile = profile
+
+      this.userinfo = await this.normalizeUserInfo(this.profile)
+
+      let { userId } = profile
+      // 用户信息加入缓存
+      window.localStorage.setItem("profile", JSON.stringify(profile))
+      this.SET_PROFILE(profile);
+
+      const ids = await this.$api.getUserLikeList(userId);
+      return ids
+    },
+    /**
+     * @method 4.获取用户等级信息并处理props
+     */
     async normalizeUserInfo(profile) {
       //获取用户等级信息
       let { data } = await this.$api.getUserLevel()
@@ -134,12 +127,6 @@ export default {
   async mounted() {
     // 获取用户喜欢的音乐
     this.userLikedSongList = await this.normalizeSongList()
-
-    //获取用户收藏的歌单
-    let res = await this.$api.getUserLikedSongList(this.profile.userId)
-    this.userCreatedSongList = res.playlist
-    // console.log(this.userCreatedSongList);
-
   },
   beforeRouteEnter(to, from, next) {
     // 访问的不是Profile页面放行
@@ -160,9 +147,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.mt {
-  margin-top: 30px;
-}
 .profile {
   display: flex;
   justify-content: space-between;
@@ -181,23 +165,6 @@ export default {
   .right {
     width: 350px;
     flex-shrink: 0;
-  }
-}
-
-.el-card {
-  background: no-repeat;
-}
-
-.cover_layout {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  width: 100%;
-  margin-top: 20px;
-
-  .song_list_cover:nth-child(3),
-  .song_list_cover:nth-child(4) {
-    margin-bottom: 0;
   }
 }
 </style>

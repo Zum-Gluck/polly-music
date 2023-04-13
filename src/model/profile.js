@@ -1,5 +1,6 @@
 class Profile {
     constructor(profile) {
+        this.userId = profile.userId
         this.backgroundUrl = profile.backgroundUrl;
         this.avatarUrl = profile.avatarUrl;
         this.nickname = profile.nickname;
@@ -14,6 +15,7 @@ class Profile {
 
 export function createProfile(userInfo) {
     return new Profile({
+        userId: userInfo.userId,
         backgroundUrl: userInfo.backgroundUrl,
         avatarUrl: userInfo.avatarUrl,
         nickname: userInfo.nickname,
