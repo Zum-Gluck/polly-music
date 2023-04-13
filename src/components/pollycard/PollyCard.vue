@@ -46,6 +46,7 @@ export default {
     .title {
       display: flex;
       font-size: 13px;
+      line-height: 20px;
 
       &::before {
         display: block;

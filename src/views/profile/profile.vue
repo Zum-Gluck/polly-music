@@ -1,9 +1,19 @@
 <template>
   <div class="profile">
     <div class="left">
-      <ElCard>
-        <SongList :songList="userLikedSongList"></SongList>
-      </ElCard>
+      <PollyCard :title="userinfo.nickname + '喜欢的音乐'">
+        <ul class="nav_bar">
+          <li
+            v-for="(item,index) of songListType"
+            :key="index"
+            :class="{'isActive':currentType === index}"
+            @click="toggleSongListDaye(item)"
+          >
+            {{item.type}}
+          </li>
+        </ul>
+        <SongList :songList="songListDate"></SongList>
+      </PollyCard>
     </div>
     <div class="right">
 
@@ -18,6 +28,7 @@ import ListCover from '@/components/listcover/ListCover.vue';
 import PollyCard from '@/components/pollycard/PollyCard.vue';
 import UserInfo from '@/components/userinfo/UserInfo.vue';
 
+
 import { mapMutations } from 'vuex';
 import { createSong } from "@/model/song"
 import { createProfile } from "@/model/profile"
@@ -31,7 +42,7 @@ export default {
     SongList,
     ListCover,
     PollyCard,
-    UserInfo
+    UserInfo,
   },
   // 变量
   data() {
@@ -40,14 +51,21 @@ export default {
         nickname: "",
         pictureUrl: ""
       },
-      // 用户喜欢的音乐
-      userLikedSongList: [],
+      // 默认用户喜欢的音乐
+      songListDate: [],
       profile: {},
       userfLeveInfo: {},
       // 用户收藏（创建）的歌单
       userCreatedSongList: [],
       // userInfo组件需要的数据
-      userinfo: {}
+      userinfo: {},
+      // 歌曲类型
+      songListType: [
+        { type: '我喜欢的', value: 0 },
+        { type: '最近一周', value: 1 },
+        { type: '所有时间', value: 2 },
+      ],
+      currentType: 0
     };
   },
   // 方法
@@ -56,8 +74,13 @@ export default {
     /**
      * @method 1.处理歌曲
      */
-    async normalizeSongList() {
-      let res = []
+    async getUserLikedList() {
+      const id = this.$route.query.id
+
+      // 如果uid存在，则是其他用户的主页
+      if (id) return this.getOtherPersonInfo(id);
+
+
       let songsDetai = await this.getUserDetail();
 
 
@@ -68,14 +91,19 @@ export default {
       }
 
 
-      songsDetai.forEach((item, index) => {
+      return this.normalizeSongList(songsDetai)
+    },
+
+    // 格式化歌曲
+    normalizeSongList(lists) {
+      let res = []
+      lists.forEach((item, index) => {
         // console.log(item);
         item.index = ++index;
         res.push(createSong(item));
       });
-      // console.log(res);
-      return res
 
+      return res
     },
     /**
      * @method 2.获取音乐详情信息
@@ -115,6 +143,70 @@ export default {
       this.userfLeveInfo = data
       profile.level = this.userfLeveInfo.level
       return createProfile(profile);
+    },
+
+    /**
+     * @mthod 获取其他用户的信息
+     * @param {number} id 
+     */
+    async getOtherPersonInfo(id, offset = 50) {
+
+      let info = await this.$api.getUserLikedSongList(id)
+      let playlist = info.playlist
+      this.userinfo = await this.normalizeUserInfo(playlist[0].creator)
+      let userLikedList = await this.$api.getSongMenuList(playlist[0].id, offset)
+      let list = this.normalizeSongList(userLikedList.songs)
+
+      return list
+    },
+
+    /**
+     * @method 获取最近一周听歌数据
+     */
+
+    // 切换歌单数据
+    async toggleSongListDaye(item) {
+      const { value } = item
+      if (this.currentType === value) return;
+      this.currentType = value;
+
+      switch (value) {
+        // 我喜欢的音乐
+        case 0:
+          this.songListDate = await this.getUserLikedList()
+          break;
+
+        // 最近一周听歌排行
+        case 1:
+          this.songListDate = await this.weekDateSongList();
+          break;
+
+        // 所有时间听歌排行
+        case 2:
+          this.songListDate = await this.allDateSongList();
+          break;
+        default:
+          console.log('error');
+          break;
+      }
+    },
+    async weekDateSongList() {
+      let uid = this.userinfo.userId;
+      let res = await this.$api.getUserRecord(uid)
+      let songlist = []
+      res.weekData.map(item => {
+        songlist.push(item.song)
+      })
+      return this.normalizeSongList(songlist)
+    },
+    async allDateSongList() {
+      let uid = this.userinfo.userId;
+      let res = await this.$api.getUserRecord(uid, 0)
+      let songlist = []
+      res.allData.map(item => {
+        songlist.push(item.song)
+      })
+      return this.normalizeSongList(songlist)
     }
   },
   // 计算属性
@@ -125,8 +217,13 @@ export default {
   created() { },
   // 生命周期 - 挂载完成(可以访问dom元素)
   async mounted() {
-    // 获取用户喜欢的音乐
-    this.userLikedSongList = await this.normalizeSongList()
+    // 默认获取用户喜欢的音乐
+    this.songListDate = await this.getUserLikedList()
+  },
+  activated() {
+    let profile = JSON.parse(localStorage.getItem('profile'));
+    const currentId = this.$route.query.id
+    if (currentId !== profile.id) this.getOtherPersonInfo(currentId);
   },
   beforeRouteEnter(to, from, next) {
     // 访问的不是Profile页面放行
@@ -147,11 +244,18 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.isActive {
+  color: @color;
+}
 .profile {
   display: flex;
   justify-content: space-between;
   align-items: top;
-
+  .nav_bar {
+    display: flex;
+    margin-top: 5px;
+    font-size: 13px;
+  }
   .left,
   .right {
     border-radius: 30px;
