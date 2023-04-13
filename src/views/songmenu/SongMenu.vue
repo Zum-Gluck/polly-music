@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading.fullscreen.lock="fullscreenLoading">
     <el-row :gutter="30">
       <el-col :span="17" :offset="0">
         <el-card style="position: relative">
@@ -169,7 +169,8 @@ export default {
       subscribe: [], //收藏者
       relatedplaylist: [], //相关推荐
       comment: [], //歌单评论
-      extend: false, //控制歌单简介展开
+      extend: false, //控制歌单简介展开，
+      fullscreenLoading: false, //控制加载动画
     };
   },
   methods: {
@@ -185,16 +186,26 @@ export default {
     toggleExtend() {
       this.extend = !this.extend;
     },
+    handlePersonalInfo(item) {
+      console.log("file: SongMenu.vue:191 @ item:", item);
+    },
+  },
+  created() {
+    this.fullscreenLoading = true;
+  },
+  mounted() {
+    this.fullscreenLoading = false;
   },
   async activated() {
     // console.log(this.$route.params.id);
+    this.fullscreenLoading = true;
     let res1 = await this.$api.getSongMenu(this.$route.params.id);
     let res2 = await this.$api.getSongMenuList(this.$route.params.id);
     let res6 = await this.$api.getSongMenuList(this.$route.params.id, 10, 10);
     let res3 = await this.$api.getSongMenuSubscribe(this.$route.params.id);
     let res4 = await this.$api.getSongMenuRelated(this.$route.params.id);
     let res5 = await this.$api.getSongMenuComment(this.$route.params.id, 5);
-    console.log("file: SongMenu.vue:114 @ res5:", res5.comments);
+
     this.playlist = res1.playlist;
     this.playlist.createTime = this.$utils.dateFormat(
       this.playlist.createTime,
@@ -204,7 +215,9 @@ export default {
     this.subscribe = res3.subscribers;
     this.relatedplaylist = res4.playlists;
     this.comment = res5.comments;
-    console.log("file: SongMenu.vue:198 @ comment:", this.comment);
+    console.log("file: SongMenu.vue:114 @ res5:", res5.comments);
+
+    this.fullscreenLoading = false;
   },
 
   computed: {},
