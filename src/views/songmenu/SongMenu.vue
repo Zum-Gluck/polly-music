@@ -1,4 +1,4 @@
-<template>
+<template >
   <div v-loading.fullscreen.lock="fullscreenLoading">
     <el-row :gutter="30">
       <el-col :span="17" :offset="0">
@@ -92,6 +92,7 @@
               size="35px"
               :songListItem="{ coverImgUrl: item.avatarUrl }"
               style="flex: 14.28%; margin: 0"
+              @click.native="handlePersonalInfo(item)"
             />
           </div>
         </PollyCard>
@@ -99,7 +100,8 @@
           <div
             v-for="(item, value) in this.relatedplaylist"
             :key="value"
-            style="position: relative; margin-top: 10px"
+            style="position: relative; margin-top: 10px; cursor: pointer"
+            @click="handleRelatedSongMenu(item)"
           >
             <ListCover
               size="55px"
@@ -125,6 +127,11 @@
           </div>
         </PollyCard>
         <PollyCard title="精彩评论">
+          <el-empty
+            description="暂无评论"
+            v-if="!this.comment.length"
+          ></el-empty>
+
           <div v-for="(item, value) in this.comment" :key="value">
             <div class="comment">
               <img
@@ -170,7 +177,7 @@ export default {
       relatedplaylist: [], //相关推荐
       comment: [], //歌单评论
       extend: false, //控制歌单简介展开，
-      fullscreenLoading: false, //控制加载动画
+      fullscreenLoading: false, //控制加载动画,
     };
   },
   methods: {
@@ -188,6 +195,10 @@ export default {
     },
     handlePersonalInfo(item) {
       console.log("file: SongMenu.vue:191 @ item:", item);
+    },
+    handleRelatedSongMenu(item) {
+      this.$router.push(`/songmenu/${item.id}`);
+      location.reload(); //由于页面缓存的影响不刷新页面不跳转
     },
   },
   created() {
@@ -219,7 +230,10 @@ export default {
 
     this.fullscreenLoading = false;
   },
-
+  beforeRouteUpdate(to, from, next) {
+    if (to.fullPath.includes("songmenu")) location.reload(); //解决点击相关歌单无法返回上一页的问题
+    next();
+  },
   computed: {},
 };
 </script>
