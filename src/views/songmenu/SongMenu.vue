@@ -1,5 +1,5 @@
-<template>
-  <div>
+<template >
+  <div v-loading.fullscreen.lock="fullscreenLoading">
     <el-row :gutter="30">
       <el-col :span="17" :offset="0">
         <el-card style="position: relative">
@@ -92,6 +92,7 @@
               size="35px"
               :songListItem="{ coverImgUrl: item.avatarUrl }"
               style="flex: 14.28%; margin: 0"
+              @click.native="handlePersonalInfo(item)"
             />
           </div>
         </PollyCard>
@@ -99,7 +100,8 @@
           <div
             v-for="(item, value) in this.relatedplaylist"
             :key="value"
-            style="position: relative; margin-top: 10px"
+            style="position: relative; margin-top: 10px; cursor: pointer"
+            @click="handleRelatedSongMenu(item)"
           >
             <ListCover
               size="55px"
@@ -125,6 +127,11 @@
           </div>
         </PollyCard>
         <PollyCard title="精彩评论">
+          <el-empty
+            description="暂无评论"
+            v-if="!this.comment.length"
+          ></el-empty>
+
           <div v-for="(item, value) in this.comment" :key="value">
             <div class="comment">
               <img
@@ -169,7 +176,8 @@ export default {
       subscribe: [], //收藏者
       relatedplaylist: [], //相关推荐
       comment: [], //歌单评论
-      extend: false, //控制歌单简介展开
+      extend: false, //控制歌单简介展开，
+      fullscreenLoading: false, //控制加载动画,
     };
   },
   methods: {
@@ -185,16 +193,30 @@ export default {
     toggleExtend() {
       this.extend = !this.extend;
     },
+    handlePersonalInfo(item) {
+      console.log("file: SongMenu.vue:191 @ item:", item);
+    },
+    handleRelatedSongMenu(item) {
+      this.$router.push(`/songmenu/${item.id}`);
+      location.reload(); //由于页面缓存的影响不刷新页面不跳转
+    },
+  },
+  created() {
+    this.fullscreenLoading = true;
+  },
+  mounted() {
+    this.fullscreenLoading = false;
   },
   async activated() {
     // console.log(this.$route.params.id);
+    this.fullscreenLoading = true;
     let res1 = await this.$api.getSongMenu(this.$route.params.id);
     let res2 = await this.$api.getSongMenuList(this.$route.params.id);
     let res6 = await this.$api.getSongMenuList(this.$route.params.id, 10, 10);
     let res3 = await this.$api.getSongMenuSubscribe(this.$route.params.id);
     let res4 = await this.$api.getSongMenuRelated(this.$route.params.id);
     let res5 = await this.$api.getSongMenuComment(this.$route.params.id, 5);
-    console.log("file: SongMenu.vue:114 @ res5:", res5.comments);
+
     this.playlist = res1.playlist;
     this.playlist.createTime = this.$utils.dateFormat(
       this.playlist.createTime,
@@ -204,9 +226,14 @@ export default {
     this.subscribe = res3.subscribers;
     this.relatedplaylist = res4.playlists;
     this.comment = res5.comments;
-    console.log("file: SongMenu.vue:198 @ comment:", this.comment);
-  },
+    console.log("file: SongMenu.vue:114 @ res5:", res5.comments);
 
+    this.fullscreenLoading = false;
+  },
+  beforeRouteUpdate(to, from, next) {
+    if (to.fullPath.includes("songmenu")) location.reload(); //解决点击相关歌单无法返回上一页的问题
+    next();
+  },
   computed: {},
 };
 </script>
