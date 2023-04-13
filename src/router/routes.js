@@ -63,7 +63,7 @@ const appRoutes = [
         component: () => import("@/views/mv/Mv.vue"),
       },
       {
-        path: "/profile",
+        path: "/profile/:id",
         name: "profile",
         meta: {
           keepAlive: true,

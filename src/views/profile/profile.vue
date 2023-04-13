@@ -75,8 +75,7 @@ export default {
      * @method 1.处理歌曲
      */
     async getUserLikedList() {
-      const id = this.$route.query.id
-
+      const id = this.$route.params.id
       // 如果uid存在，则是其他用户的主页
       if (id) return this.getOtherPersonInfo(id);
 
@@ -212,7 +211,18 @@ export default {
   // 计算属性
   computed: {},
   // 监控data中的数据变化
-  watch: {},
+  watch: {
+    $route: async function (newVal) {
+      console.log(newVal);
+      if (newVal.name !== 'profile') return
+      let profile = JSON.parse(localStorage.getItem('profile'));
+      const currentId = this.$route.params.id
+      if (currentId !== profile.id) {
+        this.songListDate = await this.getUserLikedList()
+        this.getOtherPersonInfo(currentId);
+      }
+    }
+  },
   // 生命周期 - 创建完成(可以访问当前this实例)
   created() { },
   // 生命周期 - 挂载完成(可以访问dom元素)
@@ -220,10 +230,13 @@ export default {
     // 默认获取用户喜欢的音乐
     this.songListDate = await this.getUserLikedList()
   },
-  activated() {
-    let profile = JSON.parse(localStorage.getItem('profile'));
-    const currentId = this.$route.query.id
-    if (currentId !== profile.id) this.getOtherPersonInfo(currentId);
+  async activated() {
+    // let profile = JSON.parse(localStorage.getItem('profile'));
+    // const currentId = this.$route.params.id
+    // if (currentId !== profile.id) {
+    //   this.songListDate = await this.getUserLikedList()
+    //   this.getOtherPersonInfo(currentId);
+    // }
   },
   beforeRouteEnter(to, from, next) {
     // 访问的不是Profile页面放行

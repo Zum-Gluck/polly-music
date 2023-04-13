@@ -10,18 +10,7 @@ const router = new VueRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
-  if (to.name !== 'profile') next();
 
-  if (to.query.id) {
-    next()
-  }
-  else {
-    let profile = JSON.parse(localStorage.getItem('profile'))
-    to.query.id = profile.userId
-    next();
-  }
-})
 
 
 export default router;

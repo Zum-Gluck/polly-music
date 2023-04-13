@@ -25,7 +25,11 @@
           <router-link to="/mv">MV</router-link>
         </li>
         <li>
-          <router-link to="/profile">我的</router-link>
+          <a
+            @click="profileClick"
+            :class="{'router-link-exact-active router-link-active':$route.name === 'profile'}"
+            href="javscript:;"
+          >我的</a>
         </li>
       </ul>
       <!-- 导航结束 -->
@@ -61,7 +65,7 @@
             <el-dropdown-item>
               <div
                 class="textBox"
-                @click="$router.push('/profile')"
+                @click="profileClick"
               >
                 <span class="iconfont icon-Profile"></span>
                 <span>个人主页</span>
@@ -123,6 +127,11 @@ export default {
         console.log("退出登陆时出现了问题");
         console.log(err);
       }
+    },
+    profileClick() {
+      let { userId } = JSON.parse(localStorage.getItem('profile'))
+      console.log(userId);
+      this.$router.push(`/profile/${userId}`)
     }
   },
   // 计算属性
