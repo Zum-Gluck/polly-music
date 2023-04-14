@@ -176,6 +176,7 @@ import { createSong } from "@/model/song";
 export default {
   name: "song-menu",
   components: { PollyCard, ListCover, PollyButton, SongList },
+  inject:['reload'],
   data() {
     return {
       playlist: {
@@ -213,8 +214,8 @@ export default {
       else this.$router.push(`/profile/${item.userId}`);
     },
     handleRelatedSongMenu(item) {
-      this.$router.push(`/songmenu/${item.id}`);
-      location.reload(); //由于页面缓存的影响不刷新页面不跳转
+      this.$route.params.id = item.id
+      this.reload()
     },
     async handleSubscribe(type) {
       if (type === 1) this.isSubscribe = true;
