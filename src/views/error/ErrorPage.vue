@@ -1,24 +1,19 @@
 <template>
   <div class="error-page">
-    <h1>404 not found</h1>
+    <el-empty description="啥也没有别看了" style="height: 100vh"></el-empty>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'error-page',
-  components: {
-  },
+  name: "error-page",
+  components: {},
   data() {
-    return {
-    }
+    return {};
   },
-  methods: {
-  },
-  computed: {
-  },
-
-}
+  methods: {},
+  computed: {},
+};
 </script>
 
 <style lang="less" scoped>

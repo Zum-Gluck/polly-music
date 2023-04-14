@@ -195,6 +195,13 @@ export default {
     },
     handlePersonalInfo(item) {
       console.log("file: SongMenu.vue:191 @ item:", item);
+      console.log();
+      if (this.$store.state.isLogin === null)
+        this.$message({
+          message: "请先登录",
+          type: "warning",
+        });
+      else this.$router.push(`/profile/${item.userId}`);
     },
     handleRelatedSongMenu(item) {
       this.$router.push(`/songmenu/${item.id}`);
@@ -231,6 +238,7 @@ export default {
     this.fullscreenLoading = false;
   },
   beforeRouteUpdate(to, from, next) {
+    //console.log("file: SongMenu.vue:235 @ to:", to);
     if (to.fullPath.includes("songmenu")) location.reload(); //解决点击相关歌单无法返回上一页的问题
     next();
   },
