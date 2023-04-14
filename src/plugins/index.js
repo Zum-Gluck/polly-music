@@ -34,6 +34,7 @@ import {
   Tooltip,
   Notification,
   Empty,
+  Pagination
 } from "element-ui";
 
 Vue.prototype.$message = message;
@@ -52,3 +53,4 @@ Vue.use(Loading);
 Vue.use(Progress);
 Vue.use(Tooltip);
 Vue.use(Empty);
+Vue.use(Pagination);

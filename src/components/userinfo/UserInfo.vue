@@ -99,30 +99,33 @@ export default {
     profile: {
       type: Object,
       default: {}
+    },
+    userCreatedSongList:{
+      type:Array,
+      default:[]
     }
   },
   // 变量
   data() {
     return {
       //用户收藏的歌单
-      userCreatedSongList: []
     };
   },
   // 方法
   methods: {
     async getUserCreatedSongList() {
       //获取用户收藏的歌单
-      let res = await this.$api.getUserLikedSongList(this.profile.userId)
-      this.userCreatedSongList = res.playlist
+      // let res = await this.$api.getUserLikedSongList(this.profile.userId)
+      // this.userCreatedSongList = res.playlist
     }
   },
   // 计算属性
   computed: {},
   // 监控data中的数据变化
   watch: {
-    profile: function (newVal, oldVal) {
-      this.getUserCreatedSongList()
-    }
+    // profile: function (newVal, oldVal) {
+    //   this.getUserCreatedSongList()
+    // }
   },
 };
 </script>

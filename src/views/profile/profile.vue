@@ -14,10 +14,26 @@
         </ul>
         <SongList :songList="songListDate"></SongList>
       </PollyCard>
+      <div class="layout">
+        <el-pagination
+          background
+          v-show="currentType === 0"
+          layout="prev, pager, next"
+          :current-page="currentPage"
+          :total="totalSongs"
+          :page-size="50"
+          @next-click="ChangeClick"
+          @prev-click="ChangeClick"
+          @current-change="ChangeClick"
+        >
+        </el-pagination>
+      </div>
     </div>
     <div class="right">
-
-      <UserInfo :profile="userinfo"></UserInfo>
+      <UserInfo
+        :profile="userinfo"
+        :userCreatedSongList="playlist"
+      ></UserInfo>
     </div>
   </div>
 </template>
@@ -65,7 +81,11 @@ export default {
         { type: '最近一周', value: 1 },
         { type: '所有时间', value: 2 },
       ],
-      currentType: 0
+      currentType: 0,
+      playlist: [],
+      totalSongs: 1000,
+      offset: 0,
+      currentPage: 1
     };
   },
   // 方法
@@ -74,10 +94,10 @@ export default {
     /**
      * @method 1.处理歌曲
      */
-    async getUserLikedList() {
+    async getUserLikedList(limit = 50, offset = 0) {
       const id = this.$route.params.id
       // 如果uid存在，则是其他用户的主页
-      if (id) return this.getOtherPersonInfo(id);
+      if (id) return this.getOtherPersonInfo(id, limit, offset);
     },
     // 格式化歌曲
     normalizeSongList(lists) {
@@ -102,11 +122,14 @@ export default {
      * @mthod 获取其他用户的信息
      * @param {number} id 
      */
-    async getOtherPersonInfo(id, offset = 50) {
+    async getOtherPersonInfo(id, limit, offset = 0) {
       let info = await this.$api.getUserLikedSongList(id)
-      let playlist = info.playlist
-      this.userinfo = await this.normalizeUserInfo(playlist[0].creator)
-      let userLikedList = await this.$api.getSongMenuList(playlist[0].id, offset)
+      this.playlist = info.playlist
+      this.totalSongs = this.playlist[0].trackCount
+      this.userinfo = await this.normalizeUserInfo(this.playlist[0].creator)
+
+      let userLikedList = await this.$api.getSongMenuList(this.playlist[0].id, limit, offset)
+
       let list = this.normalizeSongList(userLikedList.songs)
 
       //没有喜欢的音乐
@@ -164,6 +187,11 @@ export default {
         songlist.push(item.song)
       })
       return this.normalizeSongList(songlist)
+    },
+    async ChangeClick(current) {
+      this.currentPage = current;
+      this.offset = (current - 1) * 50
+      this.songListDate = await this.getUserLikedList(50, this.offset);
     }
   },
   // 计算属性
@@ -186,6 +214,10 @@ export default {
   async mounted() {
     // 默认获取用户喜欢的音乐
     this.songListDate = await this.getUserLikedList()
+  },
+  activated() {
+    if (this.currentType !== 0) this.currentType = 0;
+    this.ChangeClick(this.currentPage);
   },
   beforeRouteEnter(to, from, next) {
     // 访问的不是Profile页面放行
@@ -235,6 +267,11 @@ export default {
         margin-right: 10px;
         cursor: pointer;
       }
+    }
+    .layout {
+      display: flex;
+      justify-content: center;
+      margin-top: 15px;
     }
   }
 

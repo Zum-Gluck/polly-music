@@ -185,3 +185,17 @@
     border-radius: 15px;
     background-color: #fa2800 !important;
 }
+
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+    background-color: #fa2800 !important;
+    color: #FFF;
+}
+
+
+.el-pagination.is-background .el-pager li:not(.disabled):hover {
+    color: #fa2800 !important;
+}
+
+.el-pagination.is-background .el-pager li:not(.disabled).active:hover {
+    color: #FFF !important;
+}
