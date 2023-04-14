@@ -196,7 +196,7 @@ export default {
     handlePersonalInfo(item) {
       console.log("file: SongMenu.vue:191 @ item:", item);
       console.log();
-      if (this.$store.state.isLogin === null)
+      if (this.$store.getters.isLogin === null)
         this.$message({
           message: "请先登录",
           type: "warning",

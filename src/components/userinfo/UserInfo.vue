@@ -15,6 +15,7 @@
           <a href="javascript:;"> {{profile.nickname}}</a>
 
           <PollyButton
+            v-show="isSelf"
             class="fr"
             content="签到"
             width="60"
@@ -100,9 +101,9 @@ export default {
       type: Object,
       default: {}
     },
-    userCreatedSongList:{
-      type:Array,
-      default:[]
+    userCreatedSongList: {
+      type: Array,
+      default: []
     }
   },
   // 变量
@@ -113,20 +114,16 @@ export default {
   },
   // 方法
   methods: {
-    async getUserCreatedSongList() {
-      //获取用户收藏的歌单
-      // let res = await this.$api.getUserLikedSongList(this.profile.userId)
-      // this.userCreatedSongList = res.playlist
-    }
+    async getUserCreatedSongList() { }
   },
   // 计算属性
-  computed: {},
-  // 监控data中的数据变化
-  watch: {
-    // profile: function (newVal, oldVal) {
-    //   this.getUserCreatedSongList()
-    // }
+  computed: {
+    isSelf() {
+      return this.$route.params.id == this.$store.getters.profile.userId
+    }
   },
+  // 监控data中的数据变化
+  watch: {},
 };
 </script>
 
