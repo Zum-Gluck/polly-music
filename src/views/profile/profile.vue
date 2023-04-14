@@ -100,11 +100,11 @@ export default {
       if (id) return this.getOtherPersonInfo(id, limit, offset);
     },
     // 格式化歌曲
-    normalizeSongList(lists) {
+    normalizeSongList(lists, offset = 0) {
       let res = []
       lists.forEach((item, index) => {
         // console.log(item);
-        item.index = ++index;
+        item.index = index + 1 + offset;
         res.push(createSong(item));
       });
 
@@ -130,7 +130,7 @@ export default {
 
       let userLikedList = await this.$api.getSongMenuList(this.playlist[0].id, limit, offset)
 
-      let list = this.normalizeSongList(userLikedList.songs)
+      let list = this.normalizeSongList(userLikedList.songs, offset)
 
       //没有喜欢的音乐
       if (!list) {
@@ -213,15 +213,19 @@ export default {
   // 生命周期 - 挂载完成(可以访问dom元素)
   async mounted() {
     // 默认获取用户喜欢的音乐
-    this.songListDate = await this.getUserLikedList()
+    // this.songListDate = await this.getUserLikedList()
 
     // 点击个人主页时重制
     this.$bus.$on('changeType', () => {
       this.currentType = 0
+      this.currentPage = 1;
     })
+
+
   },
   activated() {
     if (this.currentType !== 0) this.currentType = 0;
+    if (this.currentPage !== 0) this.currentPage = 1;
     this.ChangeClick(this.currentPage);
   },
   beforeRouteEnter(to, from, next) {

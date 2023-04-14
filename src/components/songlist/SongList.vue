@@ -35,7 +35,11 @@
             @click="songPlayClick(scope.row)"
             style="text-align: center; cursor: pointer"
           >
-            <span>{{ scope.row.index }}</span>
+            <span>
+              <span v-show="scope.row.isShow">
+                {{ scope.row.index }}
+              </span>
+            </span>
           </div>
           <!-- 数字&播放按钮 end-->
 
@@ -161,6 +165,8 @@ export default {
     return {
       loading: true,
       isShowPlaying: false,
+      showText: true,
+      currentHoverIndex:0
     };
   },
   // 方法
@@ -193,7 +199,7 @@ export default {
       const cellEle =
         event.target.parentNode.firstChild.getElementsByClassName("cell")[0]
           .firstChild;
-      cellEle.innerHTML = "";
+      row.isShow = false
       cellEle.classList.add("icon-play");
       cellEle.classList.add("iconfont");
     },
@@ -204,7 +210,7 @@ export default {
       const cellEle =
         event.target.parentNode.firstChild.getElementsByClassName("cell")[0]
           .firstChild;
-      cellEle.innerHTML = row.index;
+      row.isShow = true
       cellEle.classList.remove("icon-play");
       cellEle.classList.remove("iconfont");
     },

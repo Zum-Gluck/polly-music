@@ -108,7 +108,7 @@ export default {
   // 变量
   data() {
     return {
-      profile: {}
+      localProfile: {}
     };
   },
   // 方法
@@ -130,7 +130,7 @@ export default {
       }
     },
     profileClick() {
-      let res = this.profile
+      let res = this.localProfile
       if (!res) {
         return this.$router.push("/login?code=301");
       } else {
@@ -153,7 +153,7 @@ export default {
   computed: {
     ...mapGetters(['isLogin', 'profile']),
     isVisitOtherPeron() {
-      return this.$route.params.id == this.profile.userId
+      return this.$route.params.id == this.localProfile.userId
     }
   },
   // 监控data中的数据变化
@@ -164,7 +164,7 @@ export default {
   },
   // 生命周期 - 挂载完成(可以访问dom元素)
   mounted() {
-    this.profile = JSON.parse(localStorage.getItem('profile'))
+    this.localProfile = JSON.parse(localStorage.getItem('profile'))
   },
 };
 </script>

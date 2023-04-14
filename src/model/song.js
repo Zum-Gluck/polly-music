@@ -8,6 +8,7 @@ class Song {
         this.url = url
         this.copyright = copyright
         this.index = index
+        this.isShow = true;
     }
 }
 
