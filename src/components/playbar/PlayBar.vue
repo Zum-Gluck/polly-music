@@ -42,17 +42,25 @@
         <!-- 右边开始 -->
         <div class="right">
           <div class="flex">
+
+
+            <!-- 音量部分开始 -->
             <div class="volume">
-              <!-- 音量按钮 -->
               <a href="javascirpt:;"> <span class="iconfont icon-yinliang"></span></a>
               <div class="my_process"></div>
             </div>
+            <!-- 音量部分结束 -->
+
+
+            <!-- 其他控件开始 -->
             <div class="other_control_btn">
               other_control_btn
             </div>
+            <!-- 其他控件结束 -->
           </div>
         </div>
         <!-- 右边结束 -->
+
 
         <!-- 中间开始 -->
         <div class="process_bar">
@@ -91,6 +99,7 @@
                   :show-text="false"
                 ></el-progress>
               </div>
+
               <!-- 拖拽条开始 -->
               <div
                 class="move"
@@ -119,6 +128,8 @@
         <!-- 中间结束 -->
 
       </div>
+
+      <!-- audio 开始 -->
       <audio
         autoplay
         :src="songUrl"
@@ -126,6 +137,8 @@
         @timeupdate="timeupdate"
         @ended="musicOver"
       ></audio>
+      <!-- audio 结束 -->
+
     </div>
   </transition>
 </template>
@@ -141,17 +154,20 @@ export default {
   data() {
     return {
       songUrl: '',
+      // 播放进度相关属性
       currentProcess: 0,
       currentDuration: "00:00",
       fullDuration: 0,
       fullSeconds: 0,
       isToastShow: false,
-      isChangeBtnPos: true
+      isChangeBtnPos: true,
+      // 音量相关属性
     };
   },
   // 方法
   methods: {
     ...mapMutations(['SET_CURRENT_SONG', 'SET_IS_PAUSE']),
+    // 音乐结束后的回调
     musicOver() {
       if (this.currentDuration === '00:30') {
         this.$message({ type: 'info', message: '试听结束，剩余需要开通网易黑胶会员' })
@@ -159,12 +175,14 @@ export default {
         this.nextClick();
       }
     },
+    // 下一首
     nextClick() {
       if (this.currentSong.index === this.songPlayList.length) return this.$message({ type: 'info', message: "已经是最后一首了～" });
       this.SET_IS_PAUSE(false);
       const nextSong = this.songPlayList[this.currentSong.index]
       this.SET_CURRENT_SONG(nextSong);
     },
+    // 上一首
     prevClick() {
       if (this.currentSong.index === 1) return this.$message({ type: 'info', message: "已经是第一首了～" });
       this.SET_IS_PAUSE(false);
@@ -180,7 +198,7 @@ export default {
       }
     },
 
-    // 进度条拖动
+    // 播放进度条拖动
     progressBtnDown() {
       this.isChangeBtnPos = false
       const leftDistance = this.$refs.mask.getBoundingClientRect().left
@@ -213,13 +231,15 @@ export default {
       }
     },
 
-    // 点击进度条
+    // 播放进度条点击
     maskClick(e) {
       const maxPos = 620
       const clickPos = e.offsetX
       const fullSeconds = this.$utils.formatSecond(this.currentSong.duration)
       this.$refs.audioEle.currentTime = clickPos / maxPos * fullSeconds
-    }
+    },
+
+
 
   },
   // 计算属性

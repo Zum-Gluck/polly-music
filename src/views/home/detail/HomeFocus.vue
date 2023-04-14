@@ -8,17 +8,32 @@
       @mouseleave.native="mouseLeave"
       v-if="isShowSwiper"
     >
-      <swiper-slide v-for="item in imgData" :key="item.id">
-        <img :src="item.imageUrl"/>
+      <swiper-slide
+        v-for="item in imgData"
+        :key="item.id"
+      >
+
+        <img
+          :src="item.imageUrl"
+          :typeTitle="item.typeTitle"
+          :targetId="item.targetId"
+        />
+        <div class="type_title">{{item.typeTitle}}</div>
       </swiper-slide>
     </swiper>
-    <div class="swiper-pagination" slot="pagination"></div>
+    <div
+      class="swiper-pagination"
+      slot="pagination"
+    ></div>
   </div>
 </template>
 
 <script>
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 import "swiper/css/swiper.css";
+import { mapActions } from 'vuex';
+import { createSong } from '@/model/song';
+import { InfiniteScroll } from 'element-ui';
 
 export default {
   // component-name小写命名
@@ -50,6 +65,30 @@ export default {
           el: ".swiper-pagination",
           clickable: true,
         },
+        on: {
+          // 轮播图点击事件
+          click: async (e) => { // 在此处实现相关业务逻辑
+            let typeTitle = e.target.getAttribute('typeTitle') // 获取自定义属性
+            let targetId = e.target.getAttribute('targetId') // 获取自定义属性
+
+            if (typeTitle === '新歌首发') {
+              const res = await this.$api.getSongDetail(targetId)
+              const song = createSong(res.songs[0]);
+              song.index = 1;
+              this.selectPlay({
+                song: song,
+                songList: [song]
+              })
+            } else if (typeTitle === '歌单推荐') {
+              this.$router.push(`/songmenu/${targetId}`);
+            } else if (typeTitle === '新碟首发') {
+              this.$message({
+                type: 'info',
+                message: "专辑页面暂未实现"
+              })
+            }
+          },
+        },
       },
       // 图片数据
       imgData: [],
@@ -57,6 +96,7 @@ export default {
   },
   // 方法
   methods: {
+    ...mapActions(['selectPlay']),
     // 获取轮播图数据
     async requestImg() {
       try {
@@ -80,6 +120,10 @@ export default {
     mouseLeave() {
       this.$refs.mySwipers.$swiper.autoplay.start();
     },
+    swiperClick(item) {
+      console.log(item.typeTitle);
+      // this.$router.push(`/songmenu/${item.targetId}`)
+    }
   },
   // 计算属性
   computed: {
@@ -90,7 +134,7 @@ export default {
   // 监控data中的数据变化
   watch: {},
   // 生命周期 - 创建完成(可以访问当前this实例)
-  created() {},
+  created() { },
   // 生命周期 - 挂载完成(可以访问dom元素)
   mounted() {
     this.requestImg();
@@ -99,4 +143,18 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.focus {
+  .type_title {
+    position: absolute;
+    right: 0px;
+    bottom: 3px;
+    width: 80px;
+    height: 20px;
+    color: #fff;
+    line-height: 20px;
+    text-align: center;
+    background-color: #bd534f;
+    border-radius: 4px;
+  }
+}
 </style>
