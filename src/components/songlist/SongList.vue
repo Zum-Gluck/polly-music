@@ -1,6 +1,9 @@
 <template>
   <div class="song_list clearfix">
-    <PollyButton class="fr btn" @click.native="playAllClick"></PollyButton>
+    <PollyButton
+      class="fr btn"
+      @click.native="playAllClick"
+    ></PollyButton>
 
     <!--表格开始 -->
     <ElTable
@@ -21,7 +24,11 @@
       @cell-dblclick="rowDbclick"
     >
       <!-- 列配置 -->
-      <ElTableColumn prop="num" label="序号" width="80">
+      <ElTableColumn
+        prop="num"
+        label="序号"
+        width="80"
+      >
         <template slot-scope="scope">
           <!-- 数字&播放按钮 start-->
           <div
@@ -37,9 +44,9 @@
             class="playing"
             :class="{
               index_active:
-                (currentSong ? currentSong.index : -1) == scope.row.index,
+                (currentSong ? currentSong.name : -1) == scope.row.name,
             }"
-            v-show="isShowPlaying && !isPause && isOriginPageRight"
+            v-show="isShowPlaying && !isPause"
           >
             <div class="box">
               <div style="animation-delay: -1.2s"></div>
@@ -59,8 +66,7 @@
             class="pause"
             :class="{
               index_active:
-                (currentSong ? currentSong.index : -1) == scope.row.index &&
-                isOriginPageRight,
+                (currentSong ? currentSong.name : -1) == scope.row.name,
             }"
           >
             <span class="iconfont icon-24gf-pause2"></span>
@@ -74,7 +80,7 @@
             class="pause"
             :class="{
               index_active:
-                (currentSong ? currentSong.index : -1) == scope.row.index,
+                (currentSong ? currentSong.name : -1) == scope.row.name,
             }"
           >
             <span class="iconfont icon-play"> </span>
@@ -82,31 +88,46 @@
           <!-- 播放 end -->
         </template>
       </ElTableColumn>
-      <ElTableColumn prop="name" label="歌曲">
+      <ElTableColumn
+        prop="name"
+        label="歌曲"
+      >
         <template slot-scope="scope">
           <span style="cursor: pointer">{{ scope.row.name }}</span>
         </template>
       </ElTableColumn>
-      <ElTableColumn show-overflow-tooltip prop="name" label="歌手" width="180">
+      <ElTableColumn
+        show-overflow-tooltip
+        prop="name"
+        label="歌手"
+        width="180"
+      >
         <template slot-scope="scope">
           <!-- {{ scope.row.ar[0] }} -->
           <span
             style="cursor: pointer"
             v-for="(item, index) in scope.row.singerList"
             :key="index"
-            >{{ item.name
-            }}<span v-if="index != scope.row.singerList.length - 1"
-              >&nbsp;/&nbsp;</span
-            >
+          >{{ item.name
+            }}<span v-if="index != scope.row.singerList.length - 1">&nbsp;/&nbsp;</span>
           </span>
         </template>
       </ElTableColumn>
-      <ElTableColumn show-overflow-tooltip prop="name" label="专辑" width="150">
+      <ElTableColumn
+        show-overflow-tooltip
+        prop="name"
+        label="专辑"
+        width="150"
+      >
         <template slot-scope="scope">
           <span style="cursor: pointer">{{ scope.row.name }}</span>
         </template>
       </ElTableColumn>
-      <ElTableColumn prop="duration" label="时长" width="70">
+      <ElTableColumn
+        prop="duration"
+        label="时长"
+        width="70"
+      >
         <template slot-scope="scope">
           <span style="cursor: pointer">{{
             $utils.formatTime(scope.row.duration)
@@ -150,8 +171,7 @@ export default {
     tableRowClassName({ row, rowIndex }) {
       if (
         this.currentSong &&
-        this.currentSong.index == rowIndex + 1 &&
-        this.isOriginPageRight
+        this.currentSong.name == row.name
       ) {
         return "active";
       }
@@ -209,9 +229,6 @@ export default {
   // 计算属性
   computed: {
     ...mapGetters(["currentSong", "isPause", "originPage"]),
-    isOriginPageRight() {
-      return this.originPage === this.$route.path;
-    },
   },
   // 监控data中的数据变化
   watch: {
@@ -220,7 +237,7 @@ export default {
     },
   },
   // 生命周期 - 创建完成(可以访问当前this实例)
-  created() {},
+  created() { },
   // 生命周期 - 挂载完成(可以访问dom元素)
   mounted() {
     //用户无喜欢的歌曲，页面不会一直loading加载

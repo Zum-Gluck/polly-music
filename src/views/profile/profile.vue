@@ -75,7 +75,6 @@ export default {
      * @method 1.处理歌曲
      */
     async getUserLikedList() {
-      let profile = JSON.parse(localStorage.getItem('profile'));
       const id = this.$route.params.id
       // 如果uid存在，则是其他用户的主页
       if (id) return this.getOtherPersonInfo(id);
@@ -214,19 +213,29 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: top;
-  .nav_bar {
-    display: flex;
-    margin-top: 5px;
-    font-size: 13px;
-  }
   .left,
   .right {
     border-radius: 30px;
   }
 
   .left {
+    position: relative;
+
     width: 100%;
     margin-right: 20px;
+
+    .nav_bar {
+      position: absolute;
+      right: 167px;
+      top: 48px;
+      display: flex;
+      margin-top: 5px;
+      font-size: 13px;
+      li {
+        margin-right: 10px;
+        cursor: pointer;
+      }
+    }
   }
 
   .right {

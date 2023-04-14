@@ -26,7 +26,7 @@
           <!-- 播放 -->
           <a
             href="javascript:;"
-            v-if="((!isBegin || isPause) || originPage !== $route.path) || 
+            v-if="(!isBegin || isPause) || 
             !(index+1 === (currentSong ? currentSong.index : -1))"
             @click="playClick(item)"
           >
