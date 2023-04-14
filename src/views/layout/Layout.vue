@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <div class="fluid">
-      <keep-alive>
+      <keep-alive exclude="song-menu">
         <router-view></router-view>
       </keep-alive>
     </div>

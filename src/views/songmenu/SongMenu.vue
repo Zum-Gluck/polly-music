@@ -1,16 +1,19 @@
 <template >
-  <div v-loading.fullscreen.lock="fullscreenLoading">
     <el-row :gutter="30">
-      <el-col :span="17" :offset="0">
+      <el-col
+        :span="17"
+        :offset="0"
+      >
         <el-card style="position: relative">
           <el-row :gutter="20">
-            <el-col :span="9"
-              ><div class="grid_left">
+            <el-col :span="9">
+              <div class="grid_left">
                 <ListCover
                   size="280px"
                   :songListItem="{ coverImgUrl: this.playlist.coverImgUrl }"
-                /></div
-            ></el-col>
+                />
+              </div>
+            </el-col>
             <el-col :span="15">
               <div class="grid_right">
                 <h1 style="font-size: 25px">
@@ -20,13 +23,8 @@
                   <img
                     :src="this.playlist.creator.avatarUrl"
                     style="width: 40px; height: 40px; border-radius: 50%"
-                  /><span
-                    style="color: black; margin-left: 20px; margin-right: 40px"
-                    >{{ this.playlist.creator.nickname }}</span
-                  >
-                  <span style="color: rgba(0, 0, 0, 0.5)"
-                    >{{ this.playlist.createTime }}创建</span
-                  >
+                  /><span style="color: black; margin-left: 20px; margin-right: 40px">{{ this.playlist.creator.nickname }}</span>
+                  <span style="color: rgba(0, 0, 0, 0.5)">{{ this.playlist.createTime }}创建</span>
                 </div>
                 <div class="right_pollybutton">
                   <span>标签:</span>
@@ -39,13 +37,11 @@
                     style="border-radius: 30px; display: inline-block"
                   />
                 </div>
-                <div
-                  :class="
+                <div :class="
                     this.extend
                       ? 'right_description_extend'
                       : 'right_description_shorten'
-                  "
-                >
+                  ">
                   <span>
                     {{ this.playlist.description }}
                   </span>
@@ -65,27 +61,35 @@
                   收起
                 </span>
                 <div class="right_subscribe">
-                  <el-button round style="width: 120px"
-                    ><i class="el-icon-star-off"></i>收藏</el-button
-                  >
+                  <el-button
+                    round
+                    style="width: 120px"
+                  ><i class="el-icon-star-off"></i>收藏</el-button>
                 </div>
               </div>
             </el-col>
           </el-row>
 
-          <SongList :songList="this.songlist" style="margin-top: 20px" />
+          <SongList
+            :songList="this.songlist"
+            style="margin-top: 20px"
+          />
         </el-card>
       </el-col>
-      <el-col :span="7" :offset="0">
-        <PollyCard title="喜欢这个歌单的人" style="margin-bottom: 30px">
-          <div
-            style="
+      <el-col
+        :span="7"
+        :offset="0"
+      >
+        <PollyCard
+          title="喜欢这个歌单的人"
+          style="margin-bottom: 30px"
+        >
+          <div style="
               display: flex;
               flex-wrap: wrap;
               justify-content: space-between;
               padding: 10px;
-            "
-          >
+            ">
             <ListCover
               v-for="(item, value) in this.subscribe"
               :key="value"
@@ -96,7 +100,10 @@
             />
           </div>
         </PollyCard>
-        <PollyCard title="相关推荐" style="margin-bottom: 30px">
+        <PollyCard
+          title="相关推荐"
+          style="margin-bottom: 30px"
+        >
           <div
             v-for="(item, value) in this.relatedplaylist"
             :key="value"
@@ -114,14 +121,12 @@
             >
               {{ item.name }}
             </div>
-            <div
-              style="
+            <div style="
                 position: absolute;
                 bottom: 10px;
                 left: 65px;
                 color: rgba(0, 0, 0, 0.5);
-              "
-            >
+              ">
               By.{{ item.creator.nickname }}
             </div>
           </div>
@@ -132,7 +137,10 @@
             v-if="!this.comment.length"
           ></el-empty>
 
-          <div v-for="(item, value) in this.comment" :key="value">
+          <div
+            v-for="(item, value) in this.comment"
+            :key="value"
+          >
             <div class="comment">
               <img
                 :src="item.user.avatarUrl"
@@ -155,7 +163,6 @@
         </PollyCard>
       </el-col>
     </el-row>
-  </div>
 </template>
 
 <script>
@@ -165,6 +172,7 @@ import PollyCard from "@/components/pollycard/PollyCard.vue";
 import ListCover from "@/components/listcover/ListCover.vue";
 import { createSong } from "@/model/song";
 export default {
+  name: "song-menu",
   components: { PollyCard, ListCover, PollyButton, SongList },
   data() {
     return {
@@ -177,7 +185,6 @@ export default {
       relatedplaylist: [], //相关推荐
       comment: [], //歌单评论
       extend: false, //控制歌单简介展开，
-      fullscreenLoading: false, //控制加载动画,
     };
   },
   methods: {
@@ -208,34 +215,27 @@ export default {
       location.reload(); //由于页面缓存的影响不刷新页面不跳转
     },
   },
-  created() {
-    this.fullscreenLoading = true;
-  },
-  mounted() {
+  async mounted() {
     this.fullscreenLoading = false;
-  },
-  async activated() {
-    // console.log(this.$route.params.id);
-    this.fullscreenLoading = true;
     let res1 = await this.$api.getSongMenu(this.$route.params.id);
-    let res2 = await this.$api.getSongMenuList(this.$route.params.id);
-    let res6 = await this.$api.getSongMenuList(this.$route.params.id, 10, 10);
-    let res3 = await this.$api.getSongMenuSubscribe(this.$route.params.id);
-    let res4 = await this.$api.getSongMenuRelated(this.$route.params.id);
-    let res5 = await this.$api.getSongMenuComment(this.$route.params.id, 5);
-
     this.playlist = res1.playlist;
     this.playlist.createTime = this.$utils.dateFormat(
       this.playlist.createTime,
       "YYYY-MM-DD"
     );
-    this.songlist = this.normalize(res2.songs.concat(res6.songs));
-    this.subscribe = res3.subscribers;
-    this.relatedplaylist = res4.playlists;
-    this.comment = res5.comments;
-    console.log("file: SongMenu.vue:114 @ res5:", res5.comments);
+    let res2 = await this.$api.getSongMenuList(this.$route.params.id);
 
-    this.fullscreenLoading = false;
+    let res6 = await this.$api.getSongMenuList(this.$route.params.id, 10, 10);
+    this.songlist = this.normalize(res2.songs.concat(res6.songs));
+
+    let res3 = await this.$api.getSongMenuSubscribe(this.$route.params.id);
+    this.subscribe = res3.subscribers;
+
+    let res4 = await this.$api.getSongMenuRelated(this.$route.params.id);
+
+    this.relatedplaylist = res4.playlists;
+    let res5 = await this.$api.getSongMenuComment(this.$route.params.id, 5);
+    this.comment = res5.comments;
   },
   beforeRouteUpdate(to, from, next) {
     //console.log("file: SongMenu.vue:235 @ to:", to);
