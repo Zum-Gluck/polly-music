@@ -153,7 +153,7 @@ export default {
       switch (value) {
         // 我喜欢的音乐
         case 0:
-          this.songListDate = await this.getUserLikedList()
+          this.songListDate = await this.getUserLikedList(50, this.offset);
           break;
 
         // 最近一周听歌排行
