@@ -27,7 +27,7 @@
         <li>
           <a
             @click="profileClick"
-            :class="{'router-link-exact-active router-link-active':$route.name === 'profile'}"
+            :class="{'router-link-exact-active router-link-active':isVisitOtherPeron}"
             href="javscript:;"
           >我的</a>
         </li>
@@ -108,6 +108,7 @@ export default {
   // 变量
   data() {
     return {
+      profile: {}
     };
   },
   // 方法
@@ -129,18 +130,31 @@ export default {
       }
     },
     profileClick() {
-      let res = JSON.parse(localStorage.getItem('profile'))
+      let res = this.profile
       if (!res) {
         return this.$router.push("/login?code=301");
       } else {
+        this.$bus.$emit('changeType', 0)
         let { userId } = res
+
+        // 避免冗余导航
+        if (this.$route.params.id == userId) {
+          return this.$message({
+            type: 'info',
+            message: '您已经在个人主页了～'
+          })
+        };
+
         this.$router.push(`/profile/${userId}`)
       }
     }
   },
   // 计算属性
   computed: {
-    ...mapGetters(['isLogin', 'profile'])
+    ...mapGetters(['isLogin', 'profile']),
+    isVisitOtherPeron() {
+      return this.$route.params.id == this.profile.userId
+    }
   },
   // 监控data中的数据变化
   watch: {},
@@ -150,6 +164,7 @@ export default {
   },
   // 生命周期 - 挂载完成(可以访问dom元素)
   mounted() {
+    this.profile = JSON.parse(localStorage.getItem('profile'))
   },
 };
 </script>

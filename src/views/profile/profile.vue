@@ -214,6 +214,11 @@ export default {
   async mounted() {
     // 默认获取用户喜欢的音乐
     this.songListDate = await this.getUserLikedList()
+
+    // 点击个人主页时重制
+    this.$bus.$on('changeType', () => {
+      this.currentType = 0
+    })
   },
   activated() {
     if (this.currentType !== 0) this.currentType = 0;
