@@ -65,8 +65,21 @@
                 收起
               </span>
               <div class="right_subscribe">
-                <el-button round style="width: 120px"
-                  ><i class="el-icon-star-off"></i>收藏</el-button
+                <el-button
+                  round
+                  style="width: 120px"
+                  @click="
+                    () => {
+                      this.$store.getters.isLogin !== null &&
+                      this.isSubscribe === false
+                        ? handleSubscribe(1)
+                        : handleSubscribe(2);
+                    }
+                  "
+                  ><i class="el-icon-star-off"></i
+                  >{{
+                    this.isSubscribe === true ? "取消收藏" : "收藏"
+                  }}</el-button
                 >
               </div>
             </div>
@@ -174,6 +187,8 @@ export default {
       relatedplaylist: [], //相关推荐
       comment: [], //歌单评论
       extend: false, //控制歌单简介展开，
+      isSubscribe: null, //歌单收藏状态
+      hasSubscribed: [], //当前用户已收藏的歌单
     };
   },
   methods: {
@@ -201,8 +216,37 @@ export default {
       this.$router.push(`/songmenu/${item.id}`);
       location.reload(); //由于页面缓存的影响不刷新页面不跳转
     },
+    async handleSubscribe(type) {
+      if (type === 1) this.isSubscribe = true;
+      else this.isSubscribe = false;
+      if (this.$store.getters.isLogin === null) {
+        this.$message({
+          message: "请先登录",
+          type: "warning",
+        });
+      } else {
+        await this.$api.Subscribe(this.$route.params.id, type);
+        this.$message({
+          message: type === 1 ? "收藏成功" : "已取消收藏",
+          type: "success",
+        });
+      }
+    },
+    async judgeSubscribe() {
+      let res = await this.$api.getUserLikedSongList(
+        this.$store.getters.profile.userId
+      );
+      if (
+        res.playlist
+          .map((item) => item.id)
+          .includes(Number(this.$route.params.id))
+      )
+        this.isSubscribe = true;
+      else this.isSubscribe = false;
+    },
   },
   async mounted() {
+    this.$store.getters.isLogin !== null && this.judgeSubscribe();
     let res1 = await this.$api.getSongMenu(this.$route.params.id);
     this.playlist = res1.playlist;
     this.playlist.createTime = this.$utils.dateFormat(

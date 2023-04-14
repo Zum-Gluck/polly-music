@@ -18,7 +18,8 @@ export const getNewSong = (limit) =>
  * @param {require} uid
  * @method 获取用户喜欢的音乐
  */
-export const getUserLikeList = (uid) => instance.get(`/likelist?uid=${uid}&timestamp=${Number(new Date())}`);
+export const getUserLikeList = (uid) =>
+  instance.get(`/likelist?uid=${uid}&timestamp=${Number(new Date())}`);
 
 /**
  *
@@ -86,9 +87,17 @@ export const getSongMenuComment = (id, limit = 8) =>
   instance.get(`/comment/playlist?id=${id}&limit=${limit}`);
 
 /**
- * @param {require} uid 
+ * @param {require} uid
  * @param {optional} type type=1 时只返回 weekData, type=0 时返回 allData
- * @method 获取用户播放记录 
+ * @method 获取用户播放记录
  */
 export const getUserRecord = (uid, type = 1) =>
   instance.get(`/user/record?uid=${uid}&type=${type}`);
+
+/**
+ * @param {require} id 歌单id
+ * @param {optional} t 1收藏,2取消收藏
+ * @method 收藏歌单
+ */
+export const Subscribe = (id, t = 1) =>
+  instance.get(`/playlist/subscribe?t=${t}&id=${id}`);
