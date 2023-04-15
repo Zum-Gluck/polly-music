@@ -76,6 +76,7 @@
                         : handleSubscribe(2);
                     }
                   "
+                  v-if="!this.isOwnPage"
                   ><i class="el-icon-star-off"></i
                   >{{
                     this.isSubscribe === true ? "取消收藏" : "收藏"
@@ -176,7 +177,7 @@ import { createSong } from "@/model/song";
 export default {
   name: "song-menu",
   components: { PollyCard, ListCover, PollyButton, SongList },
-  inject:['reload'],
+  inject: ["reload"],
   data() {
     return {
       playlist: {
@@ -189,7 +190,8 @@ export default {
       comment: [], //歌单评论
       extend: false, //控制歌单简介展开，
       isSubscribe: null, //歌单收藏状态
-      hasSubscribed: [], //当前用户已收藏的歌单
+      hasSubscribed: [], //当前用户已收藏的歌单,
+      isOwnPage: null, //是否为自己的默认歌单
     };
   },
   methods: {
@@ -214,8 +216,8 @@ export default {
       else this.$router.push(`/profile/${item.userId}`);
     },
     handleRelatedSongMenu(item) {
-      this.$route.params.id = item.id
-      this.reload()
+      this.$route.params.id = item.id;
+      this.reload();
     },
     async handleSubscribe(type) {
       if (type === 1) this.isSubscribe = true;
@@ -237,13 +239,18 @@ export default {
       let res = await this.$api.getUserLikedSongList(
         this.$store.getters.profile.userId
       );
-      if (
-        res.playlist
-          .map((item) => item.id)
-          .includes(Number(this.$route.params.id))
-      )
-        this.isSubscribe = true;
-      else this.isSubscribe = false;
+      if (res.playlist[0].id === Number(this.$route.params.id))
+        this.isOwnPage = true;
+      else {
+        this.isOwnPage = false;
+        if (
+          res.playlist
+            .map((item) => item.id)
+            .includes(Number(this.$route.params.id))
+        )
+          this.isSubscribe = true;
+        else this.isSubscribe = false;
+      }
     },
   },
   async mounted() {
