@@ -3,7 +3,7 @@
     <PollyHeader v-if="pathName != LOGIN"></PollyHeader>
     <RouterView></RouterView>
     <PollyFooter v-if="pathName != LOGIN"></PollyFooter>
-    <PlayBar v-show="pathName != LOGIN"></PlayBar>
+    <PlayBar v-show="pathName != LOGIN && $store.getters.isBegin === true"></PlayBar>
   </div>
 </template>
 <script>
@@ -39,7 +39,8 @@ export default {
   // 生命周期 - 创建完成(可以访问当前this实例)
   created() { },
   // 生命周期 - 挂载完成(可以访问dom元素)
-  mounted() { },
+  mounted() {
+  },
 };
 </script>
 

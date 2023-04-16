@@ -46,8 +46,8 @@
             <!-- 音量部分开始 -->
             <div class="volume">
               <a
-                href="javascirpt:;"
-                @click="muteClick"
+                href="#"
+                @click.prevent="muteClick"
               >
                 <span class="iconfont icon-yinliang"></span>
               </a>

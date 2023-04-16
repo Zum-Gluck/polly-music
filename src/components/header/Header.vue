@@ -26,9 +26,9 @@
         </li>
         <li>
           <a
-            @click="profileClick"
+            @click.prevent="profileClick"
             :class="{'router-link-exact-active router-link-active':isVisitOtherPeron}"
-            href="javscript:;"
+            href="#"
           >我的</a>
         </li>
       </ul>
@@ -46,7 +46,10 @@
       >
         <el-dropdown>
           <span class="el-dropdown-link">
-            <a href="javascript:;">
+            <a
+              href="#"
+              onclick="event.preventDefault();"
+            >
               <img
                 :src="profile ? profile.avatarUrl : ''"
                 alt=""
@@ -153,6 +156,7 @@ export default {
   computed: {
     ...mapGetters(['isLogin', 'profile']),
     isVisitOtherPeron() {
+      if (!this.localProfile) return false;
       return this.$route.params.id == this.localProfile.userId
     }
   },
