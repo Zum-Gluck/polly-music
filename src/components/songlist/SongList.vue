@@ -95,6 +95,7 @@
       <ElTableColumn
         prop="name"
         label="歌曲"
+        show-overflow-tooltip
       >
         <template slot-scope="scope">
           <span style="cursor: pointer">{{ scope.row.name }}</span>

@@ -43,14 +43,21 @@
         <div class="right">
           <div class="flex">
 
-
             <!-- 音量部分开始 -->
             <div class="volume">
-              <a href="javascirpt:;"> <span class="iconfont icon-yinliang"></span></a>
-              <div class="my_process"></div>
+              <a
+                href="javascirpt:;"
+                @click="muteClick"
+              >
+                <span class="iconfont icon-yinliang"></span>
+              </a>
+              <PollyProgress
+                @mouseClick="volumeClick"
+                @mouseUp="volumeUp"
+                ref='PollyProgress'
+              ></PollyProgress>
             </div>
             <!-- 音量部分结束 -->
-
 
             <!-- 其他控件开始 -->
             <div class="other_control_btn">
@@ -60,7 +67,6 @@
           </div>
         </div>
         <!-- 右边结束 -->
-
 
         <!-- 中间开始 -->
         <div class="process_bar">
@@ -144,12 +150,16 @@
 </template>
 
 <script>
+import router from '@/router';
 import { mapGetters, mapMutations } from 'vuex';
+import PollyProgress from '../pollyprogress/PollyProgress.vue';
 export default {
   // component-name小写命名
   name: "play-bar",
   // 组件
-  components: {},
+  components: {
+    PollyProgress
+  },
   // 变量
   data() {
     return {
@@ -162,6 +172,8 @@ export default {
       isToastShow: false,
       isChangeBtnPos: true,
       // 音量相关属性
+      isMute: false,
+      tempPercentage: 50,
     };
   },
   // 方法
@@ -189,6 +201,7 @@ export default {
       const prevSong = this.songPlayList[this.currentSong.index - 2]
       this.SET_CURRENT_SONG(prevSong);
     },
+
     timeupdate(e) {
       let currentTime = Math.floor(e.target.currentTime)
       this.currentDuration = this.$utils.formatSecondTime(currentTime);
@@ -223,7 +236,7 @@ export default {
       document.onmouseup = () => {
         const fullSeconds = this.$utils.formatSecond(this.currentSong.duration)
 
-        this.$refs.audioEle.currentTime = currentPos / maxPos * fullSeconds
+        this.audioEle.currentTime = currentPos / maxPos * fullSeconds
         this.$refs.mask.onmousemove = null
         this.isChangeBtnPos = true
         document.onmouseup = null;
@@ -236,15 +249,42 @@ export default {
       const maxPos = 620
       const clickPos = e.offsetX
       const fullSeconds = this.$utils.formatSecond(this.currentSong.duration)
-      this.$refs.audioEle.currentTime = clickPos / maxPos * fullSeconds
+      this.audioEle.currentTime = clickPos / maxPos * fullSeconds
     },
 
+    /**
+     * @method 音量按钮控制方法
+     */
+    volumeClick(percentage) {
+      this.audioEle.volume = percentage / 100;
+    },
+    volumeUp(percentage) {
+      this.audioEle.volume = percentage / 100;
+    },
+    muteClick() {
+      if (!this.isMute) {
+        this.audioEle.volume = 0
+        this.isMute = true;
+        this.tempPercentage = this.PollyProgress._data.percentage
+        this.PollyProgress.setPercentage(0);
+      } else {
+        this.audioEle.volume = this.tempPercentage / 100;
+        this.isMute = false;
+        this.PollyProgress.setPercentage(this.tempPercentage);
+      }
+    }
 
 
   },
   // 计算属性
   computed: {
     ...mapGetters(['isBegin', 'currentSong', 'songPlayList', 'isPause', 'profile']),
+    PollyProgress() {
+      return this.$refs.PollyProgress;
+    },
+    audioEle() {
+      return this.$refs.audioEle;
+    }
   },
   // 监控data中的数据变化
   watch: {
@@ -266,7 +306,7 @@ export default {
 
         // 无法播放的VIP歌曲
         if (this.songUrl === null) {
-          this.$refs.audioEle.currentTime = 0;
+          this.audioEle.currentTime = 0;
           this.SET_IS_PAUSE(true);
           return this.$message({ message: '该歌曲需要购买', type: 'info' })
         }
@@ -287,9 +327,9 @@ export default {
     },
     isPause: function (newVal) {
       if (newVal === true) {
-        this.$refs.audioEle.pause()
+        this.audioEle.pause()
       } else {
-        this.$refs.audioEle.play()
+        this.audioEle.play()
       }
     },
   },
@@ -297,7 +337,7 @@ export default {
   created() { },
   // 生命周期 - 挂载完成(可以访问dom元素)
   mounted() {
-
+    this.audioEle.volume = 0.7
   },
 };
 </script>
@@ -372,16 +412,11 @@ export default {
       display: flex;
       align-items: center;
       height: 70px;
+      padding-top: 18px;
+
       .volume {
         display: flex;
         align-items: center;
-
-        .my_process {
-          width: 100px;
-          height: 3px;
-          background-color: @color;
-          margin: 0 15px;
-        }
 
         a {
           color: @color;
