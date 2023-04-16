@@ -7,31 +7,43 @@
             <div class="grid_left">
               <ListCover
                 size="280px"
-                :songListItem="{ coverImgUrl: this.playlist.coverImgUrl }"
+                :songListItem="{ coverImgUrl: playlist.coverImgUrl }"
               />
             </div>
           </el-col>
           <el-col :span="15">
             <div class="grid_right">
               <h1 style="font-size: 25px">
-                {{ this.playlist.name }}
+                {{ playlist.name }}
               </h1>
               <div class="avatar_name_creatime">
                 <img
-                  :src="this.playlist.creator.avatarUrl"
-                  style="width: 40px; height: 40px; border-radius: 50%"
+                  :src="playlist.creator.avatarUrl"
+                  style="
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    cursor: pointer;
+                  "
+                  @click="handlePersonalInfo(playlist.creator)"
                 /><span
-                  style="color: black; margin-left: 20px; margin-right: 40px"
-                  >{{ this.playlist.creator.nickname }}</span
+                  style="
+                    color: black;
+                    margin-left: 20px;
+                    margin-right: 40px;
+                    cursor: pointer;
+                  "
+                  @click="handlePersonalInfo(playlist.creator)"
+                  >{{ playlist.creator.nickname }}</span
                 >
                 <span style="color: rgba(0, 0, 0, 0.5)"
-                  >{{ this.playlist.createTime }}创建</span
+                  >{{ playlist.createTime }}创建</span
                 >
               </div>
               <div class="right_pollybutton">
                 <span>标签:</span>
                 <PollyButton
-                  v-for="(item, index) in this.playlist.tags"
+                  v-for="(item, index) in playlist.tags"
                   :key="index"
                   :content="item"
                   height="30px"
@@ -41,13 +53,13 @@
               </div>
               <div
                 :class="
-                  this.extend
+                  extend
                     ? 'right_description_extend'
                     : 'right_description_shorten'
                 "
               >
                 <span>
-                  {{ this.playlist.description }}
+                  {{ playlist.description }}
                 </span>
               </div>
               <span
@@ -70,24 +82,21 @@
                   style="width: 120px"
                   @click="
                     () => {
-                      this.$store.getters.isLogin !== null &&
-                      this.isSubscribe === false
+                      $store.getters.isLogin !== null && isSubscribe === false
                         ? handleSubscribe(1)
                         : handleSubscribe(2);
                     }
                   "
-                  v-if="!this.isOwnPage"
+                  v-if="!isOwnPage"
                   ><i class="el-icon-star-off"></i
-                  >{{
-                    this.isSubscribe === true ? "取消收藏" : "收藏"
-                  }}</el-button
+                  >{{ isSubscribe === true ? "取消收藏" : "收藏" }}</el-button
                 >
               </div>
             </div>
           </el-col>
         </el-row>
 
-        <SongList :songList="this.songlist" style="margin-top: 20px" />
+        <SongList :songList="songlist" style="margin-top: 20px" />
       </el-card>
     </el-col>
     <el-col :span="7" :offset="0">
@@ -101,7 +110,7 @@
           "
         >
           <ListCover
-            v-for="(item, value) in this.subscribe"
+            v-for="(item, value) in subscribe"
             :key="value"
             size="35px"
             :songListItem="{ coverImgUrl: item.avatarUrl }"
@@ -112,7 +121,7 @@
       </PollyCard>
       <PollyCard title="相关推荐" style="margin-bottom: 30px">
         <div
-          v-for="(item, value) in this.relatedplaylist"
+          v-for="(item, value) in relatedplaylist"
           :key="value"
           style="position: relative; margin-top: 10px; cursor: pointer"
           @click="handleRelatedSongMenu(item)"
@@ -141,9 +150,9 @@
         </div>
       </PollyCard>
       <PollyCard title="精彩评论">
-        <el-empty description="暂无评论" v-if="!this.comment.length"></el-empty>
+        <el-empty description="暂无评论" v-if="!comment.length"></el-empty>
 
-        <div v-for="(item, value) in this.comment" :key="value">
+        <div v-for="(item, value) in comment" :key="value">
           <div class="comment">
             <img
               :src="item.user.avatarUrl"
@@ -345,5 +354,9 @@ export default {
       color: gray;
     }
   }
+}
+
+::v-deep img {
+  -webkit-user-drag: none;
 }
 </style>
