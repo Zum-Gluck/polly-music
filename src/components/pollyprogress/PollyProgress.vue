@@ -46,14 +46,13 @@ export default {
         current = current < 7 ? 7 : current;
         current = current > 107 ? 107 : current;
         this.percentage = current - 7;
-
+        this.$emit('mouseMove', this.percentage);
         this.mouseUp();
       }
     },
     mouseUp() {
       document.onmouseup = () => {
         document.onmousemove = null;
-        this.$emit('mouseUp', this.percentage);
       }
 
     },

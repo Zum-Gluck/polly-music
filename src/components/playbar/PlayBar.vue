@@ -52,8 +52,8 @@
                 <span class="iconfont icon-yinliang"></span>
               </a>
               <PollyProgress
-                @mouseClick="volumeClick"
-                @mouseUp="volumeUp"
+                @mouseClick="changeVolume"
+                @mouseMove="changeVolume"
                 ref='PollyProgress'
               ></PollyProgress>
             </div>
@@ -61,7 +61,33 @@
 
             <!-- 其他控件开始 -->
             <div class="other_control_btn">
-              other_control_btn
+              <ul>
+                <li>
+                  <!-- play Mode 开始 -->
+                  <span
+                    class="iconfont icon-shunxubofang"
+                    v-if="true"
+                  >
+                  </span>
+                  <span
+                    class="iconfont icon-24gl-shuffle"
+                    v-else-if="false"
+                  >
+                  </span>
+                  <span
+                    class="iconfont icon-hanhan-01-01"
+                    v-else
+                  >
+                  </span>
+                  <!-- play Mode 结束 -->
+                </li>
+                <li>
+                  <span class="iconfont icon-geciweidianji"></span>
+                </li>
+                <li>
+                  <span class="iconfont icon-yinleliebiao-"></span>
+                </li>
+              </ul>
             </div>
             <!-- 其他控件结束 -->
           </div>
@@ -255,10 +281,7 @@ export default {
     /**
      * @method 音量按钮控制方法
      */
-    volumeClick(percentage) {
-      this.audioEle.volume = percentage / 100;
-    },
-    volumeUp(percentage) {
+    changeVolume(percentage) {
       this.audioEle.volume = percentage / 100;
     },
     muteClick() {
@@ -337,6 +360,7 @@ export default {
   created() { },
   // 生命周期 - 挂载完成(可以访问dom元素)
   mounted() {
+    // 打开页面时默认音量大小 ，若要修改记得改progress的默认进度
     this.audioEle.volume = 0.7
   },
 };
@@ -412,7 +436,6 @@ export default {
       display: flex;
       align-items: center;
       height: 70px;
-      padding-top: 18px;
 
       .volume {
         display: flex;
@@ -422,6 +445,21 @@ export default {
           color: @color;
           .iconfont {
             font-size: 19px;
+          }
+        }
+      }
+    }
+
+    .other_control_btn {
+      ul {
+        width: 120px;
+        display: flex;
+        justify-content: space-between;
+        margin-left: 10px;
+        li {
+          span {
+            cursor: pointer;
+            font-size: 18px !important;
           }
         }
       }
