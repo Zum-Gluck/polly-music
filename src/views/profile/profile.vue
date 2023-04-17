@@ -111,10 +111,6 @@ export default {
       return res
     },
     async normalizeUserInfo(profile) {
-      //获取用户等级信息
-      let { data } = await this.$api.getUserLevel()
-      this.userfLeveInfo = data
-      profile.level = this.userfLeveInfo.level
       return createProfile(profile);
     },
 
@@ -126,7 +122,10 @@ export default {
       let info = await this.$api.getUserLikedSongList(id)
       this.playlist = info.playlist
       this.totalSongs = this.playlist[0].trackCount
-      this.userinfo = await this.normalizeUserInfo(this.playlist[0].creator)
+
+      const userInfo = await this.$api.getUserDetail(id)
+
+      this.userinfo = await this.normalizeUserInfo(userInfo)
 
       let userLikedList = await this.$api.getSongMenuList(this.playlist[0].id, limit, offset)
 

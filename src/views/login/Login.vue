@@ -360,10 +360,8 @@ export default {
     async getUserInfo() {
       const status = await this.$api.getLoginStatus()
       const { profile } = status.data
-      // console.log(profile);
+      
       this.profile = profile
-
-      this.userinfo = await this.normalizeUserInfo(this.profile)
 
       let { userId } = profile
       // 用户信息加入缓存
@@ -371,13 +369,6 @@ export default {
       this.SET_PROFILE(profile);
 
       return userId
-    },
-    async normalizeUserInfo(profile) {
-      //获取用户等级信息
-      let { data } = await this.$api.getUserLevel()
-      this.userfLeveInfo = data
-      profile.level = this.userfLeveInfo.level
-      return createProfile(profile);
     },
     // 调用以上QRcode有关的方法
     async QrCodeInit() {

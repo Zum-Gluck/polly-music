@@ -60,8 +60,6 @@ export const checkQrStatus = key => instance.get(`/login/qr/check?key=${key}&tim
  */
 export const getUserLevel = () => instance.get(`/user/level`);
 
-
-
 /**
  * 
  * @param {*} uid 

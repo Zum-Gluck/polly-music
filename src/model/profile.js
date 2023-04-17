@@ -15,14 +15,14 @@ class Profile {
 
 export function createProfile(userInfo) {
     return new Profile({
-        userId: userInfo.userId,
-        backgroundUrl: userInfo.backgroundUrl,
-        avatarUrl: userInfo.avatarUrl,
-        nickname: userInfo.nickname,
-        signature: userInfo.signature,
+        userId: userInfo.userId || userInfo.profile.userId,
+        backgroundUrl: userInfo.backgroundUrl || userInfo.profile.backgroundUrl,
+        avatarUrl: userInfo.avatarUrl || userInfo.profile.avatarUrl,
+        nickname: userInfo.nickname || userInfo.profile.nickname,
+        signature: userInfo.signature || userInfo.profile.signature,
         level: userInfo.level,
-        birthday: userInfo.birthday,
-        gender: userInfo.gender,
-        city: userInfo.city
+        birthday: userInfo.birthday || userInfo.profile.birthday,
+        gender: userInfo.gender || userInfo.profile.gender,
+        city: userInfo.city || userInfo.profile.city
     })
 }
