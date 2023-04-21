@@ -101,3 +101,13 @@ export const getUserRecord = (uid, type = 1) =>
  */
 export const Subscribe = (id, t = 1) =>
   instance.get(`/playlist/subscribe?t=${t}&id=${id}`);
+
+/**
+ * @method 歌单分类
+ */
+export const SongListCategory = () => instance.get(`/playlist/catlist`);
+
+/**
+ * @method 热门歌单分类
+ */
+export const SongListHot = () => instance.get(`/playlist/hot`);
