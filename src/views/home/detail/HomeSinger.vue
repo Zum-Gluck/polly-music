@@ -52,17 +52,22 @@ export default {
 
 <style lang="less" scoped>
 .home_singer {
+  margin: 0 -15px;
+
   h2 {
     margin: 10px;
+    margin-left:15px;
   }
+
   ul {
     margin-top: 10px;
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
 
     li {
-      width: 120px;
       margin-top: 10px;
+      padding: 0 10px;
     }
   }
 }

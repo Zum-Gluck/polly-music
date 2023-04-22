@@ -94,7 +94,7 @@
                   <transition name="fade">
                     <PlayHistory v-show="isShowHistory"></PlayHistory>
                   </transition>
-                  
+
                   <span
                     class="iconfont icon-yinleliebiao-"
                     :class="{'active':isShowHistory}"
@@ -315,8 +315,56 @@ export default {
         this.isMute = false;
         this.PollyProgress.setPercentage(this.tempPercentage);
       }
-    }
+    },
 
+    /**
+     * @method 绑定快捷键
+     */
+    bindShortcuts() {
+      document.addEventListener('keydown', (e) => {
+        // 没有开始播放
+        if (!this.isBegin) return;
+
+        switch (e.code) {
+          case 'Space': // 按下空格
+            e.preventDefault();
+            this.SET_IS_PAUSE(!this.isPause);
+            break;
+
+          case 'ArrowRight':
+            this.nextClick();
+            break;
+
+          case 'ArrowLeft':
+            this.prevClick();
+            break;
+
+          case 'ArrowUp':
+            {
+              e.preventDefault();
+              const currentPercentage = this.PollyProgress._data.percentage
+              if (currentPercentage >= 100) return
+              this.audioEle.volume += 0.1
+              this.PollyProgress.setPercentage(currentPercentage + 10);
+            }
+            break;
+
+          case 'ArrowDown':
+            {
+              e.preventDefault();
+              const currentPercentage = this.PollyProgress._data.percentage
+              if (currentPercentage <= 0) return
+              this.audioEle.volume -= 0.1
+              this.PollyProgress.setPercentage(currentPercentage - 10);
+            }
+            break;
+
+          case 'KeyM':
+            this.muteClick()
+            break;
+        }
+      })
+    }
 
   },
   // 计算属性
@@ -379,6 +427,9 @@ export default {
   mounted() {
     // 打开页面时默认音量大小 ，若要修改记得改progress的默认进度
     this.audioEle.volume = 0.7
+
+    // 绑定快捷键
+    this.bindShortcuts();
   },
 };
 </script>

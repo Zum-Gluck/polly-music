@@ -104,6 +104,7 @@ export const Subscribe = (id, t = 1) =>
 
 /**
 <<<<<<< HEAD
+<<<<<<< HEAD
  * @method 获取所有榜单
  */
 export const topList = () =>
@@ -111,6 +112,8 @@ export const topList = () =>
 
 
 =======
+=======
+>>>>>>> 79e5e80f749222ce1b590cd6d47c0569a99f1ec2
  * @method 歌单分类
  */
 export const SongListCategory = () => instance.get(`/playlist/catlist`);
@@ -139,4 +142,12 @@ export const NewHot = (limit = 50, order = "hot", cat = "全部", offset = 0) =>
 * @method 获取推荐歌手
 */
 export const HotSinger = (limit = 30, offset = 0) => instance.get(`/top/artists?limit=${limit}&offset=${offset}`);
+<<<<<<< HEAD
 >>>>>>> fd369a1b70a062fd990227c9e56471f5509d70b9
+=======
+/* 
+* @method 获取所有榜单
+ */
+export const topList = () =>
+  instance.get(`/toplist`);
+>>>>>>> 79e5e80f749222ce1b590cd6d47c0569a99f1ec2
