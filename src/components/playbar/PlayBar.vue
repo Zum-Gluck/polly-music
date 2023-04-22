@@ -176,9 +176,8 @@
 </template>
 
 <script>
-import router from '@/router';
 import { mapGetters, mapMutations } from 'vuex';
-import PollyProgress from '../pollyprogress/PollyProgress.vue';
+import PollyProgress from './detail/PollyProgress.vue';
 export default {
   // component-name小写命名
   name: "play-bar",
