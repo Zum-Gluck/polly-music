@@ -131,3 +131,8 @@ export const NewHot = (limit = 50, order = "hot", cat = "全部", offset = 0) =>
 * @method 获取推荐歌手
 */
 export const HotSinger = (limit = 30, offset = 0) => instance.get(`/top/artists?limit=${limit}&offset=${offset}`);
+/* 
+* @method 获取所有榜单
+ */
+export const topList = () =>
+  instance.get(`/toplist`);
