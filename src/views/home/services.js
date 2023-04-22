@@ -1,7 +1,7 @@
 /**
  * @file home页面用到的接口
  */
-import { instance } from "./instance";
+import { instance } from "@/api/instance";
 
 
 /**

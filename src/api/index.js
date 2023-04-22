@@ -1,9 +1,10 @@
-import * as home from './service/home'
-import * as rank from './service/rank'
-import * as songlist from './service/songlist'
-import * as songmenu from './service/songmenu'
-import * as profile from './service/profile'
-import * as user from './service/user'
+import * as home from '@/views/home/services'
+import * as rank from '@/views/rank/services'
+import * as songlist from '@/views/songlist/services'
+import * as songmenu from '@/views/songmenu/services'
+import * as profile from '@/views/profile/services'
+import * as user from '@/views/login/services'
+import * as singer from '@/views/singer/service'
 
 export default {
     ...home,
@@ -11,5 +12,6 @@ export default {
     ...songmenu,
     ...songlist,
     ...profile,
-    ...user
+    ...user,
+    ...singer
 }

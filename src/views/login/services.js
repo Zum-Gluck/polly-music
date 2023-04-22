@@ -1,4 +1,4 @@
-import { instance } from "./instance";
+import { instance } from "../../api/instance";
 
 
 /**
@@ -66,4 +66,3 @@ export const getUserLevel = () => instance.get(`/user/level`);
  * @method 获取用户歌单
  */
 export const getUserLikedSongList = uid => instance.get(`/user/playlist?uid=${uid}`);
-
