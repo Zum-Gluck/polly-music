@@ -33,7 +33,6 @@ import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 import "swiper/css/swiper.css";
 import { mapActions } from 'vuex';
 import { createSong } from '@/model/song';
-import { InfiniteScroll } from 'element-ui';
 
 export default {
   // component-name小写命名

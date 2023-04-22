@@ -103,9 +103,40 @@ export const Subscribe = (id, t = 1) =>
   instance.get(`/playlist/subscribe?t=${t}&id=${id}`);
 
 /**
+<<<<<<< HEAD
  * @method 获取所有榜单
  */
 export const topList = () =>
   instance.get(`/toplist`);
 
 
+=======
+ * @method 歌单分类
+ */
+export const SongListCategory = () => instance.get(`/playlist/catlist`);
+
+/**
+ * @method 热门歌单分类
+ */
+export const SongListHot = () => instance.get(`/playlist/hot`);
+
+/**
+ * @param {optional} limit 数量
+ * @param {optional} order 最新或热门
+ * @param {optional} cat 标签
+ * @param {optional} offset 偏移数量 , 用于分页
+ * @method 收藏歌单
+ */
+export const NewHot = (limit = 50, order = "hot", cat = "全部", offset = 0) =>
+  instance.get(
+    `/top/playlist?limit=${limit}&order=${order}&cat=${cat}&offset=${offset}`
+  );
+
+
+/**
+* @param {optional} limit 数量
+* @param {optional} offset 偏移数量 , 用于分页
+* @method 获取推荐歌手
+*/
+export const HotSinger = (limit = 30, offset = 0) => instance.get(`/top/artists?limit=${limit}&offset=${offset}`);
+>>>>>>> fd369a1b70a062fd990227c9e56471f5509d70b9

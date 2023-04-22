@@ -83,8 +83,8 @@
 
 <script>
 import PollyButton from '@/components/pollybutton/PollyButton.vue';
-import PollyCard from '../pollycard/PollyCard.vue';
-import ListCover from '../listcover/ListCover.vue';
+import PollyCard from '../../../components/pollycard/PollyCard.vue';
+import ListCover from '../../../components/listcover/ListCover.vue';
 
 export default {
   // component-name小写命名
