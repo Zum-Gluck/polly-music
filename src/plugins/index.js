@@ -35,8 +35,8 @@ import {
   Notification,
   Empty,
   Pagination,
-
-  Tag
+  Divider,
+  Tag,
 } from "element-ui";
 
 Vue.prototype.$message = message;
@@ -57,3 +57,4 @@ Vue.use(Tooltip);
 Vue.use(Empty);
 Vue.use(Pagination);
 Vue.use(Tag);
+Vue.use(Divider);
