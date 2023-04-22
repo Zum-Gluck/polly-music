@@ -101,3 +101,11 @@ export const getUserRecord = (uid, type = 1) =>
  */
 export const Subscribe = (id, t = 1) =>
   instance.get(`/playlist/subscribe?t=${t}&id=${id}`);
+
+/**
+ * @method 获取所有榜单
+ */
+export const topList = () =>
+  instance.get(`/toplist`);
+
+
