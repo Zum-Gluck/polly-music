@@ -81,12 +81,28 @@
                   </span>
                   <!-- play Mode 结束 -->
                 </li>
+
+                <!--歌词开始  -->
                 <li>
                   <span class="iconfont icon-geciweidianji"></span>
                 </li>
+                <!--歌词结束  -->
+
+                <!-- 播放列表开始 -->
                 <li>
-                  <span class="iconfont icon-yinleliebiao-"></span>
+                  <!-- CSS:466 -->
+                  <transition name="fade">
+                    <PlayHistory v-show="isShowHistory"></PlayHistory>
+                  </transition>
+                  
+                  <span
+                    class="iconfont icon-yinleliebiao-"
+                    :class="{'active':isShowHistory}"
+                    @click="isShowHistory = !isShowHistory"
+                  ></span>
                 </li>
+                <!-- 播放列表结束 -->
+
               </ul>
             </div>
             <!-- 其他控件结束 -->
@@ -178,12 +194,15 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex';
 import PollyProgress from './detail/PollyProgress.vue';
+import PlayHistory from './detail/PlayHistory.vue';
+
 export default {
   // component-name小写命名
   name: "play-bar",
   // 组件
   components: {
-    PollyProgress
+    PollyProgress,
+    PlayHistory
   },
   // 变量
   data() {
@@ -199,6 +218,8 @@ export default {
       // 音量相关属性
       isMute: false,
       tempPercentage: 50,
+      // 是否显示播放历史
+      isShowHistory: false
     };
   },
   // 方法
@@ -314,8 +335,6 @@ export default {
       let { copyright, id } = newVal
       if (copyright == 8) this.songUrl = newVal.url;
 
-      // console.log(copyright);
-      // console.log(this.profile.vipType);
       let vipType = 0
       if (this.profile) {
         vipType = this.profile.vipType;
@@ -323,7 +342,6 @@ export default {
       try {
         let res = await this.$api.getSongUrl(id)
         this.songUrl = res.data[0].url
-        // console.log(res);
 
 
         // 无法播放的VIP歌曲
@@ -373,6 +391,10 @@ export default {
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
+.active {
+  color: @color;
+}
+
 .w {
   width: 1200px;
   margin: 0 auto;
@@ -456,6 +478,8 @@ export default {
         justify-content: space-between;
         margin-left: 10px;
         li {
+          // HTML : 96
+          position: relative;
           span {
             cursor: pointer;
             font-size: 18px !important;
