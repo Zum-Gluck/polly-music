@@ -42,7 +42,7 @@
 import SongList from "@/components/songlist/SongList"
 import ListCover from '@/components/listcover/ListCover.vue';
 import PollyCard from '@/components/pollycard/PollyCard.vue';
-import UserInfo from '@/components/userinfo/UserInfo.vue';
+import UserInfo from './detail/UserInfo.vue';
 
 
 import { mapMutations } from 'vuex';
