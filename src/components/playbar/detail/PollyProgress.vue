@@ -59,7 +59,7 @@ export default {
 
     setPercentage(p) {
       this.percentage = p;
-    }
+    },
   },
   // 计算属性
   computed: {

@@ -56,6 +56,7 @@ export default {
 
   h2 {
     margin: 10px;
+    margin-left:15px;
   }
 
   ul {
