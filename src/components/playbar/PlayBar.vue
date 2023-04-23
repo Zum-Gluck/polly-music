@@ -331,11 +331,11 @@ export default {
             this.SET_IS_PAUSE(!this.isPause);
             break;
 
-          case 'ArrowRight':
+          case 'BracketRight':
             this.nextClick();
             break;
 
-          case 'ArrowLeft':
+          case 'BracketLeft':
             this.prevClick();
             break;
 
@@ -356,6 +356,18 @@ export default {
               if (currentPercentage <= 0) return
               this.audioEle.volume -= 0.1
               this.PollyProgress.setPercentage(currentPercentage - 10);
+            }
+            break;
+
+          case 'ArrowRight':
+            {
+              this.audioEle.currentTime += 3
+            }
+            break;
+
+          case 'ArrowLeft':
+            {
+              this.audioEle.currentTime -= 3
             }
             break;
 
