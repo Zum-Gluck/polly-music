@@ -21,6 +21,7 @@
       :style="{
         width: size,
       }"
+      @click="coverClick"
     >
       <a
         href="javascript:;"

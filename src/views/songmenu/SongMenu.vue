@@ -128,7 +128,7 @@
         >
           <ListCover
             size="55px"
-            :songListItem="{ coverImgUrl: item.coverImgUrl }"
+            :songListItem="{ coverImgUrl: item.coverImgUrl ,id:item.id }"
             style="display: inline-block; margin: 2px"
           />
           <div

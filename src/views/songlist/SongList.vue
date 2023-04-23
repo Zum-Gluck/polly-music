@@ -28,7 +28,7 @@
                     v-for="(data, index) in group[key]"
                     :key="index"
                     style="margin: 5px"
-                    @click="handleClick(data)"
+                    @click="handleClick(data.name, order)"
                     >{{ data.name }}</el-tag
                   >
                 </div>
@@ -43,20 +43,28 @@
         v-for="item in hotcategory"
         :key="item.id"
         class="hot_tag"
-        @click="handleClick(item)"
+        @click="handleClick(item.name, order)"
       >
         {{ item.name }}
       </el-tag>
-
+      <!--  -->
       <el-button
         type="danger"
         size="small"
-        @click="order = 'hot'"
+        @click="handleHot"
         style="margin-left: 160px"
+        plain
+        :class="focus ? '' : 'hot_btn'"
       >
         热门
       </el-button>
-      <el-button size="small" type="success" @click="order = 'new'">
+      <el-button
+        size="small"
+        type="success"
+        @click="handleNew"
+        plain
+        :class="focus ? 'new_btn' : ''"
+      >
         最新
       </el-button>
       <el-divider><i class="el-icon-headset"></i></el-divider>
@@ -64,11 +72,7 @@
         style="display: flex; flex-wrap: wrap; justify-content: space-around"
       >
         <div v-for="(item, index) in list" :key="index" style="margin: 10px">
-          <ListCover
-            size="125px"
-            :songListItem="{ coverImgUrl: item.coverImgUrl }"
-          />
-          <h4 class="list_name" style="width: 125px">{{ item.name }}</h4>
+          <ListCover size="125px" :songListItem="item" />
         </div>
       </div>
     </el-card>
@@ -89,24 +93,46 @@ export default {
       category: [], //歌单分类
       hotcategory: [], //热门分类
       group: [],
-      order: "热门", //最新还是热门
+      order: "hot", //最新还是热门
       list: [], //歌单
+      name: "", //种类名字
+      focus: false, //按钮状态
     };
   },
   // 方法
   methods: {
-    async handleClick(data) {
+    async handleClick(name, order = this.order) {
+      console.log("file: SongList.vue:100 @ order:", order);
+      this.name = name;
       //console.log("file: SongList.vue:71 @ data:", data);
-      let res = await this.$api.NewHot(49, this.order, data.name, 0);
-      console.log("file: SongList.vue:83 @ res:", res);
+      let res = await this.$api.NewHot(49, `%27${order}%27`, name, 0);
+
+      console.log(res.playlists);
       this.list = res.playlists;
-      console.log("file: SongList.vue:92 @ this.list:", this.list);
+    },
+    handleHot() {
+      this.order = "hot";
+
+      this.focus = false;
+    },
+    handleNew() {
+      this.order = "new";
+
+      this.focus = true;
     },
   },
   // 计算属性
   computed: {},
   // 监控data中的数据变化
-  watch: {},
+  watch: {
+    async order(neworder, oldorder) {
+      console.log("file: SongList.vue:114 @ neworder:", neworder);
+
+      let res = await this.$api.NewHot(49, `%27${neworder}%27`, this.name, 0);
+
+      this.list = res.playlists;
+    },
+  },
   // 生命周期 - 创建完成(可以访问当前this实例)
   created() {},
   // 生命周期 - 挂载完成(可以访问dom元素)
@@ -140,21 +166,22 @@ export default {
   }
   cursor: default;
 }
-.list_name {
-  text-overflow: -o-ellipsis-lastline;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  text-align: center;
-}
+
 .hot_tag {
   margin: 8px;
   cursor: pointer;
   &:hover {
     background-color: rgba(246, 222, 222, 0.8);
   }
+}
+.hot_btn {
+  background-color: rgb(245, 108, 108);
+  color: white;
+  border: 1px solid rgb(245, 108, 108);
+}
+.new_btn {
+  background-color: rgb(103, 194, 58);
+  color: white;
+  border: 1px solid rgb(103, 194, 58);
 }
 </style>
