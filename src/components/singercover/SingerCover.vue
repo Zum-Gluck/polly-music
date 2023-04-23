@@ -6,16 +6,11 @@
         :src="singer ? singer.img1v1Url : ''"
         @click="goSingerDetail(singer.id)"
       />
-      <br />
-      <a
-        href="javascript:;"
-        @click="goSingerDetail(singer.id)"
-      >
-        <span class="name">{{singer ? singer.name : ''}}</span>
+      <a href="javascript:;" @click="goSingerDetail(singer.id)">
+        <span class="name">{{ singer ? singer.name : "" }}</span>
       </a>
     </div>
-    <br />
-    <span class="count">单曲数{{singer ? singer.musicSize : ''}}</span>
+    <span class="count">单曲数{{ singer ? singer.musicSize : "" }}</span>
   </div>
 </template>
 
@@ -33,7 +28,7 @@ export default {
   // 组件
   components: {},
   // 变量
-  data() {
+  data () {
     return {};
   },
   // 方法
@@ -42,7 +37,7 @@ export default {
     /**
      * @method 在这里跳转到歌手详情页
      */
-    goSingerDetail(id) {
+    goSingerDetail (id) {
       console.log(id);
     }
 
@@ -52,9 +47,9 @@ export default {
   // 监控data中的数据变化
   watch: {},
   // 生命周期 - 创建完成(可以访问当前this实例)
-  created() { },
+  created () { },
   // 生命周期 - 挂载完成(可以访问dom元素)
-  mounted() {
+  mounted () {
   },
 };
 </script>
@@ -76,14 +71,22 @@ export default {
   }
 
   .name {
+    width: 100%;
+    display: inline-block;
+    margin-top: 10px;
     font-size: 15px;
     font-weight: 600;
     transition: all 0.3s;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .count {
+    display: inline-block;
     font-size: 11px;
     color: @color;
+    margin-top: 10px;
   }
 
   .top {
