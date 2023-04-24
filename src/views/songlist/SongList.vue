@@ -47,7 +47,6 @@
       >
         {{ item.name }}
       </el-tag>
-      <!--  -->
       <el-button
         type="danger"
         size="small"
@@ -69,12 +68,14 @@
       </el-button>
       <el-divider><i class="el-icon-headset"></i></el-divider>
       <div
+        ref="mainbox"
         style="display: flex; flex-wrap: wrap; justify-content: space-around"
       >
         <div v-for="(item, index) in list" :key="index" style="margin: 10px">
           <ListCover size="125px" :songListItem="item" />
         </div>
       </div>
+      <el-backtop :visibility-height="500" :right="200"></el-backtop>
     </el-card>
   </div>
 </template>
@@ -97,28 +98,63 @@ export default {
       list: [], //歌单
       name: "", //种类名字
       focus: false, //按钮状态
+      count: 0, //记录第几次懒加载
     };
   },
   // 方法
   methods: {
     async handleClick(name, order = this.order) {
-      console.log("file: SongList.vue:100 @ order:", order);
+      //点击分类标签获取数据
       this.name = name;
-      //console.log("file: SongList.vue:71 @ data:", data);
       let res = await this.$api.NewHot(49, `%27${order}%27`, name, 0);
-
-      console.log(res.playlists);
       this.list = res.playlists;
     },
     handleHot() {
+      //控制按钮样式和切换最新，热门数据
       this.order = "hot";
-
       this.focus = false;
     },
     handleNew() {
+      //控制按钮样式和切换最新，热门数据
       this.order = "new";
-
       this.focus = true;
+    },
+    getScroll() {
+      //获取页面滚动距离
+      return (
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop ||
+        0
+      );
+    },
+
+    async handleScroll() {
+      //懒加载
+      const scrollTop = this.getScroll();
+      if (
+        scrollTop + window.innerHeight - 70 >=
+        this.$refs.mainbox.offsetHeight
+      ) {
+        this.count++;
+
+        let res = await this.$api.NewHot(
+          49,
+          `%27${this.order}%27`,
+          this.name,
+          49 * this.count
+        );
+
+        this.list = [...this.list, ...res.playlists];
+      }
+    },
+    debounce(func, wait) {
+      //懒加载防抖
+      let timeout;
+      return function () {
+        clearTimeout(timeout);
+        timeout = setTimeout(func, wait);
+      };
     },
   },
   // 计算属性
@@ -126,10 +162,7 @@ export default {
   // 监控data中的数据变化
   watch: {
     async order(neworder, oldorder) {
-      console.log("file: SongList.vue:114 @ neworder:", neworder);
-
       let res = await this.$api.NewHot(49, `%27${neworder}%27`, this.name, 0);
-
       this.list = res.playlists;
     },
   },
@@ -141,16 +174,10 @@ export default {
     this.list = res0.playlists;
     let res = await this.$api.SongListHot();
     this.hotcategory = res.tags;
-    //console.log("file: SongList.vue:46 @ this.hotcategory:", this.hotcategory);
-
     let res1 = await this.$api.SongListCategory();
     this.category = res1;
-
-    // console.log(
-    //   "file: SongList.vue:45 @ this.category:",
-    //   this.category.categories
-    // );
     this.group = _.groupBy(this.category.sub, (item) => item.category);
+    window.addEventListener("scroll", this.debounce(this.handleScroll, 100));
   },
 };
 </script>
