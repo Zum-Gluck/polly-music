@@ -12,6 +12,7 @@
         <img
           :src="item.album"
           alt=""
+          v-lazy
           class="shadow"
         >
         <div class="middle">

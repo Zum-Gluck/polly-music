@@ -3,6 +3,7 @@
     <div class="top">
       <img
         class="pic"
+        v-lazy
         :src="singer ? singer.img1v1Url : ''"
         @click="goSingerDetail(singer.id)"
       />
