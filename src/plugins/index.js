@@ -37,6 +37,8 @@ import {
   Pagination,
   Divider,
   Tag,
+  Backtop,
+  Icon
 } from "element-ui";
 
 Vue.prototype.$message = message;
@@ -58,3 +60,5 @@ Vue.use(Empty);
 Vue.use(Pagination);
 Vue.use(Tag);
 Vue.use(Divider);
+Vue.use(Backtop);
+Vue.use(Icon);
