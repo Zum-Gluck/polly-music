@@ -41,8 +41,15 @@
         </li>
       </ul>
     </div>
-    <div class="content">
-      <div class="content_item" v-for="item of singerList" :key="item.id">
+    <div
+      class="content"
+      v-loading="isLoading"
+    >
+      <div
+        class="content_item"
+        v-for="item of singerList"
+        :key="item.id"
+      >
         <SingerCover :singer="item" />
       </div>
     </div>
@@ -59,7 +66,7 @@ export default {
   // 组件
   components: { SingerCover },
   // 变量
-  data () {
+  data() {
     return {
       areaArr,
       areaArrActiveIndex: 0,
@@ -79,18 +86,21 @@ export default {
         // 字母A_Z
         initial: -1
       },
-      singerList: []
+      singerList: [],
+      isLoading: true
     };
   },
   // 方法
   methods: {
     // 获取歌手列表
-    async getSingerList () {
+    async getSingerList() {
       const res = await this.$api.getSingerList(this.queryParams);
       this.singerList = res.artists
+      this.isLoading = false
     },
     // 改变筛选项
-    changeFilter (type, val, index) {
+    changeFilter(type, val, index) {
+      this.isLoading = true
       if (type === 'area') {
         this.areaArrActiveIndex = index;
         this.queryParams.area = val;
@@ -111,9 +121,9 @@ export default {
   // 监控data中的数据变化
   watch: {},
   // 生命周期 - 创建完成(可以访问当前this实例)
-  created () { },
+  created() { },
   // 生命周期 - 挂载完成(可以访问dom元素)
-  mounted () {
+  mounted() {
     this.getSingerList()
   },
 };

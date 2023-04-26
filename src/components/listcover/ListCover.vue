@@ -17,7 +17,7 @@
 
       <!-- 图片开始 -->
       <img
-        v-lazy="(songListItem.coverImgUrl || songListItem.picUrl) + `?param=${param}`"
+        v-lazy="(songListItem.coverImgUrl || songListItem.picUrl) + `?param=${Picsize}`"
         width="105px"
       />
       <!-- 图片结束 -->
@@ -49,7 +49,7 @@ export default {
       type: Object,
       default: () => { },
     },
-    param: {
+    Picsize: {
       type: String,
       default: '200y200'
     },

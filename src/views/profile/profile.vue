@@ -191,6 +191,12 @@ export default {
       this.currentPage = current;
       this.offset = (current - 1) * 50
       this.songListDate = await this.getUserLikedList(50, this.offset);
+
+      // 切换页面后回到顶部
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
     }
   },
   // 计算属性

@@ -1,9 +1,16 @@
 <template>
   <div class="layout">
     <div class="fluid">
-      <keep-alive v-if="isRouterAlive" exclude="song-menu">
+      <keep-alive
+        v-if="isRouterAlive"
+        exclude="song-menu"
+      >
         <router-view></router-view>
       </keep-alive>
+      <el-backtop
+        :visibility-height="500"
+        :right="200"
+      ></el-backtop>
     </div>
   </div>
 </template>
