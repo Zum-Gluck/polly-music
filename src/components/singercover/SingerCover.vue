@@ -3,10 +3,13 @@
     <div class="top">
       <img
         class="pic"
-        :src="singer ? singer.img1v1Url : ''"
+        v-lazy="singer ? singer.img1v1Url+'?param=200y200' : ''"
         @click="goSingerDetail(singer.id)"
       />
-      <a href="javascript:;" @click="goSingerDetail(singer.id)">
+      <a
+        href="javascript:;"
+        @click="goSingerDetail(singer.id)"
+      >
         <span class="name">{{ singer ? singer.name : "" }}</span>
       </a>
     </div>
@@ -28,7 +31,7 @@ export default {
   // 组件
   components: {},
   // 变量
-  data () {
+  data() {
     return {};
   },
   // 方法
@@ -37,7 +40,7 @@ export default {
     /**
      * @method 在这里跳转到歌手详情页
      */
-    goSingerDetail (id) {
+    goSingerDetail(id) {
       console.log(id);
     }
 
@@ -47,9 +50,9 @@ export default {
   // 监控data中的数据变化
   watch: {},
   // 生命周期 - 创建完成(可以访问当前this实例)
-  created () { },
+  created() { },
   // 生命周期 - 挂载完成(可以访问dom元素)
-  mounted () {
+  mounted() {
   },
 };
 </script>
@@ -64,7 +67,6 @@ export default {
   .pic {
     width: 90px;
     height: 90px;
-    background-color: pink;
     border-radius: 50%;
     margin: 0 auto;
     cursor: pointer;

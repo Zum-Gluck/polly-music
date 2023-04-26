@@ -15,6 +15,11 @@ Vue.prototype.$api = api;
 Vue.prototype.$bus = new Vue();
 Vue.prototype.$utils = utils;
 
+// 图片懒加载插件
+import VueLazyload from 'vue-lazyload'
+Vue.use(VueLazyload)
+
+
 // element ui 相关
 import "element-ui/lib/theme-chalk/index.css";
 import {
@@ -37,6 +42,8 @@ import {
   Pagination,
   Divider,
   Tag,
+  Backtop,
+  Icon
 } from "element-ui";
 
 Vue.prototype.$message = message;
@@ -58,3 +65,5 @@ Vue.use(Empty);
 Vue.use(Pagination);
 Vue.use(Tag);
 Vue.use(Divider);
+Vue.use(Backtop);
+Vue.use(Icon);

@@ -10,7 +10,7 @@
         @dblclick="playClick(item)"
       >
         <img
-          :src="item.album"
+          v-lazy="item.album + '?param=100y100'"
           alt=""
           class="shadow"
         >

@@ -1,6 +1,9 @@
 <template>
   <el-row :gutter="30">
-    <el-col :span="17" :offset="0">
+    <el-col
+      :span="17"
+      :offset="0"
+    >
       <el-card style="position: relative">
         <el-row :gutter="20">
           <el-col :span="9">
@@ -8,6 +11,7 @@
               <ListCover
                 size="280px"
                 :songListItem="{ coverImgUrl: playlist.coverImgUrl }"
+                param="500y500"
               />
             </div>
           </el-col>
@@ -34,11 +38,8 @@
                     cursor: pointer;
                   "
                   @click="handlePersonalInfo(playlist.creator)"
-                  >{{ playlist.creator.nickname }}</span
-                >
-                <span style="color: rgba(0, 0, 0, 0.5)"
-                  >{{ playlist.createTime }}创建</span
-                >
+                >{{ playlist.creator.nickname }}</span>
+                <span style="color: rgba(0, 0, 0, 0.5)">{{ playlist.createTime }}创建</span>
               </div>
               <div class="right_pollybutton">
                 <span>标签:</span>
@@ -51,13 +52,11 @@
                   style="border-radius: 30px; display: inline-block"
                 />
               </div>
-              <div
-                :class="
+              <div :class="
                   extend
                     ? 'right_description_extend'
                     : 'right_description_shorten'
-                "
-              >
+                ">
                 <span>
                   {{ playlist.description }}
                 </span>
@@ -88,38 +87,47 @@
                     }
                   "
                   v-if="!isOwnPage"
-                  ><i class="el-icon-star-off"></i
-                  >{{ isSubscribe === true ? "取消收藏" : "收藏" }}</el-button
-                >
+                ><i class="el-icon-star-off"></i>{{ isSubscribe === true ? "取消收藏" : "收藏" }}</el-button>
               </div>
             </div>
           </el-col>
         </el-row>
 
-        <SongList :songList="songlist" style="margin-top: 20px" />
+        <SongList
+          :songList="songlist"
+          style="margin-top: 20px"
+        />
       </el-card>
     </el-col>
-    <el-col :span="7" :offset="0">
-      <PollyCard title="喜欢这个歌单的人" style="margin-bottom: 30px">
-        <div
-          style="
+    <el-col
+      :span="7"
+      :offset="0"
+    >
+      <PollyCard
+        title="喜欢这个歌单的人"
+        style="margin-bottom: 30px"
+      >
+        <div style="
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
             padding: 10px;
-          "
-        >
+          ">
           <ListCover
             v-for="(item, value) in subscribe"
             :key="value"
             size="35px"
             :songListItem="{ coverImgUrl: item.avatarUrl }"
             style="flex: 14.28%; margin: 0"
+            param="50y50"
             @click.native="handlePersonalInfo(item)"
           />
         </div>
       </PollyCard>
-      <PollyCard title="相关推荐" style="margin-bottom: 30px">
+      <PollyCard
+        title="相关推荐"
+        style="margin-bottom: 30px"
+      >
         <div
           v-for="(item, value) in relatedplaylist"
           :key="value"
@@ -128,8 +136,9 @@
         >
           <ListCover
             size="55px"
-            :songListItem="{ coverImgUrl: item.coverImgUrl }"
+            :songListItem="{ coverImgUrl: item.coverImgUrl ,id:item.id }"
             style="display: inline-block; margin: 2px"
+            param="100y100"
           />
           <div
             style="position: absolute; top: 0; left: 65px"
@@ -137,25 +146,29 @@
           >
             {{ item.name }}
           </div>
-          <div
-            style="
+          <div style="
               position: absolute;
               bottom: 10px;
               left: 65px;
               color: rgba(0, 0, 0, 0.5);
-            "
-          >
+            ">
             By.{{ item.creator.nickname }}
           </div>
         </div>
       </PollyCard>
       <PollyCard title="精彩评论">
-        <el-empty description="暂无评论" v-if="!comment.length"></el-empty>
+        <el-empty
+          description="暂无评论"
+          v-if="!comment.length"
+        ></el-empty>
 
-        <div v-for="(item, value) in comment" :key="value">
+        <div
+          v-for="(item, value) in comment"
+          :key="value"
+        >
           <div class="comment">
             <img
-              :src="item.user.avatarUrl"
+              :src="item.user.avatarUrl + '?param=50y50'"
               style="width: 40px; height: 40px; border-radius: 50%"
             />
             <div class="comment_name">

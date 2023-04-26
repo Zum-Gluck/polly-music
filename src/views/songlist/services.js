@@ -24,7 +24,7 @@ export const SongListHot = () => instance.get(`/playlist/hot`);
  * @param {optional} offset 偏移数量 , 用于分页
  * @method 收藏歌单
  */
-export const NewHot = (limit = 50, order = "hot", cat = "全部", offset = 0) =>
+export const NewHot = (limit = 50, order , cat = "全部", offset = 0) =>
     instance.get(
         `/top/playlist?limit=${limit}&order=${order}&cat=${cat}&offset=${offset}`
     );
