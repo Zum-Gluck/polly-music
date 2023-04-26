@@ -3,8 +3,7 @@
     <div class="top">
       <img
         class="pic"
-        v-lazy
-        :src="singer ? singer.img1v1Url : ''"
+        v-lazy="singer ? singer.img1v1Url+'?param=200y200' : ''"
         @click="goSingerDetail(singer.id)"
       />
       <br />
@@ -70,7 +69,6 @@ export default {
   .pic {
     width: 90px;
     height: 90px;
-    background-color: pink;
     border-radius: 50%;
     margin: 0 auto;
     cursor: pointer;

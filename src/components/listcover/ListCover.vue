@@ -8,27 +8,34 @@
         height: size,
       }"
     >
-      <div class="amount_play" v-if="songListItem.playCount">
+      <div
+        class="amount_play"
+        v-if="songListItem.playCount"
+      >
         <span> {{ $utils.tranNumber(songListItem.playCount, 0) }}</span>
       </div>
+
+      <!-- 图片开始 -->
       <img
-        :src="songListItem.coverImgUrl || songListItem.picUrl"
+        v-lazy="songListItem.coverImgUrl || songListItem.picUrl"
         width="105px"
       />
+      <!-- 图片结束 -->
+
     </div>
     <div
       class="song_list_name"
       :style="{
         width: size,
       }"
+      @click="coverClick"
     >
       <a
         href="javascript:;"
         class="ellipsis-two"
         :title="songListItem.name"
         v-if="songListItem.name"
-        >{{ songListItem.name }}</a
-      >
+      >{{ songListItem.name }}</a>
     </div>
   </div>
 </template>
@@ -40,7 +47,7 @@ export default {
   props: {
     songListItem: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
 
     // 设置宽高
@@ -67,9 +74,9 @@ export default {
   // 监控data中的数据变化
   watch: {},
   // 生命周期 - 创建完成(可以访问当前this实例)
-  created() {},
+  created() { },
   // 生命周期 - 挂载完成(可以访问dom元素)
-  mounted() {},
+  mounted() { },
 };
 </script>
 

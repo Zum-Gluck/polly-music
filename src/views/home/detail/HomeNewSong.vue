@@ -10,9 +10,8 @@
         @dblclick="playClick(item)"
       >
         <img
-          :src="item.album"
+          v-lazy="item.album"
           alt=""
-          v-lazy
           class="shadow"
         >
         <div class="middle">
