@@ -3,7 +3,7 @@
     <div class="fluid">
       <keep-alive
         v-if="isRouterAlive"
-        exclude="song-menu"
+        exclude="song-menu,video-detail"
       >
         <router-view></router-view>
       </keep-alive>

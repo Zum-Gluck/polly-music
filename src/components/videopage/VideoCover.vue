@@ -5,12 +5,29 @@
         class="video_cover"
         :style="{ width: width + 'px', height: height + 'px' }"
       >
-        <div class="amount_play" v-if="data.playTime">
-          <span> {{ $utils.tranNumber(data.playTime, 0) }}</span>
+        <div class="amount_play" v-if="data.playTime || data.playCount">
+          <span>
+            {{
+              $utils.tranNumber(
+                data.playTime ? data.playTime : data.playCount,
+                0
+              )
+            }}</span
+          >
         </div>
-        <div class="title_duration" v-if="data.durationms">
-          <span class="cover_title"> {{ data.title }}</span>
-          <span> {{ $utils.formatTime(data.durationms) }}</span>
+        <div class="title_duration" v-if="data.durationms || data.duration">
+          <span class="cover_title">
+            {{
+              data.title ? data.title : data.name + "-" + data.artists[0].name
+            }}</span
+          >
+          <span>
+            {{
+              $utils.formatTime(
+                data.durationms ? data.durationms : data.duration
+              )
+            }}</span
+          >
         </div>
 
         <img v-lazy="data.coverUrl + `?param=${width}y${height}`" />
@@ -50,9 +67,6 @@ export default {
     return {};
   },
   methods: {},
-  mounted() {
-    console.log(this.data);
-  },
 };
 </script>
 

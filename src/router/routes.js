@@ -77,10 +77,15 @@ const appRoutes = [
         component: () => import("@/views/songmenu/SongMenu.vue"),
       },
       {
+        path: "/vdetail/:id",
+        name: "video-detail",
+        component: () => import("@/views/videodetail/Vdetail.vue"),
+      },
+      {
         path: "/album-detail/:id",
         name: "album-detail",
         component: () => import("@/views/album/AlbumDetail.vue"),
-      },
+      }
     ],
   },
 ];

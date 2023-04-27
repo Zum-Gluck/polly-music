@@ -40,9 +40,10 @@
       <el-button
         type="success"
         size="medium"
-        @click="handleAll"
+        @click="handleAll(0)"
         style="margin-left: 220px"
         plain
+        class="all_btn"
       >
         全部视频
       </el-button>
@@ -55,7 +56,8 @@
         <div
           v-for="(item, index) in list"
           :key="index"
-          style="margin: 23px 10px"
+          style="margin: 23px 10px; cursor: pointer"
+          @click="handleVideoDetail(item.data)"
         >
           <VideoCover width="269" height="200" :data="item.data" />
         </div>
@@ -63,8 +65,10 @@
       <el-pagination
         background
         layout="prev, pager, next"
-        :page-size="8"
-        :total="100"
+        :page-size="1"
+        :total="current + 5"
+        :current-page="current"
+        @current-change="handleChange"
         style="text-align: center"
       >
       </el-pagination>
@@ -87,21 +91,52 @@ export default {
       tag: [], //视频标签
       list: [], //视频列表
       loading: null, //加载动画
+      current: 1, //当前页数
+      tagid: null, //标签id
+      isall: null, //判断是非为全部视频
     };
   },
   // 方法
   methods: {
-    async handleAll() {
+    async handleAll(offset = 0) {
+      if (this.isall) return;
       this.loading = true;
-      let res = await this.$api.getVideoList();
+      this.isall = true;
+      this.current = 1;
+      let res = await this.$api.getVideoList(offset);
       this.list = res.datas.filter((item) => item.data.coverUrl !== undefined);
       this.loading = false;
     },
-    async handleClick(id) {
+    async handleClick(id = null, offset = 0) {
       this.loading = true;
-      let res = await this.$api.getTagVideoList(id);
+      this.current = 1;
+      this.tagid = id;
+      this.isall = false;
+      let res = await this.$api.getTagVideoList(this.tagid, offset);
       this.list = res.datas.filter((item) => item.data.coverUrl !== undefined);
       this.loading = false;
+    },
+    async handleChange(currentpage) {
+      this.current = currentpage;
+
+      if (this.isall) {
+        this.loading = true;
+        let res1 = await this.$api.getVideoList(currentpage * 8);
+        this.list = res1.datas.filter(
+          (item) => item.data.coverUrl !== undefined
+        );
+        this.loading = false;
+      } else {
+        this.loading = true;
+        let res = await this.$api.getTagVideoList(this.tagid, currentpage * 8);
+        this.list = res.datas.filter(
+          (item) => item.data.coverUrl !== undefined
+        );
+        this.loading = false;
+      }
+    },
+    handleVideoDetail(item) {
+      this.$router.push(`/vdetail/${item.vid ? item.vid : item.id}`);
     },
   },
   // 计算属性
@@ -138,5 +173,10 @@ export default {
   &:hover {
     background-color: rgba(246, 222, 222, 0.8);
   }
+}
+.all_btn {
+  background-color: rgb(103, 194, 58);
+  color: white;
+  border: 1px solid rgb(103, 194, 58);
 }
 </style>
