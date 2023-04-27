@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <div class="fluid">
-      <keep-alive v-if="isRouterAlive" exclude="song-menu">
+      <keep-alive v-if="isRouterAlive" exclude="song-menu,video-detail">
         <router-view></router-view>
       </keep-alive>
     </div>

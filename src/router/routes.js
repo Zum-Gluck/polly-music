@@ -76,6 +76,11 @@ const appRoutes = [
         name: "song-menu",
         component: () => import("@/views/songmenu/SongMenu.vue"),
       },
+      {
+        path: "/vdetail/:id",
+        name: "video-detail",
+        component: () => import("@/views/videodetail/Vdetail.vue"),
+      },
     ],
   },
 ];
