@@ -8,7 +8,7 @@
         @mouseenter="songMouseEnter"
         @mouseleave="songMouseLeave"
         @dblclick="playClick(item)"
-        :class="{'active':item.name === currentSong.name}"
+        :class="{'active':currentSong ? item.name === currentSong.name : false}"
       >
         <img
           v-lazy="item.album + '?param=100y100'"
