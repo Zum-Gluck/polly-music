@@ -81,6 +81,11 @@ const appRoutes = [
         name: "video-detail",
         component: () => import("@/views/videodetail/Vdetail.vue"),
       },
+      {
+        path: "/album-detail/:id",
+        name: "album-detail",
+        component: () => import("@/views/album/AlbumDetail.vue"),
+      },
     ],
   },
 ];

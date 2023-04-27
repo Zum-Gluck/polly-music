@@ -1,20 +1,21 @@
 <template>
   <div>
     <el-card>
-      <el-dropdown placement="bottom-start" trigger="click">
+      <el-dropdown
+        placement="bottom-start"
+        trigger="click"
+      >
         <el-button type="danger">
           全部<i class="el-icon-arrow-down el-icon--right"></i>
         </el-button>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item>
-            <div
-              style="
+            <div style="
                 display: flex;
                 flex-direction: column;
                 justify-content: space-around;
                 width: 800px;
-              "
-            >
+              ">
               <div
                 v-for="(item, key, index) in category.categories"
                 :key="index"
@@ -29,8 +30,7 @@
                     :key="index"
                     style="margin: 5px"
                     @click="handleClick(data.name, order)"
-                    >{{ data.name }}</el-tag
-                  >
+                  >{{ data.name }}</el-tag>
                 </div>
               </div>
             </div>
@@ -70,12 +70,19 @@
       <div
         ref="mainbox"
         style="display: flex; flex-wrap: wrap; justify-content: space-around"
+        v-loading="isLoading"
       >
-        <div v-for="(item, index) in list" :key="index" style="margin: 10px">
-          <ListCover size="125px" :songListItem="item" />
+        <div
+          v-for="(item, index) in list"
+          :key="index"
+          style="margin: 10px"
+        >
+          <ListCover
+            size="125px"
+            :songListItem="item"
+          />
         </div>
       </div>
-      <el-backtop :visibility-height="500" :right="200"></el-backtop>
     </el-card>
   </div>
 </template>
@@ -99,6 +106,7 @@ export default {
       name: "", //种类名字
       focus: false, //按钮状态
       count: 0, //记录第几次懒加载
+      isLoading: true,
     };
   },
   // 方法
@@ -167,7 +175,7 @@ export default {
     },
   },
   // 生命周期 - 创建完成(可以访问当前this实例)
-  created() {},
+  created() { },
   // 生命周期 - 挂载完成(可以访问dom元素)
   async mounted() {
     let res0 = await this.$api.NewHot(49);
@@ -178,6 +186,7 @@ export default {
     this.category = res1;
     this.group = _.groupBy(this.category.sub, (item) => item.category);
     window.addEventListener("scroll", this.debounce(this.handleScroll, 100));
+    this.isLoading = false;
   },
 };
 </script>

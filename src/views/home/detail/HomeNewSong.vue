@@ -8,6 +8,7 @@
         @mouseenter="songMouseEnter"
         @mouseleave="songMouseLeave"
         @dblclick="playClick(item)"
+        :class="{'active':currentSong ? item.name === currentSong.name : false}"
       >
         <img
           v-lazy="item.album + '?param=100y100'"
@@ -119,6 +120,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.active {
+  color: @color;
+}
 .home_new_song {
   margin-top: 10px;
   h2 {

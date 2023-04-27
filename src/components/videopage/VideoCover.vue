@@ -30,14 +30,20 @@
           >
         </div>
 
-        <img v-lazy="data.coverUrl + `?param=${width}y${height}`" />
+        <img
+          v-lazy="
+            data.coverUrl
+              ? data.coverUrl
+              : data.cover + `?param=${width}y${height}`
+          "
+        />
       </div>
       <a
         href="javascript:;"
         class="ellipsis-one"
         style="margin-top: 10px"
-        v-if="data.title"
-        >{{ data.description || data.title }}</a
+        v-if="data.description || data.title || data.name"
+        >{{ data.description || data.title || data.name }}</a
       >
     </div>
   </div>

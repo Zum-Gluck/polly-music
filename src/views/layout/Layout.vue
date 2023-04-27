@@ -4,6 +4,7 @@
       <keep-alive v-if="isRouterAlive" exclude="song-menu,video-detail">
         <router-view></router-view>
       </keep-alive>
+      <el-backtop :visibility-height="500" :right="200"></el-backtop>
     </div>
   </div>
 </template>
@@ -14,15 +15,15 @@ export default {
   name: "layout",
   provide() {
     return {
-      reload: this.reload
-    }
+      reload: this.reload,
+    };
   },
   // 组件
   components: {},
   // 变量
   data() {
     return {
-      isRouterAlive: true
+      isRouterAlive: true,
     };
   },
   // 方法
@@ -30,18 +31,18 @@ export default {
     reload() {
       this.isRouterAlive = false;
       this.$nextTick(function () {
-        this.isRouterAlive = true
-      })
-    }
+        this.isRouterAlive = true;
+      });
+    },
   },
   // 计算属性
   computed: {},
   // 监控data中的数据变化
   watch: {},
   // 生命周期 - 创建完成(可以访问当前this实例)
-  created() { },
+  created() {},
   // 生命周期 - 挂载完成(可以访问dom元素)
-  mounted() { },
+  mounted() {},
 };
 </script>
 

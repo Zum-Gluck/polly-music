@@ -199,3 +199,9 @@
 .el-pagination.is-background .el-pager li:not(.disabled).active:hover {
     color: #FFF !important;
 }
+
+.el-backtop {
+    position: fixed;
+    right: 70px !important;
+    bottom: 150px !important;
+}

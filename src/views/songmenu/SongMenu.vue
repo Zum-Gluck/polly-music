@@ -8,11 +8,10 @@
         <el-row :gutter="20">
           <el-col :span="9">
             <div class="grid_left">
-              <ListCover
-                size="280px"
-                :songListItem="{ coverImgUrl: playlist.coverImgUrl }"
-                param="500y500"
-              />
+              <img
+                class="cover"
+                :src="playlist.coverImgUrl"
+              >
             </div>
           </el-col>
           <el-col :span="15">
@@ -371,5 +370,8 @@ export default {
 
 ::v-deep img {
   -webkit-user-drag: none;
+}
+.cover {
+  border-radius: 10px;
 }
 </style>
