@@ -57,11 +57,11 @@ export default {
   props: {
     width: {
       type: String,
-      default: "0",
+      default: "",
     },
     height: {
       type: String,
-      default: "0",
+      default: "",
     },
     data: {
       type: Object,
