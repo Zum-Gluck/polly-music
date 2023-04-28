@@ -11,8 +11,8 @@ export const actions = {
     },
 
     // 音乐暂停
-    songPause({commit}){
-        commit(types.SET_IS_PAUSE,true)
+    songPause({ commit }) {
+        commit(types.SET_IS_PAUSE, true)
     },
 
     // 播放全部
@@ -21,5 +21,11 @@ export const actions = {
         commit(types.SET_IS_PLAYING, true)
         commit(types.SET_SONG_PLAY_LIST, songList)
         commit(types.SET_IS_PAUSE, false)
+    },
+
+    // 播放历史音乐
+    playHisroy({ commit, getters }, item) {
+        item.index = getters.currentSong.index
+        commit(types.SET_CURRENT_SONG, item)
     }
 }
