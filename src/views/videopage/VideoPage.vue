@@ -78,7 +78,6 @@
 
 <script>
 import VideoCover from "@/components/videopage/VideoCover.vue";
-import _ from "lodash";
 export default {
   // component-name小写命名
   name: "VideoPage",

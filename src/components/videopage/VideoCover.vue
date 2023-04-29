@@ -30,14 +30,16 @@
           >
         </div>
 
-        <img v-lazy="data.coverUrl + `?param=${width}y${height}`" />
+        <img
+          v-lazy="data.coverUrl || data.cover + `?param=${width}y${height}`"
+        />
       </div>
       <a
         href="javascript:;"
         class="ellipsis-one"
         style="margin-top: 10px"
-        v-if="data.title"
-        >{{ data.description || data.title }}</a
+        v-if="data.description || data.title || data.name"
+        >{{ data.description || data.title || data.name || data.desc }}</a
       >
     </div>
   </div>
@@ -51,11 +53,11 @@ export default {
   props: {
     width: {
       type: String,
-      default: "0",
+      default: "",
     },
     height: {
       type: String,
-      default: "0",
+      default: "",
     },
     data: {
       type: Object,
@@ -67,6 +69,7 @@ export default {
     return {};
   },
   methods: {},
+ 
 };
 </script>
 

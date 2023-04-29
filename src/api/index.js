@@ -7,6 +7,7 @@ import * as user from "@/views/login/services";
 import * as singer from "@/views/singer/service";
 import * as videopage from "@/views/videopage/services";
 import * as videodetail from "@/views/videodetail/services";
+import * as mv from "@/views/mv/services";
 
 export default {
   ...home,
@@ -17,5 +18,6 @@ export default {
   ...user,
   ...singer,
   ...videopage,
-  ...videodetail
+  ...videodetail,
+  ...mv,
 };

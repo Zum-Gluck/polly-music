@@ -21,15 +21,15 @@ export default {
   name: "layout",
   provide() {
     return {
-      reload: this.reload
-    }
+      reload: this.reload,
+    };
   },
   // 组件
   components: {},
   // 变量
   data() {
     return {
-      isRouterAlive: true
+      isRouterAlive: true,
     };
   },
   // 方法
@@ -37,9 +37,9 @@ export default {
     reload() {
       this.isRouterAlive = false;
       this.$nextTick(function () {
-        this.isRouterAlive = true
-      })
-    }
+        this.isRouterAlive = true;
+      });
+    },
   },
   // 计算属性
   computed: {},

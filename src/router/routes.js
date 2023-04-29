@@ -56,6 +56,13 @@ const appRoutes = [
         component: () => import("@/views/videopage/VideoPage.vue"),
       },
       {
+        path: "/partvideopage/:id",
+        name: "partvideo-page",
+        meta: {},
+        //路由懒加载的写法 import() 与 import 不同
+        component: () => import("@/views/partvideopage/PartVideoPage.vue"),
+      },
+      {
         path: "/mv",
         name: "mv",
         meta: {},
