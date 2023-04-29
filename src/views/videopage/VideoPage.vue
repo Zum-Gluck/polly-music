@@ -1,28 +1,28 @@
 <template>
   <div>
     <el-card>
-      <el-dropdown placement="bottom-start" trigger="click">
+      <el-dropdown
+        placement="bottom-start"
+        trigger="click"
+      >
         <el-button type="danger">
           所有分类<i class="el-icon-arrow-down el-icon--right"></i>
         </el-button>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item>
-            <div
-              style="
+            <div style="
                 display: flex;
                 justify-content: space-around;
                 width: 800px;
                 flex-wrap: wrap;
-              "
-            >
+              ">
               <el-tag
                 type="info"
                 v-for="(data, index) in tag"
                 :key="index"
                 style="margin: 5px"
                 @click="handleClick(data.id)"
-                >{{ data.name }}</el-tag
-              >
+              >{{ data.name }}</el-tag>
             </div>
           </el-dropdown-item>
         </el-dropdown-menu>
@@ -59,7 +59,11 @@
           style="margin: 23px 10px; cursor: pointer"
           @click="handleVideoDetail(item.data)"
         >
-          <VideoCover width="269" height="200" :data="item.data" />
+          <VideoCover
+            width="269"
+            height="200"
+            :data="item.data"
+          />
         </div>
       </div>
       <el-pagination
@@ -143,7 +147,10 @@ export default {
   // 监控data中的数据变化
   watch: {},
   // 生命周期 - 创建完成(可以访问当前this实例)
-  created() {},
+  created() {
+    this.getGrouplist();
+    this.getCategoryList();
+  },
   // 生命周期 - 挂载完成(可以访问dom元素)
   async mounted() {
     await this.handleAll();
@@ -177,5 +184,93 @@ export default {
   background-color: rgb(103, 194, 58);
   color: white;
   border: 1px solid rgb(103, 194, 58);
+  .el-dropdown {
+    vertical-align: top;
+  }
+  .el-dropdown + .el-dropdown {
+    margin-left: 15px;
+  }
+  .el-icon-arrow-down {
+    font-size: 12px;
+  }
+  .container {
+    height: 50px;
+    .head {
+      width: 100%;
+      display: flex;
+      float: left;
+      background-color: #ede6e6;
+    }
+  }
+  .tag-group__title {
+    height: 100%;
+    font-size: 20px;
+    margin: 10px;
+  }
+  .video {
+    display: flex;
+    flex-wrap: wrap;
+    .item-container {
+      margin-bottom: 10px;
+      margin-top: 10px;
+      margin-left: 10px;
+    }
+    .item_ {
+      position: relative;
+      height: 200px;
+      width: 290px;
+      img {
+        height: 100%;
+        width: 100%;
+      }
+    }
+    .amount_play {
+      position: absolute;
+      top: 3px;
+      right: 5px;
+      height: 16px;
+      border-radius: 4px;
+      padding: 0 6px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 16px;
+      background-color: rgba(0, 0, 0, 0.7);
+
+      &::before {
+        content: "";
+        display: inline-block;
+        width: 0px;
+        height: 0px;
+        border: 5px solid transparent;
+        border-left-color: #fff;
+        margin-top: -3px;
+        margin-right: -3px;
+        vertical-align: middle;
+      }
+    }
+    .video_message {
+      position: absolute;
+      top: 170px;
+      height: 30px;
+      width: 100%;
+      border-radius: 4px;
+      padding: 0 6px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 16px;
+      background-color: rgba(0, 0, 0, 0.7);
+      .time {
+        position: relative;
+        left: 210px;
+        top: 4px;
+      }
+      .Auto {
+        position: relative;
+        top: 4px;
+      }
+    }
+  }
 }
 </style>

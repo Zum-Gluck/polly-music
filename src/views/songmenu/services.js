@@ -26,7 +26,7 @@ export const getSongMenuList = (id, limit = 10, offset = 0) =>
  */
 export const getSongMenuSubscribe = (id, limit = 28) =>
     instance.get(`/playlist/subscribers?id=${id}&limit=${limit}`);
-
+    
 /**
  * @param {require} id 歌单id
  * @method 获取歌单相关推荐

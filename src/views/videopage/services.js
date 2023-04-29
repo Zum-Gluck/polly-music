@@ -27,5 +27,3 @@ export const getVideoList = (offset = 0) =>
  */
 export const getTagVideoList = (id, offset = 0) =>
   instance.get(`/video/group?id=${id}&offset=${offset}`);
-
-
