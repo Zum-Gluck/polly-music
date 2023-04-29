@@ -31,11 +31,7 @@
         </div>
 
         <img
-          v-lazy="
-            data.coverUrl
-              ? data.coverUrl
-              : data.cover + `?param=${width}y${height}`
-          "
+          v-lazy="data.coverUrl || data.cover + `?param=${width}y${height}`"
         />
       </div>
       <a
@@ -43,7 +39,7 @@
         class="ellipsis-one"
         style="margin-top: 10px"
         v-if="data.description || data.title || data.name"
-        >{{ data.description || data.title || data.name }}</a
+        >{{ data.description || data.title || data.name || data.desc }}</a
       >
     </div>
   </div>
@@ -73,6 +69,7 @@ export default {
     return {};
   },
   methods: {},
+ 
 };
 </script>
 

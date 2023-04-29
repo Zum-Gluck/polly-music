@@ -16,9 +16,10 @@ Vue.prototype.$bus = new Vue();
 Vue.prototype.$utils = utils;
 
 // 图片懒加载插件
-import VueLazyload from 'vue-lazyload'
-Vue.use(VueLazyload)
-
+import VueLazyload from "vue-lazyload";
+import infiniteScroll from "vue-infinite-scroll";
+Vue.use(VueLazyload);
+Vue.use(infiniteScroll);
 
 // element ui 相关
 import "element-ui/lib/theme-chalk/index.css";
@@ -43,7 +44,8 @@ import {
   Divider,
   Tag,
   Backtop,
-  Icon
+  Icon,
+  Input,
 } from "element-ui";
 
 Vue.prototype.$message = message;
@@ -67,3 +69,4 @@ Vue.use(Tag);
 Vue.use(Divider);
 Vue.use(Backtop);
 Vue.use(Icon);
+Vue.use(Input);
