@@ -92,13 +92,19 @@
                 <li>
                   <!-- CSS:466 -->
                   <transition name="fade">
-                    <PlayHistory v-show="isShowHistory"></PlayHistory>
+                    <PlayHistory
+                      v-show="isShowHistory"
+                      :hisList="hisList"
+                      @closeClick="isShowHistory = false"
+                      @click.native.stop="isShowHistory = true"
+                      @clearHisList='hisList = []'
+                    ></PlayHistory>
                   </transition>
 
                   <span
                     class="iconfont icon-yinleliebiao-"
                     :class="{'active':isShowHistory}"
-                    @click="isShowHistory = !isShowHistory"
+                    @click.stop="isShowHistory = !isShowHistory"
                   ></span>
                 </li>
                 <!-- 播放列表结束 -->
@@ -195,6 +201,7 @@
 import { mapGetters, mapMutations } from 'vuex';
 import PollyProgress from './detail/PollyProgress.vue';
 import PlayHistory from './detail/PlayHistory.vue';
+import { addHistory, getHistory } from '@/common/cache';
 
 export default {
   // component-name小写命名
@@ -219,7 +226,9 @@ export default {
       isMute: false,
       tempPercentage: 50,
       // 是否显示播放历史
-      isShowHistory: false
+      isShowHistory: false,
+      // 历史播放
+      hisList: []
     };
   },
   // 方法
@@ -237,14 +246,14 @@ export default {
     nextClick() {
       if (this.currentSong.index === this.songPlayList.length) return this.$message({ type: 'info', message: "已经是最后一首了～" });
       this.SET_IS_PAUSE(false);
-      const nextSong = this.songPlayList[this.currentSong.index]
+      const nextSong = this.songPlayList[this.currentSong.index % 50]
       this.SET_CURRENT_SONG(nextSong);
     },
     // 上一首
     prevClick() {
       if (this.currentSong.index === 1) return this.$message({ type: 'info', message: "已经是第一首了～" });
       this.SET_IS_PAUSE(false);
-      const prevSong = this.songPlayList[this.currentSong.index - 2]
+      const prevSong = this.songPlayList[this.currentSong.index - 2 % 50]
       this.SET_CURRENT_SONG(prevSong);
     },
 
@@ -374,10 +383,13 @@ export default {
           case 'KeyM':
             this.muteClick()
             break;
+
+          case 'KeyL':
+            this.isShowHistory = !this.isShowHistory;
+            break;
         }
       })
     }
-
   },
   // 计算属性
   computed: {
@@ -415,6 +427,10 @@ export default {
           this.$message({ message: '正在试听vip歌曲(30s)', type: 'success' })
         }
 
+
+        addHistory(this.currentSong)
+        this.hisList = getHistory()
+
         this.fullSeconds = this.$utils.formatSecond(newVal.duration);
         this.fullDuration = this.$utils.formatSecond(newVal.duration)
 
@@ -442,6 +458,10 @@ export default {
 
     // 绑定快捷键
     this.bindShortcuts();
+
+    document.addEventListener('click', (e) => {
+      this.isShowHistory = false
+    })
   },
 };
 </script>
