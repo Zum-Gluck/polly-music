@@ -5,7 +5,8 @@ import * as songmenu from '@/views/songmenu/services'
 import * as profile from '@/views/profile/services'
 import * as user from '@/views/login/services'
 import * as singer from '@/views/singer/service'
-
+import * as video from '@/views/videopage/services'
+import * as album from '@/views/album/services'
 export default {
     ...home,
     ...rank,
@@ -13,5 +14,7 @@ export default {
     ...songlist,
     ...profile,
     ...user,
-    ...singer
+    ...singer,
+    ...video,
+    ...album
 }
