@@ -106,7 +106,7 @@
                   placeholder="发布一条评论吧"
                   style="width: 70%; margin-right: 15px"
                 ></el-input>
-                <el-button type="primary">发布</el-button>
+                <el-button type="primary" @click="submit">发布</el-button>
               </div>
             </el-card>
             <el-card style="margin-top: 15px" v-loading="loading">
@@ -144,8 +144,8 @@
                   >
                 </div>
 
-                <div class="profile">
-                  <div id="content" style="margin-left: 55px">
+                <div class="profile" style="display: flex; flex-wrap: wrap">
+                  <div id="content" style="margin-left: 55px; width: 480px">
                     {{ item?.content }}
                   </div>
                   <span
@@ -166,10 +166,47 @@
                     <span
                       style="font-size: 15px; margin-left: 5px"
                       class="replaybtn"
+                      @click="rePlay(item.commentId)"
                       >回复</span
                     >
+                    <span
+                      v-if="item.user.userId === $store.getters.profile.userId"
+                      style="font-size: 15px; margin-left: 5px"
+                      class="replaybtn"
+                      @click="deleteComment(item.commentId)"
+                      >删除</span
+                    >
                   </span>
+                  <el-card
+                    style="margin-top: 15px; width: 100%"
+                    v-if="replay === item.commentId"
+                  >
+                    <div
+                      style="
+                        width: 100%;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                      "
+                    >
+                      <img
+                        :src="$store.getters.profile.avatarUrl"
+                        style="width: 55px; height: 55px; border-radius: 50%"
+                      />
+                      <el-input
+                        v-model="replayinput"
+                        placeholder="发布一条评论吧"
+                        style="width: 70%; margin-right: 15px"
+                      ></el-input>
+                      <el-button
+                        type="primary"
+                        @click="sendreplay(item.commentId)"
+                        >发布</el-button
+                      >
+                    </div>
+                  </el-card>
                 </div>
+
                 <div class="comment_replay">
                   <div v-for="(data, index) in item?.beReplied" :key="index">
                     <div style="margin-top: 15px; display: flex">
@@ -197,7 +234,7 @@
                     </div>
 
                     <div class="profile">
-                      <div id="content" style="margin-left: 55px">
+                      <div id="content" style="margin-left: 55px; width: 400px">
                         {{ data.content }}
                       </div>
                       <span
@@ -209,10 +246,55 @@
                           font-size: 15px;
                         "
                         class="replaybtn"
+                        @click="rePlay(data.beRepliedCommentId)"
                       >
                         回复
                       </span>
+                      <span
+                        v-if="
+                          data.user.userId === $store.getters.profile.userId
+                        "
+                        style="
+                          margin-left: 20px;
+                          margin-top: 10px;
+                          height: 40px;
+                          line-height: 40px;
+                          font-size: 15px;
+                        "
+                        class="replaybtn"
+                        @click="deleteComment(data.beRepliedCommentId)"
+                      >
+                        删除
+                      </span>
                     </div>
+                    <el-card
+                      style="margin-top: 15px"
+                      v-if="replay === data.beRepliedCommentId"
+                    >
+                      <div
+                        style="
+                          width: 100%;
+                          display: flex;
+                          justify-content: space-between;
+                          align-items: center;
+                        "
+                      >
+                        <img
+                          :src="$store.getters.profile.avatarUrl"
+                          style="width: 55px; height: 55px; border-radius: 50%"
+                        />
+                        <el-input
+                          v-model="replayinput"
+                          placeholder="发布一条评论吧"
+                          style="width: 70%; margin-right: 15px"
+                        ></el-input>
+                        <el-button
+                          type="primary"
+                          @click="sendreplay(data.beRepliedCommentId)"
+                          >发布</el-button
+                        >
+                      </div>
+                    </el-card>
                   </div>
                 </div>
                 <el-divider></el-divider>
@@ -305,21 +387,23 @@ export default {
       issub: 0, //是否收藏
       ispraisedcomment: 0, //是否点赞评论
       input: "",
+      replayinput: "",
+      replay: null,
     };
   },
   methods: {
     async load() {
       let res4;
       if (this.isnull) return;
-      if (this.$route.params.id?.length > 20) {
+      if (this.$route.query.id?.length > 20) {
         res4 = await this.$api.getVideoComments(
-          this.$route.params.id,
+          this.$route.query.id,
           10,
           10 * (this.page - 1)
         );
       } else {
         res4 = await this.$api.getMvComments(
-          this.$route.params.id,
+          this.$route.query.id,
           10,
           10 * (this.page - 1)
         );
@@ -328,19 +412,27 @@ export default {
       if (res4.comments?.length < 10) {
         this.isnull = true;
       }
+
       this.comments = this.comments.concat(res4.comments);
       this.page++;
     },
     handleToPersonalPage(item) {
-      if (item.creator === undefined)
-        this.$router.push(`/profile/${item.userId}`);
-      else if (item.creator[0])
+      if (item.creator === undefined) {
+        if (item.artistId)
+          console.log("file: Vdetail.vue:419 @ item:", item.artistId);
+        //跳转至歌手页面
+        else this.$router.push(`/profile/${item.userId}`);
+      } else if (item.creator[0])
         this.$router.push(`/profile/${item.creator[0].userId}`);
       else if (item.creator)
         this.$router.push(`/profile/${item.creator.userId}`);
     },
     handleToRelatedVideo(item) {
-      this.$router.push(`/vdetail/${item.vid ? item.vid : item.id}`);
+      let routeData = this.$router.resolve({
+        query: { id: item.vid ? item.vid : item.id },
+        path: "/vdetail",
+      });
+      window.open(routeData.href, "_blank");
     },
     handleToTagVideo(item) {
       this.$router.push(`/partvideopage/${item.id}`);
@@ -352,9 +444,9 @@ export default {
           type: "warning",
         });
       } else {
-        if (this.$route.params.id.length > 20) {
+        if (this.$route.query.id.length > 20) {
           if (this.ispraised === 0) {
-            let res = await this.$api.praisingVideo(this.$route.params.id, 1);
+            let res = await this.$api.praisingVideo(this.$route.query.id, 1);
             if (res.code === 200) {
               this.$message({
                 message: "点赞成功",
@@ -365,7 +457,7 @@ export default {
             }
           } else {
             let res = await this.$api.praisingVideo(
-              this.$route.params.id,
+              this.$route.query.id,
               "其他"
             );
             if (res.code === 200) {
@@ -379,7 +471,7 @@ export default {
           }
         } else {
           if (this.ispraised === 0) {
-            let res = await this.$api.praisingMV(this.$route.params.id, 1);
+            let res = await this.$api.praisingMV(this.$route.query.id, 1);
             if (res.code === 200) {
               this.$message({
                 message: "点赞成功",
@@ -389,7 +481,7 @@ export default {
               this.like++;
             }
           } else {
-            let res = await this.$api.praisingMV(this.$route.params.id, "其他");
+            let res = await this.$api.praisingMV(this.$route.query.id, "其他");
             if (res.code === 200) {
               this.$message({
                 message: "已取消点赞",
@@ -409,9 +501,9 @@ export default {
           type: "warning",
         });
       } else {
-        if (this.$route.params.id.length > 20) {
+        if (this.$route.query.id.length > 20) {
           if (this.issub === 0) {
-            let res = await this.$api.subscribeVideo(this.$route.params.id, 1);
+            let res = await this.$api.subscribeVideo(this.$route.query.id, 1);
             if (res.code === 200) {
               this.$message({
                 message: "收藏成功",
@@ -422,7 +514,7 @@ export default {
             }
           } else {
             let res = await this.$api.subscribeVideo(
-              this.$route.params.id,
+              this.$route.query.id,
               "其他"
             );
             if (res.code === 200) {
@@ -436,7 +528,7 @@ export default {
           }
         } else {
           if (this.issub === 0) {
-            let res = await this.$api.subscribeMV(this.$route.params.id, 1);
+            let res = await this.$api.subscribeMV(this.$route.query.id, 1);
             if (res.code === 200) {
               this.$message({
                 message: "收藏成功",
@@ -446,10 +538,7 @@ export default {
               this.videos.subCount++;
             }
           } else {
-            let res = await this.$api.subscribeMV(
-              this.$route.params.id,
-              "其他"
-            );
+            let res = await this.$api.subscribeMV(this.$route.query.id, "其他");
             if (res.code === 200) {
               this.$message({
                 message: "已取消收藏",
@@ -470,10 +559,10 @@ export default {
           type: "warning",
         });
       } else {
-        if (this.$route.params.id.length > 20) {
+        if (this.$route.query.id.length > 20) {
           if (this.ispraisedcomment === 0) {
             let res = await this.$api.praisingVideoComments(
-              this.$route.params.id,
+              this.$route.query.id,
               item.commentId,
               1
             );
@@ -487,7 +576,7 @@ export default {
             }
           } else {
             let res = await this.$api.praisingVideoComments(
-              this.$route.params.id,
+              this.$route.query.id,
               item.commentId,
               0
             );
@@ -503,7 +592,7 @@ export default {
         } else {
           if (this.ispraisedcomment === 0) {
             let res = await this.$api.praisingMVComments(
-              this.$route.params.id,
+              this.$route.query.id,
               item.commentId,
               1
             );
@@ -517,7 +606,7 @@ export default {
             }
           } else {
             let res = await this.$api.praisingMVComments(
-              this.$route.params.id,
+              this.$route.query.id,
               item.commentId,
               0
             );
@@ -533,32 +622,153 @@ export default {
         }
       }
     },
+    async submit() {
+      if (this.input === "") {
+        this.$message({
+          message: "评论不能为空",
+          type: "warning",
+        });
+        return;
+      }
+      if (this.$store.getters.isLogin === null) {
+        this.$message({
+          message: "请先登录",
+          type: "warning",
+        });
+      } else {
+        if (this.$route.query.id.length > 20) {
+          let res = await this.$api.getVideoDetail(
+            this.$route.query.id,
+            this.input
+          );
+          if (res.code === 200) {
+            this.$message({
+              message: "发布成功",
+              type: "success",
+            });
+            this.videos.commentCount++;
+          }
+        } else {
+          let res = await this.$api.publishMVComments(
+            this.$route.query.id,
+            this.input
+          );
+          if (res.code === 200) {
+            this.$message({
+              message: "发布成功",
+              type: "success",
+            });
+            this.videos.commentCount++;
+          }
+        }
+      }
+    },
+    async deleteComment(cid) {
+      if (this.$store.getters.isLogin === null) {
+        this.$message({
+          message: "请先登录",
+          type: "warning",
+        });
+      } else {
+        if (this.$route.query.id.length > 20) {
+          let res = await this.$api.deleteVideoComments(
+            this.$route.query.id,
+            cid
+          );
+          if (res.code === 200) {
+            this.$message({
+              message: "删除成功",
+              type: "success",
+            });
+            this.videos.commentCount--;
+          }
+        } else {
+          let res = await this.$api.deleteMVComments(this.$route.query.id, cid);
+          if (res.code === 200) {
+            this.$message({
+              message: "删除成功",
+              type: "success",
+            });
+            this.videos.commentCount--;
+          }
+        }
+      }
+    },
+    async rePlay(cid) {
+      if (this.$store.getters.isLogin === null) {
+        this.$message({
+          message: "请先登录",
+          type: "warning",
+        });
+      } else {
+        this.replay = cid;
+      }
+    },
+    async sendreplay(cid) {
+      if (this.replayinput === "") {
+        this.$message({
+          message: "评论不能为空",
+          type: "warning",
+        });
+        return;
+      }
+      if (this.$route.query.id.length > 20) {
+        let res = await this.$api.replayVideoComments(
+          this.$route.query.id,
+          cid,
+          this.replayinput
+        );
+        if (res.code === 200) {
+          this.$message({
+            message: "发布成功",
+            type: "success",
+          });
+          this.replayinput = "";
+          this.replay = null;
+        }
+      } else {
+        let res = await this.$api.replayMVComments(
+          this.$route.query.id,
+          cid,
+          this.replayinput
+        );
+        if (res.code === 200) {
+          this.$message({
+            message: "发布成功",
+            type: "success",
+          });
+          this.replayinput = "";
+          this.replay = null;
+        }
+      }
+    },
   },
 
   async activated() {
+    this.input = "";
     this.comments = [];
     this.loading = true;
+    this.isnull = false;
     let res;
-    if (this.$route.params.id.length > 20) {
-      res = await this.$api.getVideoDetail(this.$route.params.id);
+    if (this.$route.query.id.length > 20) {
+      res = await this.$api.getVideoDetail(this.$route.query.id);
       this.videos = res.data;
-      let res2 = await this.$api.getVideoPlay(this.$route.params.id);
+      let res2 = await this.$api.getVideoPlay(this.$route.query.id);
       this.Urls = res2.urls;
-      let res3 = await this.$api.getRelatedVideo(this.$route.params.id);
+      let res3 = await this.$api.getRelatedVideo(this.$route.query.id);
       this.relatedvideo = res3.data;
-      let res4 = await this.$api.getVideoComments(this.$route.params.id, 10, 0);
+      let res4 = await this.$api.getVideoComments(this.$route.query.id, 10, 0);
       this.comments = res4.comments;
     } else {
-      res = await this.$api.getMVDetail(this.$route.params.id);
-      console.log("file: Vdetail.vue:151 @ res:", res.data);
+      res = await this.$api.getMVDetail(this.$route.query.id);
       this.videos = res.data;
-      let res2 = await this.$api.getMVPlay(this.$route.params.id);
+      let res2 = await this.$api.getMVPlay(this.$route.query.id);
       this.Urls = res2.data;
-      let res3 = await this.$api.getMVinfo(this.$route.params.id);
+      let res3 = await this.$api.getMVinfo(this.$route.query.id);
       this.like = res3.likedCount;
-      let res4 = await this.$api.getRelatedMV(this.$route.params.id);
+      let res4 = await this.$api.getRelatedMV(this.$route.query.id);
       this.relatedvideo = res4.mvs;
-      let res5 = await this.$api.getMvComments(this.$route.params.id, 10, 0);
+      let res5 = await this.$api.getMvComments(this.$route.query.id, 10, 0);
       this.comments = res5.comments;
     }
 

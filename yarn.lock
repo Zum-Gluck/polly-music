@@ -6541,6 +6541,8 @@
     "send" "0.18.0"
 
 "set-blocking@^2.0.0":
+  "integrity" "sha512-KiKBS8AnWGEyLzofFfmvKwpdPzqiy16LvQfK3yv/fVH7Bj13/wl3JSR1J+rfgRE9q7xUJK4qvgS8raSOeLUehw=="
+  "resolved" "https://registry.npmmirror.com/set-blocking/-/set-blocking-2.0.0.tgz"
   "version" "2.0.0"
 
 "setprototypeof@1.1.0":

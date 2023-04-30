@@ -1,28 +1,28 @@
 <template>
   <div>
     <el-card>
-      <el-dropdown
-        placement="bottom-start"
-        trigger="click"
-      >
+      <el-dropdown placement="bottom-start" trigger="click">
         <el-button type="danger">
           所有分类<i class="el-icon-arrow-down el-icon--right"></i>
         </el-button>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item>
-            <div style="
+            <div
+              style="
                 display: flex;
                 justify-content: space-around;
                 width: 800px;
                 flex-wrap: wrap;
-              ">
+              "
+            >
               <el-tag
                 type="info"
                 v-for="(data, index) in tag"
                 :key="index"
                 style="margin: 5px"
                 @click="handleClick(data.id)"
-              >{{ data.name }}</el-tag>
+                >{{ data.name }}</el-tag
+              >
             </div>
           </el-dropdown-item>
         </el-dropdown-menu>
@@ -59,11 +59,7 @@
           style="margin: 23px 10px; cursor: pointer"
           @click="handleVideoDetail(item.data)"
         >
-          <VideoCover
-            width="269"
-            height="200"
-            :data="item.data"
-          />
+          <VideoCover width="269" height="200" :data="item.data" />
         </div>
       </div>
       <el-pagination
@@ -139,7 +135,7 @@ export default {
       }
     },
     handleVideoDetail(item) {
-      this.$router.push(`/vdetail/${item.vid ? item.vid : item.id}`);
+      this.$router.push(`/vdetail?id=${item.vid ? item.vid : item.id}`);
     },
   },
   // 计算属性

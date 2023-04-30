@@ -112,3 +112,57 @@ export const praisingVideoComments = (id, cid, t) =>
  */
 export const praisingMVComments = (id, cid, t) =>
   instance.get(`/comment/like?id=${id}&cid=${cid}&t=${t}&type=1`);
+
+/**
+ * @param {require} id   视频id
+ * @param {require} content   评论内容
+ * @method 发布视频评论
+ */
+export const publishVideoComments = (id, content) =>
+  instance.get(`/comment?t=1&type=5&id=${id}&content=${content}`);
+
+/**
+ * @param {require} id   mvid
+ * @param {require} content   评论内容
+ * @method 发布MV评论
+ */
+export const publishMVComments = (id, content) =>
+  instance.get(`/comment?t=1&type=1&id=${id}&content=${content}`);
+
+/**
+ * @param {require} id   视频id
+ * @param {require} cid   评论id
+ * @method 删除视频评论
+ */
+export const deleteVideoComments = (id, cid) =>
+  instance.get(`/comment?t=0&type=5&id=${id}&commentId=${cid}`);
+
+/**
+ * @param {require} id   mvid
+ * @param {require} cid   评论id
+ * @method 删除mv评论
+ */
+export const deleteMVComments = (id, cid) =>
+  instance.get(`/comment?t=0&type=1&id=${id}&commentId=${cid}`);
+
+/**
+ * @param {require} id   视频id
+ * @param {require} cid   评论id
+ * @param {require} content   评论内容
+ * @method 回复视频评论
+ */
+export const replayVideoComments = (id, cid, content) =>
+  instance.get(
+    `/comment?t=2&type=5&id=${id}&commentId=${cid}&content=${content}`
+  );
+
+/**
+ * @param {require} id   mvid
+ * @param {require} cid   评论id
+ * @param {require} content   评论内容
+ * @method 回复mv评论
+ */
+export const replayMVComments = (id, cid, content) =>
+  instance.get(
+    `/comment?t=2&type=1&id=${id}&commentId=${cid}&content=${content}`
+  );

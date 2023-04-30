@@ -205,7 +205,7 @@ export default {
       }
     },
     handleVideoDetail(item) {
-      this.$router.push(`/vdetail/${item.vid ? item.vid : item.id}`);
+      this.$router.push(`/vdetail?id=${item.vid ? item.vid : item.id}`);
     },
   },
   // 计算属性
