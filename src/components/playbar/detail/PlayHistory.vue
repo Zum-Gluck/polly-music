@@ -122,7 +122,8 @@ export default {
     display: flex;
     flex-direction: column;
     height: 370px;
-    overflow: scroll;
+    overflow: auto;
+    overflow-x: hidden;
 
     li {
       flex-shrink: 0;

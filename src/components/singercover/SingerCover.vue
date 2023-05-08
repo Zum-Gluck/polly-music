@@ -41,7 +41,7 @@ export default {
      * @method 在这里跳转到歌手详情页
      */
     goSingerDetail(id) {
-      console.log(id);
+      this.$router.push(`/singer-detail/${id}`);
     }
 
   },

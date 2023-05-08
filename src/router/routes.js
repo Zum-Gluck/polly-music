@@ -49,6 +49,13 @@ const appRoutes = [
         component: () => import("@/views/singer/Singer.vue"),
       },
       {
+        path: "/singer-detail/:id",
+        name: "singer-detail",
+        meta: {},
+        //路由懒加载的写法 import() 与 import 不同
+        component: () => import("@/views/singerdetail/SingerDetail.vue"),
+      },
+      {
         path: "/videopage",
         name: "video-page",
         meta: {},

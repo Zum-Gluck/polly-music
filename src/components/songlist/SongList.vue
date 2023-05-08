@@ -167,7 +167,7 @@ export default {
       loading: true,
       isShowPlaying: false,
       showText: true,
-      currentHoverIndex:0
+      currentHoverIndex: 0
     };
   },
   // 方法
@@ -287,9 +287,10 @@ export default {
     display: inline;
     position: absolute;
     top: 11px;
-    left: 25px;
+    left: 27px;
     width: 25px;
     height: 25px;
+    text-align: center !important;
     overflow: hidden;
   }
 }

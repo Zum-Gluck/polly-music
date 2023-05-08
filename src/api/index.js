@@ -4,11 +4,12 @@ import * as songlist from "@/views/songlist/services";
 import * as songmenu from "@/views/songmenu/services";
 import * as profile from "@/views/profile/services";
 import * as user from "@/views/login/services";
-import * as singer from "@/views/singer/service";
+import * as singer from "@/views/singer/services";
 import * as videopage from "@/views/videopage/services";
 import * as videodetail from "@/views/videodetail/services";
 import * as mv from "@/views/mv/services";
 import * as album from '@/views/album/services'
+import * as singerdetail from '@/views/singerdetail/services'
 
 
 export default {
@@ -22,5 +23,6 @@ export default {
   ...videopage,
   ...videodetail,
   ...mv,
-  ...album
+  ...album,
+  ...singerdetail
 };
