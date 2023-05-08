@@ -16,7 +16,7 @@
           class="shadow"
         >
         <div class="middle">
-          <div> {{item.name}}</div>
+          <div class="song_name ellipsis"> {{item.name}}</div>
           <div>{{
             $utils.tranNameListToString(item.singerList)
             }}</div>
@@ -156,6 +156,10 @@ export default {
         float: left;
         margin-left: 10px;
         line-height: 35px;
+
+        .song_name {
+          width: 420px;
+        }
 
         & div:nth-child(1) {
           font-weight: 500;
