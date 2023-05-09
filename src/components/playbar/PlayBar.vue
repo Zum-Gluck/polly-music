@@ -244,9 +244,11 @@ export default {
     },
     // 下一首
     nextClick() {
+      console.log(123)
       if (this.currentSong.index === this.songPlayList.length) return this.$message({ type: 'info', message: "已经是最后一首了～" });
       this.SET_IS_PAUSE(false);
       const nextSong = this.songPlayList[this.currentSong.index % 50]
+      console.log(nextSong)
       this.SET_CURRENT_SONG(nextSong);
     },
     // 上一首

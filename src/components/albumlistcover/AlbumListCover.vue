@@ -79,7 +79,12 @@ export default {
   // 生命周期 - 创建完成(可以访问当前this实例)
   created() { },
   // 生命周期 - 挂载完成(可以访问dom元素)
-  mounted() { },
+  mounted() {
+    setTimeout(() => {
+      console.log(this.AlbumSongListItem);
+    }, 3000);
+
+  },
 };
 </script>
 

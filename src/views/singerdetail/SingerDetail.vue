@@ -32,36 +32,73 @@
         </li>
       </ul>
     </div>
+
+    <!-- tabs 标题部分开始 -->
     <div class="tab_bar">
       <ul>
-        <li>作品</li>
-        <li class="mr">专辑</li>
-        <li class="mr">MV</li>
-        <li class="mr">歌手详情</li>
-        <li class="mr">相似歌手</li>
+        <li
+          v-for="(item,index) of tabs"
+          :key="index"
+          :class="{'active':index === current}"
+          @click="tabClick(index)"
+        >
+          {{item}}</li>
       </ul>
     </div>
+    <!-- tabs 标题部分结束 -->
+
+    <!-- tabs内容部分开始 -->
+    <div class="dis_content">
+      <ul>
+        <li v-show="current === 0">
+          <SongList :songList="songs"></SongList>
+        </li>
+        <li v-show="current === 1">
+          <Album :albumList="albumList"></Album>
+        </li>
+        <li v-show="current === 2">3</li>
+        <li v-show="current === 3">4</li>
+        <li v-show="current === 4">5</li>
+      </ul>
+    </div>
+    <!-- tabs内容部分结束 -->
+
   </div>
 </template>
 
 <script>
+import SongList from '@/components/songlist/SongList.vue';
+import Album from './detail/Album.vue';
+
+import { createSong } from '@/model/song';
+
 export default {
   // component-name小写命名
   name: "singer-detail",
   // 组件
-  components: {},
+  components: {
+    SongList,
+    Album
+  },
   // 变量
   data() {
     return {
+      singerId: 0,
       singer: {},
       isFollow: false,
-      fansCnt: 0
+      fansCnt: 0,
+      tabs: ['作品', '专辑', 'MV', '歌手详情', '相似歌手'],
+      current: 0,
+      songs: [],
+      albumList: []
     };
   },
   // 方法
   methods: {
     async init() {
       const { id } = this.$route.params
+      this.singerId = id;
+
       const { data } = await this.$api.getSingerDetail(id);
       this.singer = data.artist
 
@@ -69,6 +106,36 @@ export default {
       const { data: followData } = await this.$api.getSingerFollowers(id)
       this.isFollow = followData.isFollow;
       this.fansCnt = followData.fansCnt
+
+      // 获取歌手的音乐（id）
+      let { hotSongs } = await this.$api.getArtists(id);
+
+      // 获取songUrl
+      this.songs = await this.normalizeSongs(hotSongs)
+    },
+
+    async normalizeSongs(songs) {
+      let res = []
+
+      songs.map((item, index) => {
+        item.index = index + 1
+        res.push(createSong(item))
+      })
+
+      return res
+    },
+    // tabs标签被电击
+    tabClick(i) {
+      this.current = i;
+
+
+      if (i === 1) this.getAlbume()
+    },
+    // 获取歌手的专辑
+    async getAlbume() {
+      if (this.albumList.length !== 0) return
+      let { hotAlbums } = await this.$api.getAlbum(this.singerId);
+      this.albumList = hotAlbums
     }
   },
   // 计算属性
@@ -85,6 +152,15 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.active {
+  color: @color;
+}
+
+.dis_content {
+  width: 1000px;
+  margin: 0 auto;
+}
+
 .tab_bar {
   height: 30px;
   ul {
