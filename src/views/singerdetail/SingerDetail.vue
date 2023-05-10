@@ -134,7 +134,7 @@ export default {
     // 获取歌手的专辑
     async getAlbume() {
       if (this.albumList.length !== 0) return
-      let { hotAlbums } = await this.$api.getAlbum(this.singerId);
+      let { hotAlbums } = await this.$api.getAlbumBySingerId(this.singerId);
       this.albumList = hotAlbums
     }
   },
@@ -145,7 +145,7 @@ export default {
   // 生命周期 - 创建完成(可以访问当前this实例)
   created() { },
   // 生命周期 - 挂载完成(可以访问dom元素)
-  mounted() {
+  async mounted() {
     this.init();
   },
 };
@@ -159,6 +159,7 @@ export default {
 .dis_content {
   width: 1000px;
   margin: 0 auto;
+  margin: 20px auto 0;
 }
 
 .tab_bar {

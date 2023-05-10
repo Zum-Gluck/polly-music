@@ -39,4 +39,4 @@ export const getArtists = id => instance.get(`/artists?id=${id}`, {})
  * @param {optional} limit 取出歌单数量, 默认为 50
  * @param {optional} offset  偏移数量, 用于分页
 */
-export const getAlbum = (id, limit = 50, offset = 0) => instance.get(`/artist/album?id=${id}&limit=${limit}&offest=${offset}`)
+export const getAlbumBySingerId = (id, limit = 66, offset = 0) => instance.get(`/artist/album?id=${id}&limit=${limit}&offest=${offset}`)

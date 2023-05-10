@@ -1,7 +1,10 @@
 <template>
-  <div>
-    <AlbumListCover :AlbumSongListItem="albumList[0]"></AlbumListCover>
-    {{albumList[0]}}
+  <div class="album">
+    <AlbumListCover
+      v-for="item of albumList"
+      :key="item.id"
+      :AlbumSongListItem="item"
+    ></AlbumListCover>
   </div>
 </template>
 
@@ -39,4 +42,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.album {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 0 -110px;
+}
 </style>

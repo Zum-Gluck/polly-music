@@ -1,164 +1,164 @@
 <template>
   <div>
     <el-row :gutter="30">
-    <el-col
-      :span="17"
-      :offset="0"
-    >
-      <el-card style="position: relative">
-        <el-row :gutter="20">
-          <el-col :span="9">
-            <div class="grid_left">
-              <img
-                class="cover"
-                :src="this.album.picUrl"
-              >
-            </div>
-          </el-col>
-          <el-col :span="15">
-            <div class="grid_right">
-              <h1 style="font-size: 25px">
-                {{ album.name }}
-              </h1>
-              <div class="avatar_name_creatime">
+      <el-col
+        :span="17"
+        :offset="0"
+      >
+        <el-card style="position: relative">
+          <el-row :gutter="20">
+            <el-col :span="9">
+              <div class="grid_left">
                 <img
-                v-if="album.artist"
-                  :src="album.artist.picUrl"
-                  style="
+                  class="cover"
+                  :src="this.album.picUrl"
+                >
+              </div>
+            </el-col>
+            <el-col :span="15">
+              <div class="grid_right">
+                <h1 style="font-size: 25px">
+                  {{ album.name }}
+                </h1>
+                <div class="avatar_name_creatime">
+                  <img
+                    v-if="album.artist"
+                    :src="album.artist.picUrl"
+                    style="
                     width: 40px;
                     height: 40px;
                     border-radius: 50%;
                     cursor: pointer;
                   "
-                />
-                <span
-                  style="
+                  />
+                  <span
+                    style="
                     color: black;
                     margin-left: 20px;
                     margin-right: 40px;
                     cursor: pointer;
                   "
-                  v-if="album.artist"
-                >{{ album.artist.name}}</span>
-                <span style="color: rgba(0, 0, 0, 0.5)">{{ album.publishTime }}创建</span>
-              </div>
+                    v-if="album.artist"
+                  >{{ album.artist.name}}</span>
+                  <span style="color: rgba(0, 0, 0, 0.5)">{{ album.publishTime }}创建</span>
+                </div>
                 <div class="right_pollybutton">
-                <span>公司:{{this.album.company}}</span>
-              </div>
-              <div :class="
+                  <span>公司:{{this.album.company}}</span>
+                </div>
+                <div :class="
                   extend
                     ? 'right_description_extend'
                     : 'right_description_shorten'
                 ">
-                <span>
-                  {{ this.album.description }}
+                  <span>
+                    {{ this.album.description }}
+                  </span>
+                </div>
+                <span
+                  style="color: #f60; cursor: pointer"
+                  @click="toggleExtend()"
+                  v-if="!extend"
+                >
+                  全部 >
                 </span>
-              </div>
-              <span
-                style="color: #f60; cursor: pointer"
-                @click="toggleExtend()"
-                v-if="!extend"
-              >
-                全部 >
-              </span>
-              <span
-                style="color: #f60; cursor: pointer"
-                @click="toggleShorten()"
-                v-else
-              >
-                收起
-              </span>    
-               <div class="right_subscribe">
-                <el-button
-                  round
-                  style="width: 120px"
-                  @click="
+                <span
+                  style="color: #f60; cursor: pointer"
+                  @click="toggleShorten()"
+                  v-else
+                >
+                  收起
+                </span>
+                <div class="right_subscribe">
+                  <el-button
+                    round
+                    style="width: 120px"
+                    @click="
                     () => {
                       $store.getters.isLogin !== null && isSubscribe === false
                         ? handleSubscribe(1)
                         : handleSubscribe(2);
                     }
                   "
-                ><i class="el-icon-star-off"></i>{{ isSubscribe === true ? "取消收藏" : "收藏" }}</el-button>
+                  ><i class="el-icon-star-off"></i>{{ isSubscribe === true ? "取消收藏" : "收藏" }}</el-button>
+                </div>
               </div>
-            </div>
-          </el-col>
-        </el-row>
+            </el-col>
+          </el-row>
 
-        <SongList
-          :songList="songlist"
-          style="margin-top: 20px"
-        />
-      </el-card>
-    </el-col>
-    <el-col
-      :span="7"
-      :offset="0"
-    >
-      <PollyCard
-        title="热门专辑"
-        style="margin-bottom: 30px"
-      >
-        <div
-          v-for="(item, value) in relatedplaylist"
-          :key="value"
-          style="position: relative; margin-top: 10px; cursor: pointer"
-          @click="handleRelatedAlbum(item)"
-        >
-          <AlbumListCover
-            size="55px"
-            :AlbumSongListItem="{ coverImgUrl: item.blurPicUrl ,id:item.id }"
-            style="display: inline-block; margin: 2px"
-            param="100y100"
+          <SongList
+            :songList="songlist"
+            style="margin-top: 20px"
           />
+        </el-card>
+      </el-col>
+      <el-col
+        :span="7"
+        :offset="0"
+      >
+        <PollyCard
+          title="热门专辑"
+          style="margin-bottom: 30px"
+        >
           <div
-            style="position: absolute; top: 0; left: 65px"
-            class="related_name"
+            v-for="(item, value) in relatedplaylist"
+            :key="value"
+            style="position: relative; margin-top: 10px; cursor: pointer"
+            @click="handleRelatedAlbum(item)"
           >
-            {{ item.name }}
-          </div>
-          <div style="
+            <AlbumListCover
+              size="55px"
+              :AlbumSongListItem="{ coverImgUrl: item.blurPicUrl ,id:item.id }"
+              style="display: inline-block; margin: 1px"
+              param="100y100"
+            />
+            <div
+              style="position: absolute; top: 0; left: 75px"
+              class="related_name"
+            >
+              {{ item.name }}
+            </div>
+            <div style="
               position: absolute;
               bottom: 10px;
-              left: 65px;
+              left: 75px;
               color: rgba(0, 0, 0, 0.5);
             ">
-            By.{{ item.artist.name }}
+              By.{{ item.artist.name }}
+            </div>
           </div>
-        </div>
-      </PollyCard>
-      <PollyCard title="精彩评论">
-        <el-empty
-          description="暂无评论"
-          v-if="!comment.length"
-        ></el-empty>
+        </PollyCard>
+        <PollyCard title="精彩评论">
+          <el-empty
+            description="暂无评论"
+            v-if="!comment.length"
+          ></el-empty>
 
-        <div
-          v-for="(item, value) in comment"
-          :key="value"
-        >
-          <div class="comment">
-            <img
-              :src="item.user.avatarUrl + '?param=50y50'"
-              style="width: 40px; height: 40px; border-radius: 50%"
-            />
-            <div class="comment_name">
-              <div>
-                <strong> {{ item.user.nickname }}</strong>
-                <span style="color: rgba(0, 0, 0, 0.3)">
-                  ·{{ item.timeStr }}
-                </span>
-              </div>
+          <div
+            v-for="(item, value) in comment"
+            :key="value"
+          >
+            <div class="comment">
+              <img
+                :src="item.user.avatarUrl + '?param=50y50'"
+                style="width: 40px; height: 40px; border-radius: 50%"
+              />
+              <div class="comment_name">
+                <div>
+                  <strong> {{ item.user.nickname }}</strong>
+                  <span style="color: rgba(0, 0, 0, 0.3)">
+                    ·{{ item.timeStr }}
+                  </span>
+                </div>
 
-              <div id="content">
-                {{ item.content }}
+                <div id="content">
+                  {{ item.content }}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </PollyCard>
-    </el-col>
-  </el-row>
+        </PollyCard>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -172,7 +172,7 @@ export default {
   // component-name小写命名
   name: "aldum-detail",
   // 组件
-  components: { PollyCard, PollyButton, SongList ,AlbumListCover},
+  components: { PollyCard, PollyButton, SongList, AlbumListCover },
   inject: ["reload"],
   data() {
     return {
@@ -181,8 +181,8 @@ export default {
       comment: [], //歌单评论
       extend: false, //控制专辑简介展开，
       isSubscribe: null, //专辑收藏状态
-      album:[],    //专辑信息
-     };
+      album: [],    //专辑信息
+    };
   },
   methods: {
     normalize(list) {
@@ -220,18 +220,18 @@ export default {
     async judgeSubscribe() {
       let res = await this.$api.getDynamic(this.$route.params.id)
       console.log(res.isSub)
-      if(res.isSub===true)
-          this.isSubscribe = true;
-        else this.isSubscribe = false;
-      }
+      if (res.isSub === true)
+        this.isSubscribe = true;
+      else this.isSubscribe = false;
+    }
   },
-  async mounted() {
-    this.$store.getters.isLogin !== null 
+  async activated() {
+    this.$store.getters.isLogin !== null
     this.judgeSubscribe();
     let res1 = await this.$api.getAlbum(this.$route.params.id);
-    this.album=res1.album
-    this.songs=res1.songs;
-    this.album.publishTime= this.$utils.dateFormat(
+    this.album = res1.album
+    this.songs = res1.songs;
+    this.album.publishTime = this.$utils.dateFormat(
       this.album.publishTime,
       "YYYY-MM-DD"
     );

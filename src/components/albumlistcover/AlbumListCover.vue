@@ -10,14 +10,14 @@
     >
       <div
         class="amount_play"
-        v-if="AlbumSongListItem.playCount"
+        v-if="AlbumSongListItem ? AlbumSongListItem.subType : false"
       >
-        <span> {{ $utils.tranNumber(AlbumSongListItem.playCount, 0) }}</span>
+        <span> {{ AlbumSongListItem.subType }}</span>
       </div>
 
       <!-- 图片开始 -->
       <img
-        v-lazy="(AlbumSongListItem.coverImgUrl || AlbumSongListItem.picUrl) + `?param=${Picsize}`"
+        v-lazy="AlbumSongListItem  ? ((AlbumSongListItem.coverImgUrl || AlbumSongListItem.picUrl) + `?param=${Picsize}`) : ''"
         width="105px"
       />
       <!-- 图片结束 -->
@@ -33,9 +33,11 @@
       <a
         href="javascript:;"
         class="ellipsis-two"
-        :title="AlbumSongListItem.name"
-        v-if="AlbumSongListItem.name"
-      >{{ AlbumSongListItem.name }}</a>
+        :title="AlbumSongListItem ? AlbumSongListItem.name : '' "
+        v-if="AlbumSongListItem ? AlbumSongListItem.name : '' "
+      >{{ AlbumSongListItem.name }}
+      </a>
+
     </div>
   </div>
 </template>
@@ -56,7 +58,7 @@ export default {
     // 设置宽高
     size: {
       type: String,
-      default: "140px",
+      default: "160px",
     },
   },
   // 组件
@@ -80,10 +82,7 @@ export default {
   created() { },
   // 生命周期 - 挂载完成(可以访问dom元素)
   mounted() {
-    setTimeout(() => {
-      console.log(this.AlbumSongListItem);
-    }, 3000);
-
+    console.log(this.AlbumSongListItem.id);
   },
 };
 </script>
@@ -91,6 +90,7 @@ export default {
 <style lang="less" scoped>
 .song_list_cover {
   margin-bottom: 20px;
+  padding: 0 10px;
 }
 
 .images {
