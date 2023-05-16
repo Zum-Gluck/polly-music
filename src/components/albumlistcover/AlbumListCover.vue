@@ -82,7 +82,6 @@ export default {
   created() { },
   // 生命周期 - 挂载完成(可以访问dom元素)
   mounted() {
-    console.log(this.AlbumSongListItem.id);
   },
 };
 </script>

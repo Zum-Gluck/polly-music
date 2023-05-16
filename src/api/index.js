@@ -8,7 +8,7 @@ import * as singer from "@/views/singer/services";
 import * as videopage from "@/views/videopage/services";
 import * as videodetail from "@/views/videodetail/services";
 import * as mv from "@/views/mv/services";
-import * as album from '@/views/album/services'
+import * as album from '@/views/albumdetail/services'
 import * as singerdetail from '@/views/singerdetail/services'
 
 

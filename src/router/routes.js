@@ -98,7 +98,7 @@ const appRoutes = [
       {
         path: "/album-detail/:id",
         name: "album-detail",
-        component: () => import("@/views/album/AlbumDetail.vue"),
+        component: () => import("@/views/albumdetail/AlbumDetail.vue"),
       }
     ],
   },

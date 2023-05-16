@@ -550,7 +550,6 @@ export default {
       this.comments = res4.comments;
     } else {
       res = await this.$api.getMVDetail(this.$route.params.id);
-      console.log("file: Vdetail.vue:151 @ res:", res.data);
       this.videos = res.data;
       let res2 = await this.$api.getMVPlay(this.$route.params.id);
       this.Urls = res2.data;

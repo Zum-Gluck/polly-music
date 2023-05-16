@@ -219,7 +219,6 @@ export default {
     },
     async judgeSubscribe() {
       let res = await this.$api.getDynamic(this.$route.params.id)
-      console.log(res.isSub)
       if (res.isSub === true)
         this.isSubscribe = true;
       else this.isSubscribe = false;
@@ -235,12 +234,10 @@ export default {
       this.album.publishTime,
       "YYYY-MM-DD"
     );
-    // console.log(this.album.blurPicUrl)
     let res2 = await this.$api.getAlbum(this.$route.params.id);
     let res6 = await this.$api.getAlbum(this.$route.params.id, 10, 10);
     this.songlist = this.normalize(res2.songs);
     let res4 = await this.$api.getRelateAlbum(this.album.artist.id, 5);
-    console.log(this.album.artist.id)
     this.relatedplaylist = res4.hotAlbums;
     let res5 = await this.$api.getAlbumComment(this.$route.params.id, 5);
     this.comment = res5.comments;

@@ -15,8 +15,9 @@
 
         <img
           :src="item.imageUrl"
-          :typeTitle="item.typeTitle"
+          :targetType="item.targetType"
           :targetId="item.targetId"
+          :url="item.url"
         />
         <div class="type_title">{{item.typeTitle}}</div>
       </swiper-slide>
@@ -67,25 +68,47 @@ export default {
         on: {
           // 轮播图点击事件
           click: async (e) => { // 在此处实现相关业务逻辑
-            let typeTitle = e.target.getAttribute('typeTitle') // 获取自定义属性
+            let targetType = e.target.getAttribute('targetType') // 获取自定义属性
             let targetId = e.target.getAttribute('targetId') // 获取自定义属性
 
-            if (typeTitle === '新歌首发') {
-              const res = await this.$api.getSongDetail(targetId)
-              const song = createSong(res.songs[0]);
-              song.index = 1;
-              this.selectPlay({
-                song: song,
-                songList: [song]
-              })
-            } else if (typeTitle === '歌单推荐') {
-              this.$router.push(`/songmenu/${targetId}`);
-            } else if (typeTitle === '新碟首发') {
-              this.$message({
-                type: 'info',
-                message: "专辑页面暂未实现"
-              })
+            switch (Number(targetType)) {
+              // 歌曲
+              case 1:
+                const res = await this.$api.getSongDetail(targetId)
+                const song = createSong(res.songs[0]);
+                song.index = 1;
+                this.selectPlay({
+                  song: song,
+                  songList: [song]
+                })
+                break;
+
+              // 专辑
+              case 10:
+                this.$router.push(`/album-detail/${targetId}`);
+                break;
+
+              // 歌单
+              case 1000:
+                this.$router.push(`/songmenu/${targetId}`);
+                break;
+
+              // 数字专辑
+              case 3000:
+                let url = e.target.getAttribute('url')
+                //打开新标签
+                window.open(url, '_blank');
+                break;
+
+              default:
+                this.$message({
+                  type: 'info',
+                  message: '当前功能未完善'
+                })
+                break;
             }
+
+
           },
         },
       },
@@ -105,6 +128,7 @@ export default {
 
         // this.imgData[len]的值 为第一张轮播图的展示图片
         this.imgData[len] = this.imgData[5];
+
       } catch (err) {
         console.log(err);
         this.$message({
@@ -119,10 +143,6 @@ export default {
     mouseLeave() {
       this.$refs.mySwipers.$swiper.autoplay.start();
     },
-    swiperClick(item) {
-      console.log(item.typeTitle);
-      // this.$router.push(`/songmenu/${item.targetId}`)
-    }
   },
   // 计算属性
   computed: {

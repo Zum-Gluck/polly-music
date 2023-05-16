@@ -5,6 +5,7 @@ const HISTORY = '__history__'
 
 // 新增一条记录
 export function addHistory(item) {
+    
     const list = getHistory(HISTORY)
 
     // 数组不存在的话创建一个数组
